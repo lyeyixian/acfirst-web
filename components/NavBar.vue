@@ -18,10 +18,10 @@
 
       <template #extension>
         <v-tabs centered>
-          <v-tab><nuxt-link to="/">Home</nuxt-link></v-tab>
-          <v-tab><nuxt-link to="/about">About</nuxt-link></v-tab>
-          <v-tab><nuxt-link to="/products">Products</nuxt-link></v-tab>
-          <v-tab><nuxt-link to="/contact-us">Contact Us</nuxt-link></v-tab>
+          <v-tab><NuxtLink to="/">Home</NuxtLink></v-tab>
+          <v-tab><NuxtLink to="/about">About</NuxtLink></v-tab>
+          <v-tab><NuxtLink to="/products">Products</NuxtLink></v-tab>
+          <v-tab><NuxtLink to="/contact-us">Contact Us</NuxtLink></v-tab>
         </v-tabs>
       </template>
     </v-app-bar>
