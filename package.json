@@ -26,7 +26,8 @@
     "isbot": "^3.6.5",
     "qs": "^6.11.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "remix": "^1.19.0"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.3.3",
