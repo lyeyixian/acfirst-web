@@ -1,7 +1,5 @@
 export function getStrapiURL(path = '') {
-  return `${
-    process.env.PUBLIC_STRAPI_API_URL || 'http://localhost:1337'
-  }${path}`
+  return `${process.env.STRAPI_URL_BASE || 'http://localhost:1337'}${path}`
 }
 
 export function getStrapiMedia(img) {
