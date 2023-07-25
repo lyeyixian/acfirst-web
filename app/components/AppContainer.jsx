@@ -4,6 +4,7 @@ import Footer from './Footer'
 import { useLocation } from '@remix-run/react'
 
 export default function AppContainer({ children }) {
+  // TODO: add transition or animation or loading when switching between pages
   const location = useLocation()
 
   return (

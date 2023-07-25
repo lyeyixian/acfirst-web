@@ -1,145 +1,202 @@
 import {
   Accordion,
   Button,
-  Divider,
   Grid,
   Image,
   List,
-  ScrollArea,
-  Tabs,
   Text,
   Title,
+  createStyles,
+  getStylesRef,
+  rem,
 } from '@mantine/core'
-import { useParams } from '@remix-run/react'
-import CardsCarousel from '../../components/CardsCarousel'
+import { useLoaderData, useParams } from '@remix-run/react'
+import { json } from '@remix-run/node'
+import { getProductByCode } from '../../api/products'
+import { getStrapiMedia, getStrapiMedias } from '../../utils/apiHelper'
+import { Carousel } from '@mantine/carousel'
+
+const useStyle = createStyles((theme) => ({
+  carousel: {
+    '&:hover': {
+      [`& .${getStylesRef('carouselControls')}`]: {
+        opacity: 1,
+      },
+    },
+  },
+
+  carouselControls: {
+    ref: getStylesRef('carouselControls'),
+    transition: 'opacity 150ms ease',
+    opacity: 0,
+  },
+
+  carouselIndicator: {
+    width: rem(4),
+    height: rem(4),
+    transition: 'width 250ms ease',
+
+    '&[data-active]': {
+      width: rem(16),
+    },
+  },
+
+  accordionTitle: {
+    fontWeight: 500,
+    color: theme.colors[theme.primaryColor][7],
+  },
+}))
+
+export async function loader({ params }) {
+  const { productId } = params
+  const product = await getProductByCode(productId)
+  const {
+    name,
+    code,
+    size,
+    surface,
+    type,
+    specification,
+    viewCount,
+    productImg,
+    category,
+    coverImg,
+  } = product.attributes
+
+  return json({
+    name,
+    code,
+    size,
+    surface,
+    type,
+    specification,
+    viewCount,
+    productImages: getStrapiMedias(productImg.data),
+    category: category.data.attributes.name,
+    coverImg: getStrapiMedia(coverImg.data),
+  })
+}
 
 export default function ProductRoute() {
+  // TODO: add functionality to add to cart button
+  const { classes } = useStyle()
   const params = useParams()
+  const {
+    name,
+    code,
+    size,
+    surface,
+    type,
+    specification, // TODO: change key to description
+    viewCount, // TODO: figure out what to do with viewCount
+    productImages,
+    category,
+    coverImg,
+  } = useLoaderData()
+  const slides = productImages.map((image) => (
+    <Carousel.Slide key={image}>
+      <Image src={image} fit="contain" />
+    </Carousel.Slide>
+  ))
 
   return (
     <div>
       <h1>Product {params.productId}</h1>
       <Grid>
         <Grid.Col span={6}>
-          <Tabs defaultValue="1" variant="pills" inverted>
-            <Tabs.Panel value="1">
-              <Image
-                src="https://i.imgur.com/ZL52Q2D.png"
-                alt="Tesla Model S"
-              />
-            </Tabs.Panel>
-            <Tabs.Panel value="2">
-              <Image
-                src="https://images.unsplash.com/photo-1437719417032-8595fd9e9dc6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80"
-                alt="Tesla Model S"
-              />
-            </Tabs.Panel>
-            <Tabs.Panel value="3">
-              <Image
-                src="https://images.unsplash.com/photo-1477554193778-9562c28588c0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
-                alt="Tesla Model S"
-              />
-            </Tabs.Panel>
-            <Tabs.Panel value="4">
-              <Image
-                src="https://images.unsplash.com/photo-1477554193778-9562c28588c0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
-                alt="Tesla Model S"
-              />
-            </Tabs.Panel>
-            <Tabs.Panel value="5">
-              <Image
-                src="https://images.unsplash.com/photo-1477554193778-9562c28588c0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
-                alt="Tesla Model S"
-              />
-            </Tabs.Panel>
-
-            <ScrollArea w="26rem" offsetScrollbars>
-              <Tabs.List w={700}>
-                <Tabs.Tab value="1">
-                  <Image
-                    height={50}
-                    src="https://i.imgur.com/ZL52Q2D.png"
-                    alt="Tesla Model S"
-                  />
-                </Tabs.Tab>
-                <Tabs.Tab value="2">
-                  <Image
-                    height={50}
-                    src="https://images.unsplash.com/photo-1437719417032-8595fd9e9dc6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80"
-                    alt="Tesla Model S"
-                  />
-                </Tabs.Tab>
-                <Tabs.Tab value="3">
-                  <Image
-                    height={50}
-                    src="https://images.unsplash.com/photo-1477554193778-9562c28588c0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
-                    alt="Tesla Model S"
-                  />
-                </Tabs.Tab>
-                <Tabs.Tab value="4">
-                  <Image
-                    height={50}
-                    src="https://images.unsplash.com/photo-1477554193778-9562c28588c0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
-                    alt="Tesla Model S"
-                  />
-                </Tabs.Tab>
-                <Tabs.Tab value="5">
-                  <Image
-                    height={50}
-                    src="https://images.unsplash.com/photo-1477554193778-9562c28588c0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
-                    alt="Tesla Model S"
-                  />
-                </Tabs.Tab>
-              </Tabs.List>
-            </ScrollArea>
-          </Tabs>
+          <Carousel
+            withIndicators
+            loop
+            classNames={{
+              root: classes.carousel,
+              controls: classes.carouselControls,
+              indicator: classes.carouselIndicator,
+            }}
+          >
+            {slides}
+          </Carousel>
         </Grid.Col>
         <Grid.Col span={6}>
-          <Title order={2}>Tesla Model S</Title>
-          <Text>Place: Kitchen</Text>
-          <Text>Surface: Kitchen</Text>
-          <Text>Category: Wall Tiles</Text>
-          <Text>Size: 300x300</Text>
-          <Button>Add to Cart</Button>
-          <Accordion variant="contained" multiple>
-            <Accordion.Item value="specification">
-              <Accordion.Control>Specification</Accordion.Control>
+          <Title order={2}>{name}</Title>
+          <Text mt="md">{specification}</Text>
+          <Button my="md">Add to Cart</Button>
+          <Accordion
+            variant="separated"
+            multiple
+            defaultValue={['specifications']}
+          >
+            <Accordion.Item value="specifications">
+              <Accordion.Control>
+                <Text className={classes.accordionTitle}>Specifications</Text>
+              </Accordion.Control>
               <Accordion.Panel>
-                <List>
-                  <List.Item>Glazed Ceramic Tiles</List.Item>
-                  <List.Item>Fix Pattern</List.Item>
-                  <List.Item>Thickness 7.8mm</List.Item>
-                  <List.Item>Rectified</List.Item>
+                <List withPadding size="sm">
+                  <List.Item>
+                    <Text c="dark.4">
+                      <Text span fw={600}>
+                        Code:
+                      </Text>{' '}
+                      {code}
+                    </Text>
+                  </List.Item>
+                  <List.Item>
+                    <Text c="dark.4">
+                      <Text span fw={600}>
+                        Place:
+                      </Text>{' '}
+                      {category}
+                    </Text>
+                  </List.Item>
+                  <List.Item>
+                    <Text c="dark.4">
+                      <Text span fw={600}>
+                        Surface:
+                      </Text>{' '}
+                      {surface}
+                    </Text>
+                  </List.Item>
+                  <List.Item>
+                    <Text c="dark.4">
+                      <Text span fw={600}>
+                        Category:
+                      </Text>{' '}
+                      {type}
+                    </Text>
+                  </List.Item>
+                  <List.Item>
+                    <Text c="dark.4">
+                      <Text span fw={600}>
+                        Size:
+                      </Text>{' '}
+                      {size}
+                    </Text>
+                  </List.Item>
                 </List>
               </Accordion.Panel>
             </Accordion.Item>
-            <Accordion.Item value="feautre">
-              <Accordion.Control>Feature</Accordion.Control>
+            <Accordion.Item value="additional info">
+              <Accordion.Control>
+                <Text className={classes.accordionTitle}>
+                  Additional Information
+                </Text>
+              </Accordion.Control>
               <Accordion.Panel>
-                <List>
-                  <List.Item>Glazed Ceramic Tiles</List.Item>
-                  <List.Item>Fix Pattern</List.Item>
-                  <List.Item>Thickness 7.8mm</List.Item>
-                  <List.Item>Rectified</List.Item>
-                </List>
+                <Text>
+                  You can't order through our website yet. The cart items will
+                  only serve as reference when you enquired with us.
+                </Text>
+                <br />
+                <Text fs="italic">
+                  <Text span color="red">
+                    *
+                  </Text>{' '}
+                  All photos are for illustration purposes only.
+                </Text>
               </Accordion.Panel>
             </Accordion.Item>
           </Accordion>
         </Grid.Col>
       </Grid>
-      <Divider my="md" />
-      <Title order={3}>Related Products</Title>
-      <CardsCarousel
-        products={[
-          {
-            code: 'BS3305',
-            category: 'kitchen',
-            name: 'Tile 1',
-            viewCount: 100,
-            imgUrl: 'http://localhost:1337/uploads/BS_3303_bd7040947f.jpg',
-          },
-        ]}
-      />
     </div>
   )
 }

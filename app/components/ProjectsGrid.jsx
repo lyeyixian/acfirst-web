@@ -97,6 +97,7 @@ function ProjectCard({ title, description, projectImgUrls }) {
 
 export default function ProjectsGrid({ projects }) {
   // TODO: when mobile, make the modal full screen (with close button likely)
+  // TODO: add skeleton to cover image and project images
   const { classes } = useStyles()
   const cards = projects.map((project) => (
     <Card
