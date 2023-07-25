@@ -7,3 +7,17 @@ export async function getProductById(id) {
   }
   return await fetchApi(path, urlParamsObj)
 }
+
+export async function getProductByCode(code) {
+  const path = `/products`
+  const urlParamsObj = {
+    filters: {
+      code: {
+        $eq: code,
+      },
+    },
+    populate: 'deep',
+  }
+  const { data } = await fetchApi(path, urlParamsObj)
+  return data[0]
+}
