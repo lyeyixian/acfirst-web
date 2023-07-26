@@ -21,3 +21,15 @@ export async function getProductByCode(code) {
   const { data } = await fetchApi(path, urlParamsObj)
   return data[0]
 }
+
+export async function getAllProducts(page = 1) {
+  const path = '/products'
+  const urlParamsObj = {
+    populate: 'deep',
+    pagination: {
+      page,
+      pageSize: 6,
+    },
+  }
+  return await fetchApi(path, urlParamsObj)
+}

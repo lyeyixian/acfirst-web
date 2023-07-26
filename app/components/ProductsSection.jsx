@@ -1,29 +1,6 @@
 import { createStyles, Title, Text, SimpleGrid, rem } from '@mantine/core'
 import ProductCardImage from './ProductCardImage'
 
-const mockdata = [
-  {
-    image: 'kitchen.svg',
-    category: 'Kitchen',
-    link: '/products/kitchen',
-  },
-  {
-    image: 'bathroom.svg',
-    category: 'Bathroom',
-    link: '/products/bathroom',
-  },
-  {
-    image: 'living-room.svg',
-    category: 'Living Room',
-    link: '/products/living',
-  },
-  {
-    image: 'car-poch.svg',
-    category: 'Car Poch',
-    link: '/products/car',
-  },
-]
-
 const useStyles = createStyles((theme) => ({
   container: {
     marginTop: `calc(${theme.spacing.xl} * 4)`,

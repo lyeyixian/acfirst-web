@@ -1,113 +1,116 @@
 import {
-  Button,
-  Divider,
-  Flex,
-  Grid,
+  AspectRatio,
+  Card,
+  Image,
   Pagination,
-  Select,
+  SimpleGrid,
+  Text,
   Title,
+  createStyles,
 } from '@mantine/core'
-import {
-  IconCategory,
-  IconChevronDown,
-  IconRuler,
-  IconSquaresFilled,
-} from '@tabler/icons-react'
-import { useState } from 'react'
-import FiltersGroup from '../../components/FiltersGroup'
-import ProjectsGrid from '../../components/ProjectsGrid'
+import { useEffect, useState } from 'react'
+import { getAllProducts } from '../../api/products'
+import { json } from '@remix-run/node'
+import { getStrapiMedia } from '../../utils/apiHelper'
+import { Link, useLoaderData, useSearchParams } from '@remix-run/react'
 
-const sortData = [
-  { value: 'popular', label: 'Most Popular' },
-  { value: 'rating', label: 'Best Rating' },
-  { value: 'newest', label: 'Newest' },
-  { value: 'low', label: 'Price: Low to High' },
-  { value: 'high', label: 'Price: High to Low' },
-]
-const linkData1 = [
-  {
-    label: 'Surface',
-    icon: IconSquaresFilled,
-    initiallyOpened: true,
-    links: [
-      { label: 'Matt', link: '/' },
-      { label: 'Satin', link: '/' },
-      { label: 'Gloss', link: '/' },
-      { label: 'Polished', link: '/' },
-      { label: 'Rough', link: '/' },
-      { label: 'Honed', link: '/' },
-      { label: 'Lappato', link: '/' },
-      { label: 'Structured Surface', link: '/' },
-    ],
+const useStyle = createStyles((theme) => ({
+  card: {
+    transition: 'transform 150ms ease, box-shadow 150ms ease',
+
+    '&:hover': {
+      transform: 'scale(1.01)',
+      boxShadow: theme.shadows.md,
+    },
   },
-  {
-    label: 'Category',
-    icon: IconCategory,
-    initiallyOpened: true,
-    links: [
-      { label: 'Wall Tiles', link: '/' },
-      { label: 'Floor Tiles', link: '/' },
-      { label: 'Outdoor Tiles', link: '/' },
-    ],
-  },
-  {
-    label: 'Size',
-    icon: IconRuler,
-    initiallyOpened: true,
-    links: [
-      { label: '300x300', link: '/' },
-      { label: '600x600', link: '/' },
-    ],
-  },
-]
-const linkData2 = [
-  { label: 'Kitchen' },
-  { label: 'Bathroom' },
-  { label: 'Living Room' },
-  { label: 'Car Poch' },
-]
+}))
+
+export async function loader({ request }) {
+  const url = new URL(request.url)
+  const page = url.searchParams.get('p') || 1
+  const products = await getAllProducts(page)
+  const prunedProducts = products.data.map((product) => {
+    const {
+      name,
+      code,
+      size,
+      surface,
+      type,
+      specification,
+      viewCount,
+      category,
+      coverImg,
+    } = product.attributes
+
+    return {
+      id: product.id,
+      name,
+      code,
+      viewCount,
+      category: category.data.attributes.name,
+      imageUrl: getStrapiMedia(coverImg.data),
+    }
+  })
+
+  return json({
+    products: prunedProducts,
+    pageCount: products.meta.pagination.pageCount,
+  })
+}
+
+function ProductsGrid({ products }) {
+  const { classes } = useStyle()
+  const cards = products.map((product) => (
+    <Card
+      key={product.id}
+      className={classes.card}
+      radius="md"
+      withBorder
+      component={Link}
+      to={`/product/${product.code}`}
+    >
+      <AspectRatio ratio={1}>
+        <Image src={product.imageUrl} />
+      </AspectRatio>
+      <Text mt="xs" fw={500}>
+        {product.name}
+      </Text>
+      <Text color="dimmed" size="sm">
+        {product.category}
+      </Text>
+    </Card>
+  ))
+
+  return <SimpleGrid cols={3}>{cards}</SimpleGrid>
+}
 
 export default function ProductsIndexRoute() {
-  const [value, setValue] = useState(null)
-  const links1 = linkData1.map((item) => (
-    <FiltersGroup {...item} key={item.label} />
-  ))
-  const links2 = linkData2.map((item) => (
-    <FiltersGroup {...item} key={item.label} />
-  ))
+  const { products, pageCount } = useLoaderData()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const searchParamsPage = searchParams.get('p') || 1
+  const [page, setPage] = useState(searchParamsPage)
+
+  useEffect(() => {
+    setPage(parseInt(searchParamsPage))
+  }, [searchParamsPage])
 
   return (
     <div>
-      <Title order={2}>Kitchen</Title>
-      <Divider my="md" />
-      <Grid>
-        <Grid.Col span={3}>
-          <Select
-            value={value}
-            onChange={setValue}
-            label="Sort by:"
-            placeholder="Pick one"
-            size="xs"
-            rightSection={value ? null : <IconChevronDown size="1rem" />}
-            data={sortData}
-            clearable
-          />
-          <Divider my="md" />
-          {links2}
-          <Divider my="md" />
-          {links1}
-        </Grid.Col>
-        <Grid.Col span="auto">
-          {/* <ProjectsGrid page={1} /> */}
-          <Pagination
-            // value={page}
-            // onChange={setPage}
-            total={3}
-            position="center"
-            withEdges
-          />
-        </Grid.Col>
-      </Grid>
+      <Title order={2} ta="center" mb="md">
+        Kitchen
+      </Title>
+      <ProductsGrid products={products} />
+      <Pagination
+        value={page}
+        onChange={(value) => {
+          setPage(value)
+          setSearchParams({ p: value })
+        }}
+        total={pageCount}
+        position="center"
+        mt="lg"
+        withEdges
+      />
     </div>
   )
 }

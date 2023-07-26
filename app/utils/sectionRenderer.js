@@ -7,7 +7,6 @@ export function sectionRenderer(section, index) {
     return null
   }
 
-  // console.log(section)
   switch (section.type) {
     case 'elements.text':
     case 'hero':

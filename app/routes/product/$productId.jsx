@@ -79,6 +79,8 @@ export async function loader({ params }) {
 
 export default function ProductRoute() {
   // TODO: add functionality to add to cart button
+  // TODO: refactor carousel with the carousel in ProjectsGrid
+  // TODO: increase the gap between carousel slides
   const { classes } = useStyle()
   const params = useParams()
   const {
