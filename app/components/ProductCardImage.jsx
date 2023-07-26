@@ -9,7 +9,7 @@ const useStyles = createStyles((theme) => ({
     transition: 'transform 500ms ease',
 
     '&:hover': {
-      transform: 'scale(1.1)',
+      transform: 'scale(1.05)',
     },
   },
 
@@ -31,9 +31,11 @@ const useStyles = createStyles((theme) => ({
 //   category: string;
 // }
 
+// TODO: remove this file and put together with ProductsSection
 export default function ProductCardImage({ name, slug, imgUrl }) {
   const { classes } = useStyles()
   // TODO: to url probably is wrong. change to use query params instead
+  // TODO: change position of category to bottom of the card
   return (
     <Link to={`/products/${slug}`} className={classes.link}>
       <Paper
