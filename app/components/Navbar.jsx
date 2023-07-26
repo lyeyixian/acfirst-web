@@ -78,7 +78,7 @@ const links = [
     label: 'About',
   },
   {
-    link: '/products',
+    link: '/products/all',
     label: 'Products',
   },
   {

@@ -9,10 +9,15 @@ import {
   createStyles,
 } from '@mantine/core'
 import { useEffect, useState } from 'react'
-import { getAllProducts } from '../../api/products'
+import { getProducts } from '../../api/products'
 import { json } from '@remix-run/node'
 import { getStrapiMedia } from '../../utils/apiHelper'
-import { Link, useLoaderData, useSearchParams } from '@remix-run/react'
+import {
+  Link,
+  useLoaderData,
+  useParams,
+  useSearchParams,
+} from '@remix-run/react'
 
 const useStyle = createStyles((theme) => ({
   card: {
@@ -25,10 +30,11 @@ const useStyle = createStyles((theme) => ({
   },
 }))
 
-export async function loader({ request }) {
+export async function loader({ request, params }) {
+  const { category } = params
   const url = new URL(request.url)
   const page = url.searchParams.get('p') || 1
-  const products = await getAllProducts(page)
+  const products = await getProducts(page, category)
   const prunedProducts = products.data.map((product) => {
     const {
       name,
@@ -85,6 +91,7 @@ function ProductsGrid({ products }) {
 }
 
 export default function ProductsIndexRoute() {
+  const { category } = useParams()
   const { products, pageCount } = useLoaderData()
   const [searchParams, setSearchParams] = useSearchParams()
   const searchParamsPage = searchParams.get('p') || 1
@@ -96,8 +103,8 @@ export default function ProductsIndexRoute() {
 
   return (
     <div>
-      <Title order={2} ta="center" mb="md">
-        Kitchen
+      <Title order={2} ta="center" mb="md" transform="capitalize">
+        {category === 'all' ? 'All products' : category}
       </Title>
       <ProductsGrid products={products} />
       <Pagination

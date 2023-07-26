@@ -22,7 +22,7 @@ export async function getProductByCode(code) {
   return data[0]
 }
 
-export async function getAllProducts(page = 1) {
+export async function getProducts(page = 1, category) {
   const path = '/products'
   const urlParamsObj = {
     populate: 'deep',
@@ -31,5 +31,16 @@ export async function getAllProducts(page = 1) {
       pageSize: 6,
     },
   }
+
+  if (category && category !== 'all') {
+    urlParamsObj.filters = {
+      category: {
+        slug: {
+          $eq: category,
+        },
+      },
+    }
+  }
+
   return await fetchApi(path, urlParamsObj)
 }
