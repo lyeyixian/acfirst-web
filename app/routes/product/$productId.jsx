@@ -143,7 +143,7 @@ export default function ProductRoute() {
                   <List.Item>
                     <Text c="dark.4">
                       <Text span fw={600}>
-                        Place:
+                        Category:
                       </Text>{' '}
                       {category}
                     </Text>
@@ -159,7 +159,7 @@ export default function ProductRoute() {
                   <List.Item>
                     <Text c="dark.4">
                       <Text span fw={600}>
-                        Category:
+                        Type:
                       </Text>{' '}
                       {type}
                     </Text>
