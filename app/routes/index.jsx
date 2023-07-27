@@ -4,7 +4,7 @@ import { useLoaderData } from '@remix-run/react'
 import { Container } from '@mantine/core'
 
 import { getPageBySlug } from '../api/page'
-import { sectionRenderer } from '../utils/sectionRenderer'
+import { renderSection } from '../utils/renderer'
 import { getStrapiMedia } from '../utils/apiHelper'
 
 export async function loader() {
@@ -77,7 +77,7 @@ export async function loader() {
 
 export default function Index() {
   const data = useLoaderData()
-  const sections = data.map((section, index) => sectionRenderer(section, index))
+  const sections = data.map((section, index) => renderSection(section, index))
   return (
     <div>
       {sections[0]}

@@ -1,8 +1,15 @@
+import {
+  IconBath,
+  IconCar,
+  IconSofa,
+  IconToolsKitchen2,
+} from '@tabler/icons-react'
 import HeroBanner from '../components/HeroBanner'
 import ProductsSection from '../components/ProductsSection'
 import ShowcaseSection from '../components/ShowcaseSection'
+import { NavLink } from '@mantine/core'
 
-export function sectionRenderer(section, index) {
+export function renderSection(section, index) {
   if (!section) {
     return null
   }
@@ -51,6 +58,25 @@ export function sectionRenderer(section, index) {
           categories={categories}
         />
       )
+    default:
+      return null
+  }
+}
+
+export function renderCategoryIcon(category) {
+  if (!category) {
+    return null
+  }
+
+  switch (category.slug) {
+    case 'kitchen':
+      return IconToolsKitchen2
+    case 'bathroom':
+      return IconBath
+    case 'living-room':
+      return IconSofa
+    case 'car-poch':
+      return IconCar
     default:
       return null
   }
