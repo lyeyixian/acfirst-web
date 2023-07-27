@@ -78,7 +78,7 @@ const links = [
     label: 'About',
   },
   {
-    link: '/products/all',
+    link: '/products',
     label: 'Products',
   },
   {
@@ -106,7 +106,6 @@ export default function Navbar() {
         className={({ isActive }) =>
           cx(classes.link, { [classes.linkActive]: isActive })
         }
-        end
       >
         {link.label}
       </NavLink>
