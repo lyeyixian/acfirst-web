@@ -29,7 +29,7 @@ export async function loader() {
             size,
             surface,
             type,
-            specification,
+            description,
             viewCount,
             productImg,
             category,

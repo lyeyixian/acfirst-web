@@ -42,7 +42,7 @@ export async function loader({ request, params }) {
       size,
       surface,
       type,
-      specification,
+      description,
       viewCount,
       category,
       coverImg,

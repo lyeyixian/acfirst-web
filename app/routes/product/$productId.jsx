@@ -56,7 +56,7 @@ export async function loader({ params }) {
     size,
     surface,
     type,
-    specification,
+    description,
     viewCount,
     productImg,
     category,
@@ -69,7 +69,7 @@ export async function loader({ params }) {
     size,
     surface,
     type,
-    specification,
+    description,
     viewCount,
     productImages: getStrapiMedias(productImg.data),
     category: category.data.attributes.name,
@@ -89,7 +89,7 @@ export default function ProductRoute() {
     size,
     surface,
     type,
-    specification, // TODO: change key to description
+    description,
     viewCount, // TODO: figure out what to do with viewCount
     productImages,
     category,
@@ -120,7 +120,7 @@ export default function ProductRoute() {
         </Grid.Col>
         <Grid.Col span={6}>
           <Title order={2}>{name}</Title>
-          <Text mt="md">{specification}</Text>
+          <Text mt="md">{description}</Text>
           <Button my="md">Add to Cart</Button>
           <Accordion
             variant="separated"
