@@ -18,43 +18,44 @@ const sortData = [
   { value: 'low', label: 'Price: Low to High' },
   { value: 'high', label: 'Price: High to Low' },
 ]
-const linkData1 = [
+const filterData = [
   {
     label: 'Surface',
+    slug: 'surface',
     icon: IconSquaresFilled,
-    initiallyOpened: true,
     links: [
-      { label: 'Matt', link: '/' },
-      { label: 'Satin', link: '/' },
-      { label: 'Gloss', link: '/' },
-      { label: 'Polished', link: '/' },
-      { label: 'Rough', link: '/' },
-      { label: 'Honed', link: '/' },
-      { label: 'Lappato', link: '/' },
-      { label: 'Structured Surface', link: '/' },
+      { label: 'Matt', slug: 'matt' },
+      { label: 'Satin', slug: 'satin' },
+      { label: 'Gloss', slug: 'gloss' },
+      { label: 'Polished', slug: 'polished' },
+      { label: 'Rough', slug: 'rough' },
+      { label: 'Honed', slug: 'honed' },
+      { label: 'Lappato', slug: 'lappato' },
+      { label: 'Structured Surface', slug: 'structuredSurface' },
     ],
   },
   {
-    label: 'Category',
+    label: 'Type',
+    slug: 'type',
     icon: IconCategory,
-    initiallyOpened: true,
     links: [
-      { label: 'Wall Tiles', link: '/' },
-      { label: 'Floor Tiles', link: '/' },
-      { label: 'Outdoor Tiles', link: '/' },
+      { label: 'Wall Tiles', slug: 'wall' },
+      { label: 'Floor Tiles', slug: 'floor' },
+      { label: 'Outdoor Tiles', slug: 'outdoor' },
     ],
   },
   {
     label: 'Size',
+    slug: 'size',
     icon: IconRuler,
-    initiallyOpened: true,
     links: [
-      { label: '300x300', link: '/' },
-      { label: '600x600', link: '/' },
+      { label: '300x300', slug: 'mm-300x300' },
+      { label: '600x600', slug: 'mm-600x600' },
     ],
   },
 ]
 
+// TODO: dont make the loader run when search params changed
 export async function loader() {
   const categories = await getCategories()
   const prunedCategories = categories.data.map((category) => {
@@ -70,7 +71,7 @@ export async function loader() {
 
 export default function ProductsRoute() {
   const [value, setValue] = useState(null)
-  const links1 = linkData1.map((item) => (
+  const specificationFilters = filterData.map((item) => (
     <FiltersGroup {...item} key={item.label} />
   ))
 
@@ -81,9 +82,9 @@ export default function ProductsRoute() {
   }, [category])
 
   const { categories } = useLoaderData()
-  const categoryLinks = categories.map((category, index) => {
+  const categoryFilters = categories.map((category, index) => {
     const CategoryIcon = renderCategoryIcon(category)
-
+    // TODO: preserve the search params when clicking on the category, except the page
     return (
       <div key={index}>
         {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
@@ -123,9 +124,9 @@ export default function ProductsRoute() {
             clearable
           />
           <Divider my="md" />
-          {categoryLinks}
+          {categoryFilters}
           <Divider my="md" />
-          {links1}
+          {specificationFilters}
         </Grid.Col>
         <Grid.Col span="auto">
           <Outlet />

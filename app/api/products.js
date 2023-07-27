@@ -22,7 +22,7 @@ export async function getProductByCode(code) {
   return data[0]
 }
 
-export async function getProducts(page = 1, category) {
+export async function getProducts(page = 1, category, filters = {}) {
   const path = '/products'
   const urlParamsObj = {
     populate: 'deep',
@@ -30,14 +30,21 @@ export async function getProducts(page = 1, category) {
       page,
       pageSize: 6,
     },
+    filters: {},
+  }
+
+  for (const [key, value] of Object.entries(filters)) {
+    if (value) {
+      urlParamsObj.filters[key] = {
+        $eq: value,
+      }
+    }
   }
 
   if (category && category !== 'all') {
-    urlParamsObj.filters = {
-      category: {
-        slug: {
-          $eq: category,
-        },
+    urlParamsObj.filters.category = {
+      slug: {
+        $eq: category,
       },
     }
   }

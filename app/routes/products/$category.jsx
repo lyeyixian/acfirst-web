@@ -34,7 +34,10 @@ export async function loader({ request, params }) {
   const { category } = params
   const url = new URL(request.url)
   const page = url.searchParams.get('p') || 1
-  const products = await getProducts(page, category)
+  const surface = url.searchParams.get('surface')
+  const type = url.searchParams.get('type')
+  const size = url.searchParams.get('size')
+  const products = await getProducts(page, category, { surface, type, size })
   const prunedProducts = products.data.map((product) => {
     const { name, code, viewCount, category, coverImg } = product.attributes
 
@@ -54,6 +57,7 @@ export async function loader({ request, params }) {
   })
 }
 
+// TODO: put viewCount to the bottom right of the card
 function ProductsGrid({ products }) {
   const { classes } = useStyle()
   const cards = products.map((product) => (
@@ -80,6 +84,8 @@ function ProductsGrid({ products }) {
   return <SimpleGrid cols={3}>{cards}</SimpleGrid>
 }
 
+// TODO: pagination bug. when on page 2 then switch filter, will stay on page 2 even if there isn't anything there
+// TODO: fix pagination to the bottom, instead of keep jumping around
 export default function ProductsIndexRoute() {
   const { category } = useParams()
   const { products, pageCount } = useLoaderData()
@@ -101,7 +107,12 @@ export default function ProductsIndexRoute() {
         value={page}
         onChange={(value) => {
           setPage(value)
-          setSearchParams({ p: value })
+          setSearchParams((prev) => {
+            // TODO: refactor this into a hook tgt with filters group
+            const params = new URLSearchParams(prev)
+            params.set('p', value)
+            return params
+          })
         }}
         total={pageCount}
         position="center"

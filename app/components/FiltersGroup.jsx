@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react'
 import {
   Group,
   Box,
@@ -8,8 +8,14 @@ import {
   UnstyledButton,
   createStyles,
   rem,
-} from '@mantine/core';
-import { IconCalendarStats, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+  NavLink,
+} from '@mantine/core'
+import {
+  IconCalendarStats,
+  IconChevronLeft,
+  IconChevronRight,
+} from '@tabler/icons-react'
+import { useSearchParams } from '@remix-run/react'
 
 const useStyles = createStyles((theme) => ({
   control: {
@@ -21,7 +27,10 @@ const useStyles = createStyles((theme) => ({
     fontSize: theme.fontSizes.sm,
 
     '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0],
+      backgroundColor:
+        theme.colorScheme === 'dark'
+          ? theme.colors.dark[7]
+          : theme.colors.gray[0],
       color: theme.colorScheme === 'dark' ? theme.white : theme.black,
     },
   },
@@ -34,13 +43,19 @@ const useStyles = createStyles((theme) => ({
     paddingLeft: rem(31),
     marginLeft: rem(30),
     fontSize: theme.fontSizes.sm,
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
+    color:
+      theme.colorScheme === 'dark'
+        ? theme.colors.dark[0]
+        : theme.colors.gray[7],
     borderLeft: `${rem(1)} solid ${
       theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
     }`,
 
     '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0],
+      backgroundColor:
+        theme.colorScheme === 'dark'
+          ? theme.colors.dark[7]
+          : theme.colors.gray[0],
       color: theme.colorScheme === 'dark' ? theme.white : theme.black,
     },
   },
@@ -48,7 +63,7 @@ const useStyles = createStyles((theme) => ({
   chevron: {
     transition: 'transform 200ms ease',
   },
-}));
+}))
 
 // interface LinksGroupProps {
 //   icon: React.FC<any>;
@@ -57,22 +72,48 @@ const useStyles = createStyles((theme) => ({
 //   links?: { label: string; link: string }[];
 // }
 
-export default function FiltersGroup({ icon: Icon, label, initiallyOpened, links }) {
-  const { classes, theme } = useStyles();
-  const hasLinks = Array.isArray(links);
-  const [opened, setOpened] = useState(initiallyOpened || false);
-  const ChevronIcon = theme.dir === 'ltr' ? IconChevronRight : IconChevronLeft;
-  const items = (hasLinks ? links : []).map((link) => (
-    <Text
-      component="a"
-      className={classes.link}
-      href={link.link}
-      key={link.label}
-      onClick={(event) => event.preventDefault()}
-    >
-      {link.label}
-    </Text>
-  ));
+export default function FiltersGroup({
+  icon: Icon,
+  label,
+  slug,
+  initiallyOpened,
+  links,
+}) {
+  const { classes, theme } = useStyles()
+  const hasLinks = Array.isArray(links)
+  const [opened, setOpened] = useState(initiallyOpened || true)
+  const ChevronIcon = theme.dir === 'ltr' ? IconChevronRight : IconChevronLeft
+
+  const [searchParams, setSearchParams] = useSearchParams()
+  const filterValue = searchParams.get(slug)
+  const [active, setActive] = useState(filterValue)
+  useEffect(() => {
+    setActive(filterValue)
+  }, [filterValue])
+  // TODO: NavLink overflow to grid
+  const items = (hasLinks ? links : []).map((link, index) => (
+    <div key={index}>
+      {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+      <NavLink
+        active={active === link.slug}
+        className={classes.link}
+        label={link.label}
+        onClick={() =>
+          setSearchParams((prev) => {
+            const params = new URLSearchParams(prev)
+
+            if (active === link.slug) {
+              params.delete(slug)
+            } else {
+              params.set(slug, link.slug)
+            }
+
+            return params
+          })
+        }
+      />
+    </div>
+  ))
 
   return (
     <>
@@ -116,7 +157,7 @@ const mockdata = {
     { label: 'Previous releases', link: '/' },
     { label: 'Releases schedule', link: '/' },
   ],
-};
+}
 
 // export function NavbarLinksGroup() {
 //   return (
