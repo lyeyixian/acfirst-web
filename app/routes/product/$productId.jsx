@@ -47,6 +47,7 @@ const useStyle = createStyles((theme) => ({
   },
 }))
 
+// TODO: everytime this loads, increase the viewCount
 export async function loader({ params }) {
   const { productId } = params
   const product = await getProductByCode(productId)
@@ -90,10 +91,8 @@ export default function ProductRoute() {
     surface,
     type,
     description,
-    viewCount, // TODO: figure out what to do with viewCount
     productImages,
     category,
-    coverImg,
   } = useLoaderData()
   const slides = productImages.map((image) => (
     <Carousel.Slide key={image}>

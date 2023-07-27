@@ -7,7 +7,6 @@ import {
 import HeroBanner from '../components/HeroBanner'
 import ProductsSection from '../components/ProductsSection'
 import ShowcaseSection from '../components/ShowcaseSection'
-import { NavLink } from '@mantine/core'
 
 export function renderSection(section, index) {
   if (!section) {

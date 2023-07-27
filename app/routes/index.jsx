@@ -27,11 +27,9 @@ export async function loader() {
             name,
             code,
             size,
-            surface,
+            surface, // TODO: maybe can consider putting these details into product section
             type,
-            description,
             viewCount,
-            productImg,
             category,
             coverImg,
           } = product.attributes

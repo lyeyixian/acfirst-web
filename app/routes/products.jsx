@@ -3,14 +3,10 @@ import { Outlet, useParams, Link, useLoaderData } from '@remix-run/react'
 import { useEffect, useState } from 'react'
 import FiltersGroup from '../components/FiltersGroup'
 import {
-  IconBath,
-  IconCar,
   IconCategory,
   IconChevronDown,
   IconRuler,
-  IconSofa,
   IconSquaresFilled,
-  IconToolsKitchen2,
 } from '@tabler/icons-react'
 import { getCategories } from '../api/category'
 import { renderCategoryIcon } from '../utils/renderer'

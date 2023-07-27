@@ -36,17 +36,7 @@ export async function loader({ request, params }) {
   const page = url.searchParams.get('p') || 1
   const products = await getProducts(page, category)
   const prunedProducts = products.data.map((product) => {
-    const {
-      name,
-      code,
-      size,
-      surface,
-      type,
-      description,
-      viewCount,
-      category,
-      coverImg,
-    } = product.attributes
+    const { name, code, viewCount, category, coverImg } = product.attributes
 
     return {
       id: product.id,
