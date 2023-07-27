@@ -99,7 +99,7 @@ export default function ProductsRoute() {
           component={Link}
           to={
             active === category.slug
-              ? '/products'
+              ? '/products/all'
               : `/products/${category.slug}`
           }
         />
