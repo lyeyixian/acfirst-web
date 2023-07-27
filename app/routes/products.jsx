@@ -1,13 +1,19 @@
-import { Divider, Grid, Select } from '@mantine/core'
-import { Outlet } from '@remix-run/react'
-import { useState } from 'react'
+import { Divider, Grid, NavLink, Select, ThemeIcon } from '@mantine/core'
+import { Outlet, useParams, Link, useLoaderData } from '@remix-run/react'
+import { useEffect, useState } from 'react'
 import FiltersGroup from '../components/FiltersGroup'
 import {
+  IconBath,
+  IconCar,
   IconCategory,
   IconChevronDown,
   IconRuler,
+  IconSofa,
   IconSquaresFilled,
+  IconToolsKitchen2,
 } from '@tabler/icons-react'
+import { getCategories } from '../api/category'
+import { renderCategoryIcon } from '../utils/renderer'
 
 const sortData = [
   { value: 'popular', label: 'Most Popular' },
@@ -52,21 +58,58 @@ const linkData1 = [
     ],
   },
 ]
-const linkData2 = [
-  { label: 'Kitchen' },
-  { label: 'Bathroom' },
-  { label: 'Living Room' },
-  { label: 'Car Poch' },
-]
+
+export async function loader() {
+  const categories = await getCategories()
+  const prunedCategories = categories.data.map((category) => {
+    const { name, slug } = category.attributes
+    return {
+      name,
+      slug,
+    }
+  })
+
+  return { categories: prunedCategories }
+}
 
 export default function ProductsRoute() {
   const [value, setValue] = useState(null)
   const links1 = linkData1.map((item) => (
     <FiltersGroup {...item} key={item.label} />
   ))
-  const links2 = linkData2.map((item) => (
-    <FiltersGroup {...item} key={item.label} />
-  ))
+
+  const { category } = useParams()
+  const [active, setActive] = useState(category)
+  useEffect(() => {
+    setActive(category)
+  }, [category])
+
+  const { categories } = useLoaderData()
+  const categoryLinks = categories.map((category, index) => {
+    const CategoryIcon = renderCategoryIcon(category)
+
+    return (
+      <div key={index}>
+        {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+        <NavLink
+          fw={500}
+          label={category.name}
+          icon={
+            <ThemeIcon variant="outline" size={30}>
+              <CategoryIcon size="1.1rem" />
+            </ThemeIcon>
+          }
+          active={active === category.slug}
+          component={Link}
+          to={
+            active === category.slug
+              ? '/products'
+              : `/products/${category.slug}`
+          }
+        />
+      </div>
+    )
+  })
 
   return (
     <div>
@@ -84,7 +127,7 @@ export default function ProductsRoute() {
             clearable
           />
           <Divider my="md" />
-          {links2}
+          {categoryLinks}
           <Divider my="md" />
           {links1}
         </Grid.Col>
