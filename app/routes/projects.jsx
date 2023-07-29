@@ -2,9 +2,9 @@ import { json } from '@remix-run/node'
 import { useLoaderData, useSearchParams } from '@remix-run/react'
 import { Pagination } from '@mantine/core'
 import { useEffect, useState } from 'react'
-import ProjectsGrid from '../components/ProjectsGrid'
 import { getAllProjects } from '../models/project.server'
 import { formatDate, getStrapiMedia, getStrapiMedias } from '../utils/apiHelper'
+import ProjectsGrid from '../components/projects/ProjectsGrid'
 
 export async function loader({ request }) {
   const url = new URL(request.url)

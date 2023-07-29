@@ -4,9 +4,9 @@ import {
   IconSofa,
   IconToolsKitchen2,
 } from '@tabler/icons-react'
-import HeroBanner from '../components/HeroBanner'
-import ProductsSection from '../components/ProductsSection'
-import ShowcaseSection from '../components/ShowcaseSection'
+import HeroBanner from '../components/home/HeroBanner'
+import ProductsSection from '../components/home/ProductsSection'
+import ShowcaseSection from '../components/home/ShowcaseSection'
 
 export function renderSection(section, index) {
   if (!section) {

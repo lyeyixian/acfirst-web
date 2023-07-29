@@ -1,13 +1,13 @@
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 
-import { AspectRatio, Skeleton, Text, createStyles, rem } from '@mantine/core'
+import { Text, createStyles, rem } from '@mantine/core'
 
 import { IconMapPin, IconPhone } from '@tabler/icons-react'
 
 import ContactIconsList from '../components/ContactIconsList'
 import { getPageBySlug } from '../models/page.server'
-import { useEffect, useRef, useState } from 'react'
+import Map from '../components/stores/Map'
 
 const useStyles = createStyles((theme) => {
   const BREAKPOINT = theme.fn.smallerThan('sm')
@@ -48,54 +48,8 @@ const useStyles = createStyles((theme) => {
         marginBottom: theme.spacing.xl,
       },
     },
-
-    map: {
-      // TODO: size of map incorrect when screen is smaller but haven't reach sm breakpoint
-      boxSizing: 'border-box',
-      flex: 1,
-      marginLeft: theme.spacing.md,
-
-      [BREAKPOINT]: {
-        marginLeft: 0,
-      },
-    },
   }
 })
-
-function Map({ src }) {
-  const [loading, setLoading] = useState(true)
-  const iframeRef = useRef(null)
-
-  useEffect(() => {
-    const iframeCurrent = iframeRef.current
-    iframeCurrent?.addEventListener('load', () => {
-      setLoading(false)
-    })
-
-    return () => {
-      iframeCurrent?.removeEventListener('load', () => {
-        setLoading(false)
-      })
-    }
-  }, [iframeRef])
-
-  const { classes } = useStyles()
-
-  return (
-    <Skeleton visible={loading} className={classes.map}>
-      {/* TODO: add transition to skeleton */}
-      <AspectRatio ratio={16 / 9}>
-        <iframe
-          ref={iframeRef}
-          src={src}
-          style={{ border: 0 }}
-          loading="lazy"
-          title="Google Maps"
-        ></iframe>
-      </AspectRatio>
-    </Skeleton>
-  )
-}
 
 export async function loader() {
   const pageData = await getPageBySlug('stores')

@@ -9,7 +9,7 @@ import {
 import { MantineProvider, createEmotionCache } from '@mantine/core'
 import { StylesPlaceholder } from '@mantine/remix'
 import { theme } from './theme'
-import AppContainer from './components/AppContainer'
+import AppContainer from './components/layout/AppContainer'
 import { Notifications } from '@mantine/notifications'
 import { ModalsProvider } from '@mantine/modals'
 
