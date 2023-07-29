@@ -2,7 +2,7 @@ import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 
 import { AspectRatio, Image, Text, Title } from '@mantine/core'
-import { getPageBySlug } from '../../api/page'
+import { getPageBySlug } from '../../models/page.server'
 import { getStrapiMedia } from '../../utils/apiHelper'
 
 export async function loader() {

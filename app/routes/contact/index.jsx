@@ -32,8 +32,8 @@ import {
 } from '@tabler/icons-react'
 
 import ContactIconsList from '~/components/ContactIconsList'
-import { createFormEntry } from '../../api/contactForm'
-import { getPageBySlug } from '../../api/page'
+import { createFormEntry } from '../../models/contactFormSubmission.server'
+import { getPageBySlug } from '../../models/page.server'
 
 const useStyles = createStyles((theme) => {
   const BREAKPOINT = theme.fn.smallerThan('sm')

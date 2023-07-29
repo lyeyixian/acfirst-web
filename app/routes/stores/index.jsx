@@ -6,7 +6,7 @@ import { AspectRatio, Skeleton, Text, createStyles, rem } from '@mantine/core'
 import { IconMapPin, IconPhone } from '@tabler/icons-react'
 
 import ContactIconsList from '../../components/ContactIconsList'
-import { getPageBySlug } from '../../api/page'
+import { getPageBySlug } from '../../models/page.server'
 import { useEffect, useRef, useState } from 'react'
 
 const useStyles = createStyles((theme) => {

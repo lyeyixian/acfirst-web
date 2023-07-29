@@ -3,7 +3,7 @@ import { useLoaderData } from '@remix-run/react'
 
 import { Container } from '@mantine/core'
 
-import { getPageBySlug } from '../api/page'
+import { getPageBySlug } from '../models/page.server'
 import { renderSection } from '../utils/renderer'
 import { getStrapiMedia } from '../utils/apiHelper'
 

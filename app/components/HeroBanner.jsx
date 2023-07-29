@@ -8,8 +8,7 @@ import {
   rem,
   Box,
 } from '@mantine/core'
-import { Link, useLoaderData } from '@remix-run/react'
-import { getPageById } from '../api/page'
+import { Link } from '@remix-run/react'
 
 const useStyles = createStyles((theme) => ({
   container: {

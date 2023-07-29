@@ -8,7 +8,7 @@ import {
   IconRuler,
   IconSquaresFilled,
 } from '@tabler/icons-react'
-import { getCategories } from '../api/category'
+import { getCategories } from '../models/category.server'
 import { renderCategoryIcon } from '../utils/renderer'
 
 const sortData = [

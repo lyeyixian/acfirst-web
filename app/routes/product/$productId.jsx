@@ -12,7 +12,7 @@ import {
 } from '@mantine/core'
 import { useLoaderData, useParams } from '@remix-run/react'
 import { json } from '@remix-run/node'
-import { getProductByCode } from '../../api/products'
+import { getProductByCode } from '../../models/product.server'
 import { getStrapiMedia, getStrapiMedias } from '../../utils/apiHelper'
 import { Carousel } from '@mantine/carousel'
 

@@ -9,7 +9,7 @@ import {
   createStyles,
 } from '@mantine/core'
 import { useEffect, useState } from 'react'
-import { getProducts } from '../../api/products'
+import { getProducts } from '../../models/product.server'
 import { json } from '@remix-run/node'
 import { getStrapiMedia } from '../../utils/apiHelper'
 import {
@@ -80,7 +80,7 @@ function ProductsGrid({ products }) {
       </Text>
     </Card>
   ))
-
+  // TODO: show something when products is empty
   return <SimpleGrid cols={3}>{cards}</SimpleGrid>
 }
 

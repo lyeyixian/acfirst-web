@@ -60,6 +60,9 @@ export default function App() {
   )
 }
 
+// TODO: add healthcheck route
+
+// TODO: add error handling
 // issue with error boundary: https://github.com/remix-run/remix/issues/1136
 // https://github.com/mui/material-ui/pull/30592
 // https://github.com/mui/material-ui/issues/30436#issuecomment-1003339715
