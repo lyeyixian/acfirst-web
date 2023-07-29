@@ -5,13 +5,21 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  isRouteErrorResponse,
+  useRouteError,
 } from '@remix-run/react'
-import { MantineProvider, createEmotionCache } from '@mantine/core'
+import {
+  MantineProvider,
+  createEmotionCache,
+  useEmotionCache,
+} from '@mantine/core'
 import { StylesPlaceholder } from '@mantine/remix'
 import { theme } from './theme'
 import AppContainer from './components/layout/AppContainer'
 import { Notifications } from '@mantine/notifications'
 import { ModalsProvider } from '@mantine/modals'
+import { useContext, useEffect } from 'react'
+import { ClientStyleContext } from './context'
 
 export const meta = () => ({
   charset: 'utf-8',
@@ -23,9 +31,23 @@ export const links = () => {
   return [{ rel: 'icon', href: '/logo.png' }]
 }
 
-createEmotionCache({ key: 'mantine' })
-
 export default function App() {
+  // fix for style disappearing on error
+  // https://github.com/correiarmjoao/remix-with-mantine
+  const clientStyleData = useContext(ClientStyleContext)
+  const mantineCache = useEmotionCache()
+
+  useEffect(() => {
+    const cache = mantineCache
+    cache.sheet.container = document.head
+    const tags = cache.sheet.tags
+    cache.sheet.flush()
+    tags.forEach((tag) => {
+      cache.sheet._insertTag(tag)
+    })
+    clientStyleData?.reset()
+  }, [])
+
   return (
     <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
       <ModalsProvider>
@@ -62,8 +84,29 @@ export default function App() {
 
 // TODO: add healthcheck route
 
-// TODO: add error handling
-// issue with error boundary: https://github.com/remix-run/remix/issues/1136
-// https://github.com/mui/material-ui/pull/30592
-// https://github.com/mui/material-ui/issues/30436#issuecomment-1003339715
-// https://github.com/correiarmjoao/remix-with-mantine
+// TODO: add error handling UI
+export function ErrorBoundary() {
+  const error = useRouteError()
+
+  if (isRouteErrorResponse(error)) {
+    return (
+      <div>
+        <h1>
+          {error.status} {error.statusText}
+        </h1>
+        <p>{error.data}</p>
+      </div>
+    )
+  } else if (error instanceof Error) {
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>{error.message}</p>
+        <p>The stack trace is:</p>
+        <pre>{error.stack}</pre>
+      </div>
+    )
+  } else {
+    return <h1>Unknown Error</h1>
+  }
+}
