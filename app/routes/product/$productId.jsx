@@ -12,7 +12,7 @@ import {
 } from '@mantine/core'
 import { useLoaderData, useParams } from '@remix-run/react'
 import { json } from '@remix-run/node'
-import { getProductByCode } from '../../models/product.server'
+import { getProduct } from '../../models/product.server'
 import { getStrapiMedia, getStrapiMedias } from '../../utils/apiHelper'
 import { Carousel } from '@mantine/carousel'
 
@@ -50,7 +50,7 @@ const useStyle = createStyles((theme) => ({
 // TODO: everytime this loads, increase the viewCount
 export async function loader({ params }) {
   const { productId } = params
-  const product = await getProductByCode(productId)
+  const product = await getProduct(productId)
   const {
     name,
     code,

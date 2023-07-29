@@ -1,11 +1,11 @@
 import { useLoaderData } from '@remix-run/react'
-import { getPageBySlug } from '../models/page.server'
+import { getPage } from '../models/page.server'
 import { getStrapiMedia } from '../utils/apiHelper'
 import { json } from '@remix-run/node'
 import { AspectRatio, Image, Text, Title } from '@mantine/core'
 
 export async function loader() {
-  const pageData = await getPageBySlug('about')
+  const pageData = await getPage('about')
   const imgUrl = getStrapiMedia(pageData.attributes.contentSection[0].url.data)
   const texts = []
 

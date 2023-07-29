@@ -3,12 +3,12 @@ import { useLoaderData } from '@remix-run/react'
 
 import { Container } from '@mantine/core'
 
-import { getPageBySlug } from '../models/page.server'
+import { getPage } from '../models/page.server'
 import { renderSection } from '../utils/renderer'
 import { getStrapiMedia } from '../utils/apiHelper'
 
 export async function loader() {
-  const pageData = await getPageBySlug('home')
+  const pageData = await getPage('home')
   const sections = pageData.attributes.contentSection.map((section) => {
     switch (section.__component) {
       case 'sections.hero':

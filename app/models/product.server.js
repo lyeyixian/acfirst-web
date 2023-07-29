@@ -1,14 +1,6 @@
 import { fetchApi } from '../utils/fetchApi'
 
-export async function getProductById(id) {
-  const path = `/products/${id}`
-  const urlParamsObj = {
-    populate: '*',
-  }
-  return await fetchApi(path, urlParamsObj)
-}
-
-export async function getProductByCode(code) {
+export async function getProduct(code) {
   const path = `/products`
   const urlParamsObj = {
     filters: {

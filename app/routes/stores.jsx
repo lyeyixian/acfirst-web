@@ -6,7 +6,7 @@ import { Text, createStyles, rem } from '@mantine/core'
 import { IconMapPin, IconPhone } from '@tabler/icons-react'
 
 import ContactIconsList from '../components/ContactIconsList'
-import { getPageBySlug } from '../models/page.server'
+import { getPage } from '../models/page.server'
 import Map from '../components/stores/Map'
 
 const useStyles = createStyles((theme) => {
@@ -52,7 +52,7 @@ const useStyles = createStyles((theme) => {
 })
 
 export async function loader() {
-  const pageData = await getPageBySlug('stores')
+  const pageData = await getPage('stores')
   const res = []
 
   for (const section of pageData.attributes.contentSection) {

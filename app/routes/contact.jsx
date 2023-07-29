@@ -12,8 +12,8 @@ import {
   IconX,
 } from '@tabler/icons-react'
 
-import { createFormEntry } from '../models/contactFormSubmission.server'
-import { getPageBySlug } from '../models/page.server'
+import { addContactFormSubmission } from '../models/contactFormSubmission.server'
+import { getPage } from '../models/page.server'
 import GetInTouch from '../components/contact/GetInTouch'
 
 export async function action({ request }) {
@@ -25,11 +25,11 @@ export async function action({ request }) {
     message: formData.get('message'),
   }
 
-  return await createFormEntry(data)
+  return await addContactFormSubmission(data)
 }
 
 export async function loader() {
-  const pageData = await getPageBySlug('contact')
+  const pageData = await getPage('contact')
   const { contactInfo, submitButton } = pageData.attributes.contentSection[0]
 
   return json({

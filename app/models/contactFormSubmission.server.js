@@ -1,6 +1,6 @@
 import { fetchApi } from '../utils/fetchApi'
 
-export async function createFormEntry(data) {
+export async function addContactFormSubmission(data) {
   const path = '/contact-form-submissions'
   const options = {
     method: 'POST',

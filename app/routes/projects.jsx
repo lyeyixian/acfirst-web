@@ -2,14 +2,14 @@ import { json } from '@remix-run/node'
 import { useLoaderData, useSearchParams } from '@remix-run/react'
 import { Pagination } from '@mantine/core'
 import { useEffect, useState } from 'react'
-import { getAllProjects } from '../models/project.server'
+import { getProjects } from '../models/project.server'
 import { formatDate, getStrapiMedia, getStrapiMedias } from '../utils/apiHelper'
 import ProjectsGrid from '../components/projects/ProjectsGrid'
 
 export async function loader({ request }) {
   const url = new URL(request.url)
   const page = url.searchParams.get('p') || 1
-  const projects = await getAllProjects(page)
+  const projects = await getProjects(page)
   const prunedProjects = projects.data.map((project) => {
     const { title, date, coverImg, description, projectImg } =
       project.attributes

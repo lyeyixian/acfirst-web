@@ -1,12 +1,6 @@
-import { getStrapiURL } from '../utils/apiHelper'
 import { fetchApi } from '../utils/fetchApi'
 
-export async function getPageById(id) {
-  const res = await fetch(getStrapiURL(`/api/pages/${id}?populate=*`))
-  return await res.json()
-}
-
-export async function getPageBySlug(slug) {
+export async function getPage(slug) {
   const path = '/pages'
   const urlParamsObj = {
     filters: {
