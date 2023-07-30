@@ -83,7 +83,7 @@ export default function App() {
             <Links />
           </head>
           <body>
-            <Notifications limit={5} />
+            <Notifications limit={5} position="bottom-center" />
             <AppContainer>
               <Outlet />
             </AppContainer>

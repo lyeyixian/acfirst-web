@@ -10,11 +10,15 @@ import {
   getStylesRef,
   rem,
 } from '@mantine/core'
-import { useLoaderData, useParams } from '@remix-run/react'
+import { useFetcher, useLoaderData, useParams } from '@remix-run/react'
 import { json } from '@remix-run/node'
 import { getProduct } from '../../models/product.server'
 import { getStrapiMedia, getStrapiMedias } from '../../utils/apiHelper'
 import { Carousel } from '@mantine/carousel'
+import { commitSession, getCartId, getSession } from '../../session.server'
+import { addCart, addToCart, getCart } from '../../models/cart.server'
+import { notifications } from '@mantine/notifications'
+import { IconCheck, IconX } from '@tabler/icons-react'
 
 const useStyle = createStyles((theme) => ({
   carousel: {
@@ -78,6 +82,26 @@ export async function loader({ params }) {
   })
 }
 
+export async function action({ request }) {
+  let cartId = await getCartId(request)
+  let options = {}
+
+  if (!cartId) {
+    const session = await getSession(request)
+    const res = await addCart()
+
+    cartId = res.data.attributes.cartId
+    session.set('cartId', cartId)
+    options = { headers: { 'Set-Cookie': await commitSession(session) } }
+  }
+
+  const formData = await request.formData()
+  const productId = formData.get('productId')
+  const res = await addToCart(productId, cartId)
+
+  return json(res, options)
+}
+
 export default function ProductRoute() {
   // TODO: add functionality to add to cart button
   // TODO: refactor carousel with the carousel in ProjectsGrid
@@ -94,6 +118,35 @@ export default function ProductRoute() {
     productImages,
     category,
   } = useLoaderData()
+  const addToCartBtn = useFetcher()
+
+  if (addToCartBtn.state === 'idle' && addToCartBtn.data) {
+    if (addToCartBtn.data.error) {
+      notifications.show({
+        title: `Error: ${addToCartBtn.data.error}`,
+        message:
+          'There is something wrong when adding to cart. Please try again.',
+        color: 'red',
+        icon: <IconX size="1.2rem" />,
+      })
+    } else if (addToCartBtn.data.msg) {
+      notifications.show({
+        title: 'Success',
+        message: addToCartBtn.data.msg,
+        color: 'teal',
+        icon: <IconCheck size="1.2rem" />,
+      })
+    } else {
+      notifications.show({
+        title: 'Success',
+        message: 'Product has been added to cart.',
+        color: 'teal',
+        icon: <IconCheck size="1.2rem" />,
+      })
+    }
+    addToCartBtn.data = null
+  }
+
   const slides = productImages.map((image) => (
     <Carousel.Slide key={image}>
       <Image src={image} fit="contain" />
@@ -120,7 +173,17 @@ export default function ProductRoute() {
         <Grid.Col span={6}>
           <Title order={2}>{name}</Title>
           <Text mt="md">{description}</Text>
-          <Button my="md">Add to Cart</Button>
+          <addToCartBtn.Form method="post">
+            <input type="hidden" name="productId" value={params.productId} />
+            <Button
+              my="md"
+              type="submit"
+              loading={addToCartBtn.state === 'submitting'}
+              loaderPosition="right"
+            >
+              Add to Cart
+            </Button>
+          </addToCartBtn.Form>
           <Accordion
             variant="separated"
             multiple

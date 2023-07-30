@@ -6,11 +6,21 @@ import {
   Burger,
   rem,
   ActionIcon,
+  Popover,
+  Text,
+  Image,
+  Divider,
+  Box,
+  Button,
+  Paper,
+  Indicator,
+  ScrollArea,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { MantineLogo } from '@mantine/ds'
-import { NavLink } from '@remix-run/react'
-import { IconShoppingCart } from '@tabler/icons-react'
+import { Link, NavLink, useRouteLoaderData } from '@remix-run/react'
+import { IconShoppingCart, IconTrash } from '@tabler/icons-react'
+import { useState } from 'react'
 
 const HEADER_HEIGHT = rem(60)
 
@@ -112,6 +122,34 @@ export default function Navbar() {
     )
   })
 
+  const { cart } = useRouteLoaderData('root')
+  const cartProducts = cart.attributes.cartItems.map((product, index) => (
+    <div key={index}>
+      {index !== 0 && <Divider my="md" />}
+      <Paper>
+        <Group>
+          <Image src={product.imgUrl} maw={75} radius="sm" />
+          <Box
+            mr="md"
+            miw={100}
+            sx={{
+              flexGrow: 1,
+            }}
+          >
+            <Text>{product.name}</Text>
+            <Text color="dimmed">{product.category}</Text>
+          </Box>
+          {/* TODO: useFetcher to delete product in cart. create a new resource route for /cart/:code */}
+          <ActionIcon color="red.4">
+            <IconTrash size="1.2rem" />
+          </ActionIcon>
+        </Group>
+      </Paper>
+    </div>
+  ))
+
+  const [cartOpened, setCartOpened] = useState(false)
+
   return (
     <Header height={HEADER_HEIGHT} sx={{ borderBottom: 0 }} mb={120}>
       <Container className={classes.inner}>
@@ -128,9 +166,37 @@ export default function Navbar() {
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>
-        <ActionIcon variant="subtle" size="lg">
-          <IconShoppingCart stroke={1.5} />
-        </ActionIcon>
+        <Popover shadow="sm" opened={cartOpened} onChange={setCartOpened}>
+          <Popover.Target>
+            <Indicator
+              color="red"
+              label={cart.attributes.cartItems.length}
+              size={16}
+            >
+              <ActionIcon
+                variant="subtle"
+                onClick={() => setCartOpened((o) => !o)}
+              >
+                <IconShoppingCart stroke={1.5} size="2rem" />
+              </ActionIcon>
+            </Indicator>
+          </Popover.Target>
+          <Popover.Dropdown p="xl">
+            <ScrollArea h={400} offsetScrollbars>
+              {/* TODO: show something when cart is empty */}
+              {cartProducts}
+            </ScrollArea>
+            <Button
+              fullWidth
+              mt="xl"
+              component={Link}
+              to="/checkout"
+              onClick={() => setCartOpened(false)}
+            >
+              Checkout
+            </Button>
+          </Popover.Dropdown>
+        </Popover>
       </Container>
     </Header>
   )
