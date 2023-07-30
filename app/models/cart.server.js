@@ -70,4 +70,26 @@ export async function addToCart(code, cartId) {
   return { msg: 'OK! Product already in cart.' }
 }
 
-export async function removeFromCart(product) {}
+export async function removeFromCart(code, cartId) {
+  let cart = await getCart(cartId)
+  if (!cart) {
+    throw new Response('Cart not found', { status: 404 })
+  }
+
+  const cartItems = cart.attributes.cartItems.filter(
+    (item) => item.code !== code
+  )
+  const path = `/carts/${cart.id}`
+  const options = {
+    method: 'PUT',
+    body: JSON.stringify({
+      data: { cartItems },
+    }),
+  }
+
+  try {
+    return await fetchApi(path, {}, options)
+  } catch {
+    return { error: 'Unable to delete product from cart!' }
+  }
+}

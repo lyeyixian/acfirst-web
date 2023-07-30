@@ -18,7 +18,7 @@ import {
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { MantineLogo } from '@mantine/ds'
-import { Link, NavLink, useRouteLoaderData } from '@remix-run/react'
+import { Link, NavLink, useFetcher, useRouteLoaderData } from '@remix-run/react'
 import { IconShoppingCart, IconTrash } from '@tabler/icons-react'
 import { useState } from 'react'
 
@@ -105,6 +105,42 @@ const links = [
   },
 ]
 
+function CartItem({ product, index }) {
+  const deleteCartItemBtn = useFetcher()
+
+  return (
+    <div>
+      {index !== 0 && <Divider my="md" />}
+      <Paper>
+        <Group>
+          <Image src={product.imgUrl} maw={75} radius="sm" />
+          <Box
+            mr="md"
+            miw={100}
+            sx={{
+              flexGrow: 1,
+            }}
+          >
+            <Text>{product.name}</Text>
+            <Text color="dimmed">{product.category}</Text>
+          </Box>
+          <deleteCartItemBtn.Form method="delete" action="/cart">
+            <input type="hidden" name="code" value={product.code} />
+            <ActionIcon
+              color="red.4"
+              type="submit"
+              loading={deleteCartItemBtn.state === 'submitting'}
+              loaderPosition="center"
+            >
+              <IconTrash size="1.2rem" />
+            </ActionIcon>
+          </deleteCartItemBtn.Form>
+        </Group>
+      </Paper>
+    </div>
+  )
+}
+
 export default function Navbar() {
   const { classes, cx } = useStyles()
   const [opened, { toggle }] = useDisclosure(false)
@@ -124,28 +160,7 @@ export default function Navbar() {
 
   const { cart } = useRouteLoaderData('root')
   const cartProducts = cart.attributes.cartItems.map((product, index) => (
-    <div key={index}>
-      {index !== 0 && <Divider my="md" />}
-      <Paper>
-        <Group>
-          <Image src={product.imgUrl} maw={75} radius="sm" />
-          <Box
-            mr="md"
-            miw={100}
-            sx={{
-              flexGrow: 1,
-            }}
-          >
-            <Text>{product.name}</Text>
-            <Text color="dimmed">{product.category}</Text>
-          </Box>
-          {/* TODO: useFetcher to delete product in cart. create a new resource route for /cart/:code */}
-          <ActionIcon color="red.4">
-            <IconTrash size="1.2rem" />
-          </ActionIcon>
-        </Group>
-      </Paper>
-    </div>
+    <CartItem key={index} product={product} index={index} />
   ))
 
   const [cartOpened, setCartOpened] = useState(false)
