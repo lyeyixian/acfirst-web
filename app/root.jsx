@@ -20,6 +20,14 @@ import { Notifications } from '@mantine/notifications'
 import { ModalsProvider } from '@mantine/modals'
 import { useContext, useEffect } from 'react'
 import { ClientStyleContext } from './context'
+import {
+  commitSession,
+  createCartSession,
+  getCartId,
+  getSession,
+} from './session.server'
+import { json } from '@remix-run/node'
+import { getCart } from './models/cart.server'
 
 export const meta = () => ({
   charset: 'utf-8',
@@ -31,9 +39,26 @@ export const links = () => {
   return [{ rel: 'icon', href: '/logo.png' }]
 }
 
+export const loader = async ({ request }) => {
+  const cartId = await getCartId(request)
+
+  if (!cartId) {
+    return await createCartSession(request)
+  }
+
+  const session = await getSession(request)
+  session.set('cartId', cartId)
+
+  return json(
+    { cart: await getCart(cartId) },
+    { headers: { 'Set-Cookie': await commitSession(session) } }
+  )
+}
+
 export default function App() {
   // fix for style disappearing on error
   // https://github.com/correiarmjoao/remix-with-mantine
+  // TODO: have hydration error, might be becos of this, need to check
   const clientStyleData = useContext(ClientStyleContext)
   const mantineCache = useEmotionCache()
 
@@ -81,8 +106,6 @@ export default function App() {
     </MantineProvider>
   )
 }
-
-// TODO: add healthcheck route
 
 // TODO: add error handling UI
 export function ErrorBoundary() {

@@ -128,13 +128,13 @@ const useStyles = createStyles((theme) => ({
 
   socialIcon: {
     '&:hover': {
-      color: theme.colors.dark[3]
+      color: theme.colors.dark[3],
     },
   },
 
   copyright: {
     marginLeft: theme.spacing.md,
-  }
+  },
 }))
 
 const groupsData = [
@@ -194,8 +194,8 @@ export default function Footer() {
   })
   const infos = infosData.map((info, index) => {
     return (
-      <Group key={index} align='center'>
-        <ThemeIcon variant='light' color='gray' size="sm">
+      <Group key={index} align="center">
+        <ThemeIcon variant="light" color="gray" size="sm">
           <info.icon size="1.25rem" stroke={1.5} />
         </ThemeIcon>
         <Text size="xs" color="dimmed" className={classes.description}>
