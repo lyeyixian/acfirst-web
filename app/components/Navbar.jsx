@@ -197,7 +197,7 @@ export default function Navbar() {
             </Indicator>
           </Popover.Target>
           <Popover.Dropdown p="xl">
-            <ScrollArea h={400} offsetScrollbars>
+            <ScrollArea mah={400} offsetScrollbars>
               {/* TODO: show something when cart is empty */}
               {cartProducts}
             </ScrollArea>

@@ -69,6 +69,7 @@ function ProductsGrid({ products }) {
       component={Link}
       to={`/product/${product.code}`}
     >
+      {/* TODO: add to cart btn on hover */}
       <AspectRatio ratio={1}>
         <Image src={product.imageUrl} />
       </AspectRatio>

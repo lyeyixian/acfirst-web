@@ -51,6 +51,7 @@ export async function addToCart(code, cartId) {
       size: product.attributes.size,
       surface: product.attributes.surface,
       type: product.attributes.type,
+      category: product.attributes.category.data.attributes.name,
       imgUrl: getStrapiMedia(product.attributes.coverImg.data),
     }
     const path = `/carts/${cart.id}`
