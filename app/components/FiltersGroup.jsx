@@ -128,7 +128,8 @@ export default function FiltersGroup({
                 <Icon size="1.1rem" />
               </ThemeIcon>
             )}
-            <Box ml="md">{label}</Box>
+            <Box ml="md">{`${label}${active ? `: ${active}` : ''}`}</Box>{' '}
+            {/* TODO: use link label instead of slug. fix ui when text too long */}
           </Box>
           {hasLinks && (
             <ChevronIcon
