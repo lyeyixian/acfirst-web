@@ -2,22 +2,10 @@ import { Divider, Grid, NavLink, Select, ThemeIcon } from '@mantine/core'
 import { Outlet, useParams, Link, useLoaderData } from '@remix-run/react'
 import { useEffect, useState } from 'react'
 import FiltersGroup from '../components/FiltersGroup'
-import {
-  IconCategory,
-  IconChevronDown,
-  IconRuler,
-  IconSquaresFilled,
-} from '@tabler/icons-react'
+import { IconCategory, IconRuler, IconSquaresFilled } from '@tabler/icons-react'
 import { getCategories } from '../models/category.server'
 import { renderCategoryIcon } from '../utils/renderer'
 
-const sortData = [
-  { value: 'popular', label: 'Most Popular' },
-  { value: 'rating', label: 'Best Rating' },
-  { value: 'newest', label: 'Newest' },
-  { value: 'low', label: 'Price: Low to High' },
-  { value: 'high', label: 'Price: High to Low' },
-]
 const filterData = [
   {
     label: 'Surface',
@@ -70,7 +58,6 @@ export async function loader() {
 }
 
 export default function ProductsRoute() {
-  const [value, setValue] = useState(null)
   const specificationFilters = filterData.map((item) => (
     <FiltersGroup {...item} key={item.label} />
   ))
@@ -113,17 +100,6 @@ export default function ProductsRoute() {
       <h1>Products</h1>
       <Grid>
         <Grid.Col span={3}>
-          <Select
-            value={value}
-            onChange={setValue}
-            label="Sort by:"
-            placeholder="Pick one"
-            size="xs"
-            rightSection={value ? null : <IconChevronDown size="1rem" />}
-            data={sortData}
-            clearable
-          />
-          <Divider my="md" />
           {categoryFilters}
           <Divider my="md" />
           {specificationFilters}
