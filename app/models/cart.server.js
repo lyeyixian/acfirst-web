@@ -29,6 +29,27 @@ export async function addCart() {
   }
 }
 
+export async function clearCart(cartId) {
+  let cart = await getCart(cartId)
+  if (!cart) {
+    throw new Response('Cart not found', { status: 404 })
+  }
+
+  const path = `/carts/${cart.id}`
+  const options = {
+    method: 'PUT',
+    body: JSON.stringify({
+      data: { cartItems: [] },
+    }),
+  }
+
+  try {
+    return await fetchApi(path, {}, options)
+  } catch {
+    return { error: 'Unable to clear cart!' }
+  }
+}
+
 export async function addToCart(code, cartId) {
   const product = await getProduct(code)
   if (!product) {
