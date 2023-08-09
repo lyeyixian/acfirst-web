@@ -177,6 +177,7 @@ export default function Navbar() {
           />
           <MantineLogo size={28} />
           {/* <Image width={60} src='logo.svg' /> */}
+          {/* TODO: change to acfirst logo */}
         </Group>
         <Group spacing={5} className={classes.links}>
           {items}

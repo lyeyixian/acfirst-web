@@ -1,3 +1,4 @@
+// TODO: deploy failed, cos healthcheck cant pass, probably becos of port error
 export const loader = async ({ request }) => {
   try {
     const url = new URL(`http://localhost:${process.env.PORT ?? 3000}/`)
