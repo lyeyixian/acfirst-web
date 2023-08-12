@@ -25,8 +25,7 @@ export async function getSession(request) {
 
 export async function createCartSession(request) {
   const session = await getSession(request)
-  const res = await addCart()
-  console.log(res)
+  const res = await addCart() // TODO: do try catch on all api calls
   session.set('cartId', res.data.attributes.cartId)
   return json(
     { cart: res.data },
