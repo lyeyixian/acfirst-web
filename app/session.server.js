@@ -26,8 +26,8 @@ export async function getSession(request) {
 export async function createCartSession(request) {
   const session = await getSession(request)
   const res = await addCart()
-  session.set('cartId', res.data.attributes.cartId)
   console.log(res)
+  session.set('cartId', res.data.attributes.cartId)
   return json(
     { cart: res.data },
     {
