@@ -8,11 +8,7 @@ import {
   isRouteErrorResponse,
   useRouteError,
 } from '@remix-run/react'
-import {
-  MantineProvider,
-  createEmotionCache,
-  useEmotionCache,
-} from '@mantine/core'
+import { MantineProvider, useEmotionCache } from '@mantine/core'
 import { StylesPlaceholder } from '@mantine/remix'
 import { theme } from './theme'
 import AppContainer from './components/layout/AppContainer'
@@ -58,7 +54,6 @@ export const loader = async ({ request }) => {
 export default function App() {
   // fix for style disappearing on error
   // https://github.com/correiarmjoao/remix-with-mantine
-  // TODO: have hydration error, might be becos of this, need to check
   const clientStyleData = useContext(ClientStyleContext)
   const mantineCache = useEmotionCache()
 
