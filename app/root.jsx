@@ -24,6 +24,7 @@ import {
 } from './session.server'
 import { json } from '@remix-run/node'
 import { getCart } from './models/cart.server'
+import GracefulError from './components/GracefulError'
 import { useCacheFix } from './utils/fixes'
 
 export const meta = () => ({
@@ -89,29 +90,43 @@ export default function App() {
   )
 }
 
-// TODO: add error handling UI
 export function ErrorBoundary() {
+  useCacheFix()
+
   const error = useRouteError()
+  let errorUI = null
 
   if (isRouteErrorResponse(error)) {
-    return (
-      <div>
-        <h1>
-          {error.status} {error.statusText}
-        </h1>
-        <p>{error.data}</p>
-      </div>
+    errorUI = (
+      <GracefulError status={error.status} statusText={error.statusText} />
     )
   } else if (error instanceof Error) {
-    return (
-      <div>
-        <h1>Error</h1>
-        <p>{error.message}</p>
-        <p>The stack trace is:</p>
-        <pre>{error.stack}</pre>
-      </div>
+    errorUI = (
+      <GracefulError
+        status={null}
+        statusText="Unexpected Error"
+        statusDescription={error.message}
+      />
     )
   } else {
-    return <h1>Unknown Error</h1>
+    errorUI = <GracefulError status={null} statusText="Unknown error" />
   }
+
+  return (
+    <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
+      <html lang="en">
+        <head>
+          <title>Oops !!</title>
+          <StylesPlaceholder />
+          <Meta />
+          <Links />
+        </head>
+        <body>
+          <AppContainer>{errorUI}</AppContainer>
+          <Scripts />
+          <LiveReload />
+        </body>
+      </html>
+    </MantineProvider>
+  )
 }
