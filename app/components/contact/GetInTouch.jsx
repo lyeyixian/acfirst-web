@@ -32,6 +32,7 @@ const useStyles = createStyles((theme) => {
 
       [BREAKPOINT]: {
         flexDirection: 'column',
+        padding: rem(16),
       },
     },
 
@@ -147,68 +148,66 @@ export default function GetInTouch({
   }
 
   return (
-    <Paper shadow="md" radius="lg" mt={50}>
-      <div className={classes.wrapper}>
-        <div className={classes.contacts}>
-          <Text fz="lg" fw={700} className={classes.title} c="#fff">
-            {contactInfoTitle}
-          </Text>
+    <Paper shadow="md" radius="lg" mt={50} className={classes.wrapper}>
+      <div className={classes.contacts}>
+        <Text fz="lg" fw={700} className={classes.title} c="#fff">
+          {contactInfoTitle}
+        </Text>
 
-          <ContactIconsList variant="white" data={contactInfoData} />
-        </div>
+        <ContactIconsList variant="white" data={contactInfoData} />
+      </div>
 
-        <form className={classes.form} onSubmit={form.onSubmit(handleSubmit)}>
-          <Text fz="lg" fw={700} className={classes.title}>
-            Get in touch
-          </Text>
+      <form className={classes.form} onSubmit={form.onSubmit(handleSubmit)}>
+        <Text fz="lg" fw={700} className={classes.title}>
+          Get in touch
+        </Text>
 
-          <div className={classes.fields}>
-            <SimpleGrid cols={1}>
-              <TextInput
-                label="Name"
-                placeholder="Your name"
-                name="name"
-                withAsterisk
-                {...form.getInputProps('name')}
-              />
-
-              <TextInput
-                label="Email"
-                placeholder="hello@acfirst.com"
-                name="email"
-                withAsterisk
-                {...form.getInputProps('email')}
-              />
-              <TextInput
-                label="Phone"
-                placeholder="0123456789"
-                name="phone"
-                withAsterisk
-                {...form.getInputProps('phone')}
-              />
-            </SimpleGrid>
-
-            <Textarea
-              mt="md"
-              label="Message"
-              placeholder="Your message"
-              minRows={4}
-              {...form.getInputProps('message')}
+        <div className={classes.fields}>
+          <SimpleGrid cols={1}>
+            <TextInput
+              label="Name"
+              placeholder="Your name"
+              name="name"
+              withAsterisk
+              {...form.getInputProps('name')}
             />
 
-            <Group position="right" mt="md">
-              <Button
-                type="submit"
-                className={classes.control}
-                loading={isSubmitting}
-                loaderPosition="right"
-              >
-                {text}
-              </Button>
-            </Group>
-          </div>
-        </form>
-      </div>
+            <TextInput
+              label="Email"
+              placeholder="hello@acfirst.com"
+              name="email"
+              withAsterisk
+              {...form.getInputProps('email')}
+            />
+            <TextInput
+              label="Phone"
+              placeholder="0123456789"
+              name="phone"
+              withAsterisk
+              {...form.getInputProps('phone')}
+            />
+          </SimpleGrid>
+
+          <Textarea
+            mt="md"
+            label="Message"
+            placeholder="Your message"
+            minRows={4}
+            {...form.getInputProps('message')}
+          />
+
+          <Group position="right" mt="md">
+            <Button
+              type="submit"
+              className={classes.control}
+              loading={isSubmitting}
+              loaderPosition="right"
+            >
+              {text}
+            </Button>
+          </Group>
+        </div>
+      </form>
     </Paper>
   )
 }
