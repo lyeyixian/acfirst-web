@@ -8,14 +8,12 @@ import {
   isRouteErrorResponse,
   useRouteError,
 } from '@remix-run/react'
-import { MantineProvider, useEmotionCache } from '@mantine/core'
+import { MantineProvider } from '@mantine/core'
 import { StylesPlaceholder } from '@mantine/remix'
 import { theme } from './theme'
 import AppContainer from './components/layout/AppContainer'
 import { Notifications } from '@mantine/notifications'
 import { ModalsProvider } from '@mantine/modals'
-import { useContext, useEffect } from 'react'
-import { ClientStyleContext } from './context'
 import {
   commitSession,
   createCartSession,
