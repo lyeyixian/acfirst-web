@@ -158,10 +158,18 @@ export default function Navbar() {
     )
   })
 
-  const { cart } = useRouteLoaderData('root')
-  const cartProducts = cart.attributes.cartItems.map((product, index) => (
-    <CartItem key={index} product={product} index={index} />
-  ))
+  const rootLoaderData = useRouteLoaderData('root')
+  let cart = null
+  let cartSize = 0
+  let cartProducts = []
+
+  if (rootLoaderData) {
+    cart = rootLoaderData.cart
+    cartSize = cart.attributes.cartItems.length
+    cartProducts = cart.attributes.cartItems.map((product, index) => (
+      <CartItem key={index} product={product} index={index} />
+    ))
+  }
 
   const [cartOpened, setCartOpened] = useState(false)
 
@@ -184,11 +192,7 @@ export default function Navbar() {
         </Group>
         <Popover shadow="sm" opened={cartOpened} onChange={setCartOpened}>
           <Popover.Target>
-            <Indicator
-              color="red"
-              label={cart.attributes.cartItems.length}
-              size={16}
-            >
+            <Indicator color="red" label={cartSize} size={16}>
               <ActionIcon
                 variant="subtle"
                 onClick={() => setCartOpened((o) => !o)}
