@@ -4,6 +4,7 @@ import {
   Image,
   Pagination,
   SimpleGrid,
+  Stack,
   Text,
   Title,
   createStyles,
@@ -19,6 +20,7 @@ import {
   useSearchParams,
 } from '@remix-run/react'
 
+// TODO: responsive
 const useStyle = createStyles((theme) => ({
   card: {
     transition: 'transform 150ms ease, box-shadow 150ms ease',
@@ -86,7 +88,6 @@ function ProductsGrid({ products }) {
 }
 
 // TODO: pagination bug. when on page 2 then switch filter, will stay on page 2 even if there isn't anything there
-// TODO: fix pagination to the bottom, instead of keep jumping around
 export default function ProductsIndexRoute() {
   const { category } = useParams()
   const { products, pageCount } = useLoaderData()
@@ -103,23 +104,25 @@ export default function ProductsIndexRoute() {
       <Title order={2} ta="center" mb="md" transform="capitalize">
         {category === 'all' ? 'All products' : category}
       </Title>
-      <ProductsGrid products={products} />
-      <Pagination
-        value={page}
-        onChange={(value) => {
-          setPage(value)
-          setSearchParams((prev) => {
-            // TODO: refactor this into a hook tgt with filters group
-            const params = new URLSearchParams(prev)
-            params.set('p', value)
-            return params
-          })
-        }}
-        total={pageCount}
-        position="center"
-        mt="lg"
-        withEdges
-      />
+      <Stack justify="space-between" mih={650}>
+        <ProductsGrid products={products} />
+        <Pagination
+          value={page}
+          onChange={(value) => {
+            setPage(value)
+            setSearchParams((prev) => {
+              // TODO: refactor this into a hook tgt with filters group
+              const params = new URLSearchParams(prev)
+              params.set('p', value)
+              return params
+            })
+          }}
+          total={pageCount}
+          position="center"
+          mt="lg"
+          withEdges
+        />
+      </Stack>
     </div>
   )
 }

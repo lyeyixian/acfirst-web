@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node'
 import { useLoaderData, useSearchParams } from '@remix-run/react'
-import { Pagination } from '@mantine/core'
+import { Pagination, Stack } from '@mantine/core'
 import { useEffect, useState } from 'react'
 import { getProjects } from '../models/project.server'
 import { formatDate, getStrapiMedia, getStrapiMedias } from '../utils/apiHelper'
@@ -44,16 +44,17 @@ export default function ProjectsRoute() {
   return (
     <div>
       <h1>Projects</h1>
-      <ProjectsGrid projects={projects} />
-      {/* TODO: fix pagination to the bottom */}
-      <Pagination
-        value={page}
-        onChange={setPage}
-        total={pageCount}
-        position="center"
-        withEdges
-        mt="md"
-      />
+      <Stack justify="space-between" mih={730}>
+        <ProjectsGrid projects={projects} />
+        <Pagination
+          value={page}
+          onChange={setPage}
+          total={pageCount}
+          position="center"
+          withEdges
+          mt="md"
+        />
+      </Stack>
     </div>
   )
 }
