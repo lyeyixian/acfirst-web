@@ -19,6 +19,7 @@ import { commitSession, getCartId, getSession } from '../../session.server'
 import { addCart, addToCart, getCart } from '../../models/cart.server'
 import { notifications } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons-react'
+import { useEffect } from 'react'
 
 const useStyle = createStyles((theme) => ({
   carousel: {
@@ -103,7 +104,6 @@ export async function action({ request }) {
 }
 
 export default function ProductRoute() {
-  // TODO: add functionality to add to cart button
   // TODO: refactor carousel with the carousel in ProjectsGrid
   // TODO: increase the gap between carousel slides
   const { classes } = useStyle()
@@ -120,32 +120,34 @@ export default function ProductRoute() {
   } = useLoaderData()
   const addToCartBtn = useFetcher()
 
-  if (addToCartBtn.state === 'idle' && addToCartBtn.data) {
-    if (addToCartBtn.data.error) {
-      notifications.show({
-        title: `Error: ${addToCartBtn.data.error}`,
-        message:
-          'There is something wrong when adding to cart. Please try again.',
-        color: 'red',
-        icon: <IconX size="1.2rem" />,
-      })
-    } else if (addToCartBtn.data.msg) {
-      notifications.show({
-        title: 'Success',
-        message: addToCartBtn.data.msg,
-        color: 'teal',
-        icon: <IconCheck size="1.2rem" />,
-      })
-    } else {
-      notifications.show({
-        title: 'Success',
-        message: 'Product has been added to cart.',
-        color: 'teal',
-        icon: <IconCheck size="1.2rem" />,
-      })
+  useEffect(() => {
+    if (addToCartBtn.state === 'idle' && addToCartBtn.data) {
+      if (addToCartBtn.data.error) {
+        notifications.show({
+          title: `Error: ${addToCartBtn.data.error}`,
+          message:
+            'There is something wrong when adding to cart. Please try again.',
+          color: 'red',
+          icon: <IconX size="1.2rem" />,
+        })
+      } else if (addToCartBtn.data.msg) {
+        notifications.show({
+          title: 'Success',
+          message: addToCartBtn.data.msg,
+          color: 'teal',
+          icon: <IconCheck size="1.2rem" />,
+        })
+      } else {
+        notifications.show({
+          title: 'Success',
+          message: 'Product has been added to cart.',
+          color: 'teal',
+          icon: <IconCheck size="1.2rem" />,
+        })
+      }
+      addToCartBtn.data = null
     }
-    addToCartBtn.data = null
-  }
+  }, [addToCartBtn.state])
 
   const slides = productImages.map((image) => (
     <Carousel.Slide key={image}>
