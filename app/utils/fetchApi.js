@@ -1,6 +1,6 @@
 import qs from 'qs'
 import { getStrapiURL } from './apiHelper'
-// TODO: create strapi api tokens and place it in auth header when fetch
+
 export async function fetchApi(path, urlParamsObj = {}, options = {}) {
   try {
     // Merge default and user options

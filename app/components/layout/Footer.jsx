@@ -136,7 +136,7 @@ const useStyles = createStyles((theme) => ({
     marginLeft: theme.spacing.md,
   },
 }))
-
+// TODO: switch these data to take from strapi
 const groupsData = [
   {
     title: 'Categories',
@@ -154,13 +154,6 @@ const groupsData = [
       { label: 'Projects', link: '/projects' },
       { label: 'Locate Us', link: '/stores' },
       { label: 'Contact', link: '/contact' },
-    ],
-  },
-  {
-    title: 'Legal',
-    links: [
-      { label: 'Terms of Service', link: '/terms' },
-      { label: 'Privacy Policy', link: '/privacy' },
     ],
   },
 ]
