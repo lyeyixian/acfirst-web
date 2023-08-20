@@ -130,7 +130,6 @@ function CartItem({ product, index }) {
               color="red.4"
               type="submit"
               loading={deleteCartItemBtn.state === 'submitting'}
-              loaderPosition="center"
             >
               <IconTrash size="1.2rem" />
             </ActionIcon>
