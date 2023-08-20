@@ -33,13 +33,13 @@ const useStyles = createStyles((theme) => ({
   },
 
   links: {
-    [theme.fn.smallerThan('52em')]: {
+    [theme.fn.smallerThan('sm')]: {
       display: 'none',
     },
   },
 
   burger: {
-    [theme.fn.largerThan('52em')]: {
+    [theme.fn.largerThan('sm')]: {
       display: 'none',
     },
   },
