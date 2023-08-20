@@ -113,7 +113,7 @@ export default function GetInTouch({
   contactInfoData,
   submitButtonData,
 }) {
-  const { type, text } = submitButtonData // TODO: figure out how to utilise type
+  const { text } = submitButtonData
   const { classes } = useStyles()
   const submit = useSubmit()
   const navigation = useNavigation()

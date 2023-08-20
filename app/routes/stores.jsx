@@ -1,10 +1,7 @@
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-
 import { Text, createStyles, rem } from '@mantine/core'
-
 import { IconMapPin, IconPhone } from '@tabler/icons-react'
-
 import ContactIconsList from '../components/ContactIconsList'
 import { getPage } from '../models/page.server'
 import Map from '../components/stores/Map'
@@ -37,6 +34,7 @@ const useStyles = createStyles((theme) => {
       [BREAKPOINT]: {
         marginBottom: theme.spacing.sm,
         paddingLeft: theme.spacing.md,
+        flexBasis: 'auto',
       },
     },
 

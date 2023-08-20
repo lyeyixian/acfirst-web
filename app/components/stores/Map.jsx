@@ -6,7 +6,6 @@ const useStyles = createStyles((theme) => {
 
   return {
     map: {
-      // TODO: size of map incorrect when screen is smaller but haven't reach sm breakpoint
       boxSizing: 'border-box',
       flex: 1,
       marginLeft: theme.spacing.md,
@@ -39,8 +38,7 @@ export default function Map({ src }) {
 
   return (
     <Skeleton visible={loading} className={classes.map}>
-      {/* TODO: add transition to skeleton */}
-      <AspectRatio ratio={16 / 9}>
+      <AspectRatio ratio={16 / 9} mih={300}>
         <iframe
           ref={iframeRef}
           src={src}
