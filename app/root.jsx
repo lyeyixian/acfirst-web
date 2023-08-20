@@ -68,17 +68,7 @@ export default function App() {
             <AppContainer>
               <Outlet />
             </AppContainer>
-            <ScrollRestoration
-              getKey={(location, matches) => {
-                const paths = ['/about', '/stores', '/contact']
-
-                return paths.includes(location.pathname)
-                  ? location.key
-                  : location.pathname.includes('/products')
-                  ? '/products'
-                  : location.pathname
-              }}
-            />
+            <ScrollRestoration />
             <Scripts />
             <LiveReload />
           </body>

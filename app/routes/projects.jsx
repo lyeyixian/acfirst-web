@@ -32,7 +32,7 @@ export async function loader({ request }) {
 
 export default function ProjectsRoute() {
   const [page, setPage] = useState(1)
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [_, setSearchParams] = useSearchParams()
 
   useEffect(() => {
     setSearchParams({ p: page })
