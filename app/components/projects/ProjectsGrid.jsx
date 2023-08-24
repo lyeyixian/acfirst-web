@@ -5,9 +5,12 @@ import {
   Image,
   Text,
   AspectRatio,
+  Skeleton,
 } from '@mantine/core'
 import { modals } from '@mantine/modals'
-import ProjectCard from './ProjectCard'
+import ProjectModal from './ProjectModal'
+import { useRef } from 'react'
+import { useSkeletonLoading } from './hooks/skeleton'
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -25,18 +28,20 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-export default function ProjectsGrid({ projects }) {
-  // TODO: when mobile, make the modal full screen (with close button likely)
-  // TODO: add skeleton to cover image and project images
+function ProjectCard({ project }) {
   const { classes } = useStyles()
-  const cards = projects.map((project) => (
+  const imageRef = useRef(null)
+  const { loading, handleOnLoad } = useSkeletonLoading(
+    imageRef.current?.complete
+  )
+
+  return (
     <Card
-      key={project.id}
       p="md"
       radius="md"
       onClick={() => {
         modals.open({
-          children: <ProjectCard {...project} />,
+          children: <ProjectModal {...project} />,
           centered: true,
           withCloseButton: false,
           padding: 0,
@@ -46,9 +51,15 @@ export default function ProjectsGrid({ projects }) {
       }}
       className={classes.card}
     >
-      <AspectRatio ratio={1920 / 1080}>
-        <Image src={project.coverImgUrl} />
-      </AspectRatio>
+      <Skeleton visible={loading}>
+        <AspectRatio ratio={1920 / 1080}>
+          <Image
+            imageRef={imageRef}
+            src={project.coverImgUrl}
+            onLoad={handleOnLoad}
+          />
+        </AspectRatio>
+      </Skeleton>
       <Text color="dimmed" size="xs" transform="uppercase" weight={700} mt="md">
         {project.date}
       </Text>
@@ -56,6 +67,12 @@ export default function ProjectsGrid({ projects }) {
         {project.title}
       </Text>
     </Card>
+  )
+}
+
+export default function ProjectsGrid({ projects }) {
+  const cards = projects.map((project) => (
+    <ProjectCard key={project.id} project={project} />
   ))
 
   return (

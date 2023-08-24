@@ -3,12 +3,14 @@ import {
   Card,
   Group,
   Image,
+  Skeleton,
   Text,
   createStyles,
   getStylesRef,
   rem,
 } from '@mantine/core'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useSkeletonLoading } from './hooks/skeleton'
 
 const useStyles = createStyles((theme) => ({
   carousel: {
@@ -36,13 +38,31 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-export default function ProjectCard({ title, description, projectImgUrls }) {
+function ImageSlide({ image }) {
+  const imageRef = useRef(null)
+  const { loading, handleOnLoad } = useSkeletonLoading(
+    imageRef.current?.complete
+  )
+
+  return (
+    <Carousel.Slide>
+      <Skeleton visible={loading}>
+        <Image
+          imageRef={imageRef}
+          src={image}
+          height={220}
+          onLoad={handleOnLoad}
+        />
+      </Skeleton>
+    </Carousel.Slide>
+  )
+}
+
+export default function ProjectModal({ title, description, projectImgUrls }) {
   const { classes } = useStyles()
   // TODO: need to check if image fits in the carousel
   const slides = projectImgUrls.map((image) => (
-    <Carousel.Slide key={image}>
-      <Image src={image} height={220} />
-    </Carousel.Slide>
+    <ImageSlide key={image} image={image} />
   ))
 
   const [embla, setEmbla] = useState(null)
