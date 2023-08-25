@@ -9,7 +9,7 @@ import {
   getStylesRef,
   rem,
 } from '@mantine/core'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useSkeletonLoading } from './hooks/skeleton'
 
 const useStyles = createStyles((theme) => ({
@@ -60,13 +60,13 @@ function ImageSlide({ image }) {
 
 export default function ProjectModal({ title, description, projectImgUrls }) {
   const { classes } = useStyles()
-  // TODO: need to check if image fits in the carousel
   const slides = projectImgUrls.map((image) => (
     <ImageSlide key={image} image={image} />
   ))
 
+  // Fix for carousel in modal offset issue
   const [embla, setEmbla] = useState(null)
-  useAnimationOffsetEffect(embla, 200)
+  useAnimationOffsetEffect(embla, 300)
 
   return (
     <Card radius="md" padding="xl">
