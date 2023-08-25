@@ -10,7 +10,7 @@ import {
   rem,
 } from '@mantine/core'
 import { useRef, useState } from 'react'
-import { useSkeletonLoading } from './hooks/skeleton'
+import { useSkeletonLoading } from '../hooks/skeleton'
 
 const useStyles = createStyles((theme) => ({
   carousel: {

@@ -10,7 +10,7 @@ import {
 import { modals } from '@mantine/modals'
 import ProjectModal from './ProjectModal'
 import { useRef } from 'react'
-import { useSkeletonLoading } from './hooks/skeleton'
+import { useSkeletonLoading } from '../hooks/skeleton'
 
 const useStyles = createStyles((theme) => ({
   card: {
