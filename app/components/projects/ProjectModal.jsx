@@ -40,9 +40,7 @@ const useStyles = createStyles((theme) => ({
 
 function ImageSlide({ image }) {
   const imageRef = useRef(null)
-  const { loading, handleOnLoad } = useSkeletonLoading(
-    imageRef.current?.complete
-  )
+  const { loading, handleOnLoad } = useSkeletonLoading(imageRef)
 
   return (
     <Carousel.Slide>

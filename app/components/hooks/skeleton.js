@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 
-export const useSkeletonLoading = (complete) => {
+export const useSkeletonLoading = (ref) => {
   const [loading, setLoading] = useState(true)
   const handler = () => {
     setLoading(false)
   }
 
   useEffect(() => {
-    if (complete) {
+    if (ref.current?.complete) {
       handler()
     }
-  }, [complete])
+  }, [ref.current?.complete])
 
   return { loading, handleOnLoad: handler }
 }

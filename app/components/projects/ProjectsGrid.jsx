@@ -31,9 +31,7 @@ const useStyles = createStyles((theme) => ({
 function ProjectCard({ project }) {
   const { classes } = useStyles()
   const imageRef = useRef(null)
-  const { loading, handleOnLoad } = useSkeletonLoading(
-    imageRef.current?.complete
-  )
+  const { loading, handleOnLoad } = useSkeletonLoading(imageRef)
 
   return (
     <Card
