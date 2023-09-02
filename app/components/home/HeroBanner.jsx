@@ -25,6 +25,10 @@ const useStyles = createStyles((theme) => ({
       height: rem(500),
       paddingBottom: `calc(${theme.spacing.xl} * 3)`,
     },
+
+    [theme.fn.smallerThan('xs')]: {
+      height: rem(400),
+    },
   },
 
   title: {
@@ -47,9 +51,16 @@ const useStyles = createStyles((theme) => ({
   description: {
     color: theme.white,
     maxWidth: 600,
+    marginTop: theme.spacing.xl,
+    fontSize: theme.fontSizes.xl,
 
     [theme.fn.smallerThan('sm')]: {
       maxWidth: '100%',
+      fontSize: theme.fontSizes.md,
+      marginTop: theme.spacing.md,
+    },
+
+    [theme.fn.smallerThan('xs')]: {
       fontSize: theme.fontSizes.sm,
     },
   },
@@ -57,7 +68,7 @@ const useStyles = createStyles((theme) => ({
   control: {
     marginTop: `calc(${theme.spacing.xl} * 1.5)`,
 
-    [theme.fn.smallerThan('sm')]: {
+    [theme.fn.smallerThan('xs')]: {
       width: '100%',
     },
   },
@@ -88,20 +99,18 @@ export default function HeroBanner({
       />
       <Container className={classes.container}>
         <Title className={classes.title}>{title}</Title>
-        <Text className={classes.description} size="xl" mt="xl">
-          {description}
-        </Text>
+        <Text className={classes.description}>{description}</Text>
 
-        <Link to={url}>
-          <Button
-            variant="gradient"
-            size="xl"
-            radius="xl"
-            className={classes.control}
-          >
-            {text}
-          </Button>
-        </Link>
+        <Button
+          variant="gradient"
+          size="xl"
+          radius="xl"
+          className={classes.control}
+          component={Link}
+          to={url}
+        >
+          {text}
+        </Button>
       </Container>
     </Box>
   )

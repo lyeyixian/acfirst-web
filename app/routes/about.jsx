@@ -3,7 +3,7 @@ import { getPage } from '../models/page.server'
 import { getStrapiMedia } from '../utils/apiHelper'
 import { json } from '@remix-run/node'
 import { AspectRatio, Image, Skeleton, Text, Title } from '@mantine/core'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { useSkeletonLoading } from '../components/hooks/skeleton'
 
 export async function loader() {
