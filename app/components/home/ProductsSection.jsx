@@ -1,5 +1,13 @@
-import { createStyles, Title, Text, SimpleGrid, rem } from '@mantine/core'
-import ProductCardImage from './ProductCardImage'
+import {
+  createStyles,
+  Title,
+  Text,
+  SimpleGrid,
+  rem,
+  Paper,
+  Stack,
+} from '@mantine/core'
+import { Link } from '@remix-run/react'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -31,7 +39,40 @@ const useStyles = createStyles((theme) => ({
       marginRight: 'auto',
     },
   },
+
+  card: {
+    height: rem(250),
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    transition: 'transform 500ms ease',
+    padding: theme.spacing.xl,
+
+    '&:hover': {
+      transform: 'scale(1.05)',
+    },
+  },
 }))
+
+function ProductCardImage({ name, slug, imgUrl }) {
+  const { classes } = useStyles()
+
+  return (
+    <Paper
+      shadow="md"
+      radius="md"
+      className={classes.card}
+      sx={{ backgroundImage: `url(${imgUrl})` }}
+      component={Link}
+      to={`/products/${slug}`}
+    >
+      <Stack justify="flex-end" h="100%">
+        <Text color="white" opacity={0.8} fw={700} tt="uppercase" size="md">
+          {name}
+        </Text>
+      </Stack>
+    </Paper>
+  )
+}
 
 export default function ProductsSection({ title, subtitle, categories }) {
   const { classes } = useStyles()
@@ -53,7 +94,7 @@ export default function ProductsSection({ title, subtitle, categories }) {
         cols={4}
         spacing="xl"
         mt={50}
-        breakpoints={[{ maxWidth: 'sm', cols: 2 }]}
+        breakpoints={[{ maxWidth: 'sm', cols: 2, spacing: 'md' }]}
       >
         {features}
       </SimpleGrid>
