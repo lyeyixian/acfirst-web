@@ -65,7 +65,7 @@ function ImageCard({ imgUrl, name, code, category, viewCount }) {
       className={classes.card}
       radius="md"
       component={Link}
-      to={`/products/${code}`}
+      to={`/product/${code}`}
     >
       <div
         className={classes.image}
