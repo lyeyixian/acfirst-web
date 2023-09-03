@@ -1,14 +1,5 @@
 import { Carousel } from '@mantine/carousel'
-import { useMediaQuery } from '@mantine/hooks'
-import {
-  createStyles,
-  Paper,
-  Text,
-  Title,
-  Button,
-  useMantineTheme,
-  rem,
-} from '@mantine/core'
+import { createStyles, Paper, Text, Title, Button, rem } from '@mantine/core'
 import { ImageCard } from './ImageCard'
 
 const useStyles = createStyles((theme) => ({
@@ -39,41 +30,8 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-// interface CardProps {
-//   image: string;
-//   title: string;
-//   category: string;
-// }
-
-function Card({ image, title, category }) {
-  const { classes } = useStyles()
-
-  return (
-    <Paper
-      shadow="md"
-      p="xl"
-      radius="md"
-      sx={{ backgroundImage: `url(${image})` }}
-      className={classes.card}
-    >
-      <div>
-        <Text className={classes.category} size="xs">
-          {category}
-        </Text>
-        <Title order={3} className={classes.title}>
-          {title}
-        </Title>
-      </div>
-      <Button variant="white" color="dark">
-        Read article
-      </Button>
-    </Paper>
-  )
-}
-
+// TODO: refactor to ShowcaseSection
 export default function CardsCarousel({ products }) {
-  const theme = useMantineTheme()
-  const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`)
   const slides = products.map((product, index) => (
     <Carousel.Slide key={index}>
       <ImageCard {...product} />
@@ -83,10 +41,13 @@ export default function CardsCarousel({ products }) {
   return (
     <Carousel
       slideSize="33.333333%"
-      breakpoints={[{ maxWidth: 'sm', slideSize: '50%', slideGap: 'lg' }]}
+      breakpoints={[
+        { maxWidth: 'sm', slideSize: '50%' },
+        { maxWidth: 'xs', slideSize: '100%' },
+      ]}
       slideGap="lg"
       align="start"
-      slidesToScroll={mobile ? 2 : 3}
+      slidesToScroll="auto"
       loop
     >
       {slides}

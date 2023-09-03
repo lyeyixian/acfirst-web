@@ -51,69 +51,52 @@ const useStyles = createStyles((theme) => ({
     justifyContent: 'flex-end',
     zIndex: 1,
   },
-
-  title: {
-    color: theme.white,
-    marginBottom: rem(5),
-  },
-
-  bodyText: {
-    color: theme.colors.dark[0],
-    marginLeft: rem(7),
-  },
-
-  author: {
-    color: theme.colors.dark[2],
-  },
-
-  link: {
-    textDecoration: 'none',
-  },
 }))
 
-// interface ImageCardProps {
-//   link: string;
-//   image: string;
-//   title: string;
-//   author: string;
-//   views: number;
-//   comments: number;
-// }
-
+// TODO: refactor to CardsCarousel
 export function ImageCard({ imgUrl, name, code, category, viewCount }) {
-  // TODO: display category
   const { classes, theme } = useStyles()
 
   return (
-    <Link to={`/products/${code}`} className={classes.link}>
-      <Card p="lg" shadow="lg" className={classes.card} radius="md">
-        <div
-          className={classes.image}
-          style={{ backgroundImage: `url(${imgUrl})` }} // TODO: use AspectRatio component
-        />
-        <div className={classes.overlay} />
+    <Card
+      p="lg"
+      shadow="lg"
+      className={classes.card}
+      radius="md"
+      component={Link}
+      to={`/products/${code}`}
+    >
+      <div
+        className={classes.image}
+        style={{ backgroundImage: `url(${imgUrl})` }}
+      />
+      <div className={classes.overlay} />
 
-        <div className={classes.content}>
-          <div>
-            <Text size="lg" className={classes.title} weight={500}>
-              {name}
+      <div className={classes.content}>
+        <div>
+          <Text size="lg" color={theme.white} mb={5} weight={500}>
+            {name}
+          </Text>
+
+          <Group position="apart">
+            <Text size="sm" color="dark.0">
+              {category}
             </Text>
-
             <Group spacing="lg">
               <Center>
                 <IconEye
                   size="1rem"
                   stroke={1.5}
-                  color={theme.colors.dark[2]}
+                  color={theme.colors.dark[0]}
                 />
-                <Text size="sm" className={classes.bodyText}>
+                <Text size="sm" ml={7} color="dark.0">
                   {viewCount}
                 </Text>
               </Center>
             </Group>
-          </div>
+          </Group>
         </div>
-      </Card>
-    </Link>
+      </div>
+    </Card>
   )
 }
