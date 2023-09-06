@@ -23,16 +23,8 @@ export async function loader() {
       case 'sections.showcase':
         const { heading: showcaseHeading, products } = section
         const prunedProducts = products.data.map((product) => {
-          const {
-            name,
-            code,
-            size,
-            surface, // TODO: maybe can consider putting these details into product section
-            type,
-            viewCount,
-            category,
-            coverImg,
-          } = product.attributes
+          const { name, code, viewCount, category, coverImg } =
+            product.attributes
 
           return {
             code,
