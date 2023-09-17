@@ -227,19 +227,37 @@ export default function Navbar() {
             </Indicator>
           </Popover.Target>
           <Popover.Dropdown p="xl">
-            <ScrollArea mah={400} offsetScrollbars>
-              {/* TODO: show something when cart is empty */}
-              {cartProducts}
-            </ScrollArea>
-            <Button
-              fullWidth
-              mt="xl"
-              component={Link}
-              to="/checkout"
-              onClick={() => setCartOpened(false)}
-            >
-              Checkout
-            </Button>
+            {cartProducts.length ? (
+              <>
+                <ScrollArea mah={400} offsetScrollbars>
+                  {cartProducts}
+                </ScrollArea>
+                <Button
+                  fullWidth
+                  mt="xl"
+                  component={Link}
+                  to="/checkout"
+                  onClick={() => setCartOpened(false)}
+                >
+                  Checkout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Text align="center" size="sm" color="dimmed">
+                  Your cart is empty.
+                </Text>
+                <Button
+                  fullWidth
+                  mt="xl"
+                  component={Link}
+                  to="/products"
+                  onClick={() => setCartOpened(false)}
+                >
+                  Browse our products
+                </Button>
+              </>
+            )}
           </Popover.Dropdown>
         </Popover>
 
