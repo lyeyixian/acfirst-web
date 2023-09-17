@@ -24,7 +24,6 @@ const useStyles = createStyles((theme) => ({
   footer: {
     marginTop: rem(120),
     paddingTop: `calc(${theme.spacing.xl} * 2)`,
-    paddingBottom: `calc(${theme.spacing.xl} * 2)`,
     backgroundColor:
       theme.colorScheme === 'dark'
         ? theme.colors.dark[6]
@@ -136,7 +135,7 @@ const useStyles = createStyles((theme) => ({
     marginLeft: theme.spacing.md,
   },
 }))
-// TODO: switch these data to take from strapi
+
 const groupsData = [
   {
     title: 'Categories',
@@ -237,7 +236,7 @@ export default function Footer() {
             className={classes.socialIcon}
             size="lg"
             component="a"
-            href="#" // TODO: make this open user's whatsapp
+            href="https://wa.me/60174051255"
             target="_blank"
             rel="noreferrer noopener"
           >

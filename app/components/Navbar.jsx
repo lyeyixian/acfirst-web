@@ -18,7 +18,6 @@ import {
   Transition,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { MantineLogo } from '@mantine/ds'
 import { Link, NavLink, useFetcher, useRouteLoaderData } from '@remix-run/react'
 import { IconShoppingCart, IconTrash } from '@tabler/icons-react'
 import { useState } from 'react'
