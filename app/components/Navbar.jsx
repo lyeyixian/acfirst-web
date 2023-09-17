@@ -15,6 +15,7 @@ import {
   Paper,
   Indicator,
   ScrollArea,
+  Transition,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { MantineLogo } from '@mantine/ds'
@@ -44,6 +45,22 @@ const useStyles = createStyles((theme) => ({
     },
   },
 
+  dropdown: {
+    position: 'absolute',
+    top: HEADER_HEIGHT,
+    right: 0,
+    left: 0,
+    zIndex: 0,
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0,
+    borderTopWidth: 0,
+    overflow: 'hidden',
+
+    [theme.fn.largerThan('sm')]: {
+      display: 'none',
+    },
+  },
+
   link: {
     display: 'block',
     lineHeight: 1,
@@ -62,6 +79,12 @@ const useStyles = createStyles((theme) => ({
         theme.colorScheme === 'dark'
           ? theme.colors.dark[6]
           : theme.colors.gray[1],
+    },
+
+    [theme.fn.smallerThan('sm')]: {
+      paddingTop: theme.spacing.md,
+      paddingBottom: theme.spacing.md,
+      paddingLeft: theme.spacing.lg,
     },
   },
 
@@ -151,6 +174,7 @@ export default function Navbar() {
         className={({ isActive }) =>
           cx(classes.link, { [classes.linkActive]: isActive })
         }
+        onClick={() => toggle(false)}
       >
         {link.label}
       </NavLink>
@@ -176,19 +200,21 @@ export default function Navbar() {
     <Header height={HEADER_HEIGHT} sx={{ borderBottom: 0 }} mb={120}>
       <Container className={classes.inner}>
         <Group>
-          <Burger // TODO: when click navbar doesnt come out
+          <Burger
             opened={opened}
             onClick={toggle}
             className={classes.burger}
             size="sm"
           />
-          <MantineLogo size={28} />
-          {/* <Image width={60} src='logo.svg' /> */}
-          {/* TODO: change to acfirst logo */}
+          <NavLink to="/">
+            <Image width={70} src="logo.svg" />
+          </NavLink>
         </Group>
+
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>
+
         <Popover shadow="sm" opened={cartOpened} onChange={setCartOpened}>
           <Popover.Target>
             <Indicator color="red" label={cartSize} size={16}>
@@ -216,6 +242,14 @@ export default function Navbar() {
             </Button>
           </Popover.Dropdown>
         </Popover>
+
+        <Transition transition="pop-top-left" duration={200} mounted={opened}>
+          {(styles) => (
+            <Paper withBorder style={styles} className={classes.dropdown}>
+              {items}
+            </Paper>
+          )}
+        </Transition>
       </Container>
     </Header>
   )
