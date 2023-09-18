@@ -78,6 +78,7 @@ export default function App() {
   )
 }
 
+// TODO: don't show detail error message
 export function ErrorBoundary() {
   useCacheFix()
 
@@ -118,5 +119,3 @@ export function ErrorBoundary() {
     </MantineProvider>
   )
 }
-
-// TODO: production got problem

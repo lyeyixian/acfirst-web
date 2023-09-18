@@ -83,8 +83,14 @@ function ProductsGrid({ products }) {
       </Text>
     </Card>
   ))
-  // TODO: show something when products is empty
-  return <SimpleGrid cols={3}>{cards}</SimpleGrid>
+
+  return cards.length ? (
+    <SimpleGrid cols={3}>{cards}</SimpleGrid>
+  ) : (
+    <Text align="center" color="dimmed" mt="xl">
+      No products found.
+    </Text>
+  )
 }
 
 // TODO: pagination bug. when on page 2 then switch filter, will stay on page 2 even if there isn't anything there
