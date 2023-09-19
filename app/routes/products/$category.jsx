@@ -112,22 +112,24 @@ export default function ProductsIndexRoute() {
       </Title>
       <Stack justify="space-between" mih={650}>
         <ProductsGrid products={products} />
-        <Pagination
-          value={page}
-          onChange={(value) => {
-            setPage(value)
-            setSearchParams((prev) => {
-              // TODO: refactor this into a hook tgt with filters group
-              const params = new URLSearchParams(prev)
-              params.set('p', value)
-              return params
-            })
-          }}
-          total={pageCount}
-          position="center"
-          mt="lg"
-          withEdges
-        />
+        {products.length ? (
+          <Pagination
+            value={page}
+            onChange={(value) => {
+              setPage(value)
+              setSearchParams((prev) => {
+                // TODO: refactor this into a hook tgt with filters group
+                const params = new URLSearchParams(prev)
+                params.set('p', value)
+                return params
+              })
+            }}
+            total={pageCount}
+            position="center"
+            mt="lg"
+            withEdges
+          />
+        ) : null}
       </Stack>
     </div>
   )
