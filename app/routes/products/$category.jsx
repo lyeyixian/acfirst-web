@@ -93,7 +93,6 @@ function ProductsGrid({ products }) {
   )
 }
 
-// TODO: pagination bug. when on page 2 then switch filter, will stay on page 2 even if there isn't anything there
 export default function ProductsIndexRoute() {
   const { category } = useParams()
   const { products, pageCount } = useLoaderData()

@@ -65,13 +65,6 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-// interface LinksGroupProps {
-//   icon: React.FC<any>;
-//   label: string;
-//   initiallyOpened?: boolean;
-//   links?: { label: string; link: string }[];
-// }
-
 export default function FiltersGroup({
   icon: Icon,
   label,
@@ -107,6 +100,8 @@ export default function FiltersGroup({
             } else {
               params.set(slug, link.slug)
             }
+
+            params.set('p', 1)
 
             return params
           })
