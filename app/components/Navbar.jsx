@@ -206,7 +206,7 @@ export default function Navbar() {
             size="sm"
           />
           <NavLink to="/">
-            <Image width={70} src="logo.svg" />
+            <Image width={70} src="/logo.svg" />
           </NavLink>
         </Group>
 
@@ -214,6 +214,7 @@ export default function Navbar() {
           {items}
         </Group>
 
+        {/* TODO: refactor shopping cart out into another component */}
         <Popover shadow="sm" opened={cartOpened} onChange={setCartOpened}>
           <Popover.Target>
             <Indicator color="red" label={cartSize} size={16}>

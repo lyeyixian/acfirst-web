@@ -32,7 +32,7 @@ export const meta = () => ({
 })
 
 export const links = () => {
-  return [{ rel: 'icon', href: '/logo2.svg' }]
+  return [{ rel: 'icon', href: '/title-logo.svg' }]
 }
 
 export const loader = async ({ request }) => {
