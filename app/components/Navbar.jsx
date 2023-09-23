@@ -207,7 +207,7 @@ export default function Navbar() {
             size="sm"
           />
           <NavLink to="/">
-            <Image width={70} src="/logo.svg" />
+            <Image width={70} src="/nav-logo.svg" />
           </NavLink>
         </Group>
 
