@@ -1,5 +1,5 @@
 import { AppShell, Container } from '@mantine/core'
-import Navbar from '../Navbar'
+import Navbar from './Navbar'
 import Footer from './Footer'
 import { useLocation } from '@remix-run/react'
 import RouterTransition from './RouterTransition'

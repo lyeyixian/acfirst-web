@@ -38,6 +38,7 @@ export async function action({ request }) {
 
 export default function CheckoutRoute() {
   const { cart } = useRouteLoaderData('root')
+  // TODO: UI issue
   const checkoutProducts = cart.attributes.cartItems.map((product, index) => (
     <Card.Section key={index} withBorder inheritPadding py="lg">
       <Group>
