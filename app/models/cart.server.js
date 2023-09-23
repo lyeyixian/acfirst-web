@@ -6,7 +6,7 @@ export async function getCart(cartId) {
   const path = '/carts'
   const urlParamsObj = {
     filters: {
-      cartID: {
+      cartId: {
         $eq: cartId,
       },
     },
@@ -16,6 +16,7 @@ export async function getCart(cartId) {
   return data[0]
 }
 
+// TODO: when deploy, dont know why a lot of carts will be created
 export async function addCart() {
   const path = '/carts'
   const options = {

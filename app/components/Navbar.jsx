@@ -186,7 +186,6 @@ export default function Navbar() {
   let cartProducts = []
 
   if (rootLoaderData) {
-    console.log('DEBUG rootLoaderData: ', rootLoaderData)
     cart = rootLoaderData.cart
     cartSize = cart.attributes.cartItems.length
     cartProducts = cart.attributes.cartItems.map((product, index) => (

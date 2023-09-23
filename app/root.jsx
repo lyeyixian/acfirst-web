@@ -39,13 +39,12 @@ export const loader = async ({ request }) => {
   const cartId = await getCartId(request)
 
   if (!cartId) {
-    console.log('DEBUG no cartId, creating new cart session')
     return await createCartSession(request)
   }
 
   const session = await getSession(request)
   session.set('cartId', cartId)
-  console.log('DEBUG have cart session: ', session?.data)
+
   return json(
     { cart: await getCart(cartId) },
     { headers: { 'Set-Cookie': await commitSession(session) } }
