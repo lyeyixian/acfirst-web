@@ -1,5 +1,11 @@
-import { Divider, Grid, NavLink, Select, ThemeIcon } from '@mantine/core'
-import { Outlet, useParams, Link, useLoaderData } from '@remix-run/react'
+import { Divider, Grid, NavLink, ThemeIcon } from '@mantine/core'
+import {
+  Outlet,
+  useParams,
+  Link,
+  useLoaderData,
+  useSearchParams,
+} from '@remix-run/react'
 import { useEffect, useState } from 'react'
 import FiltersGroup from '../components/FiltersGroup'
 import { IconCategory, IconRuler, IconSquaresFilled } from '@tabler/icons-react'
@@ -68,10 +74,18 @@ export default function ProductsRoute() {
     setActive(category)
   }, [category])
 
+  const [searchParams, setSearchParams] = useSearchParams()
   const { categories } = useLoaderData()
   const categoryFilters = categories.map((category, index) => {
     const CategoryIcon = renderCategoryIcon(category)
-    // TODO: preserve the search params when clicking on the category, except the page
+    const preserveSearchParams = (str) => {
+      const searchParamsEntries = [...searchParams.entries()]
+      const newSearchParams = new URLSearchParams(
+        Object.fromEntries(searchParamsEntries.filter(([key]) => key !== 'p'))
+      )
+
+      return str + `?${newSearchParams.toString()}`
+    }
     return (
       <div key={index}>
         {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
@@ -85,11 +99,11 @@ export default function ProductsRoute() {
           }
           active={active === category.slug}
           component={Link}
-          to={
+          to={preserveSearchParams(
             active === category.slug
               ? '/products/all'
               : `/products/${category.slug}`
-          }
+          )}
         />
       </div>
     )
