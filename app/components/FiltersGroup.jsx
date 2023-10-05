@@ -70,7 +70,7 @@ export default function FiltersGroup({
   label,
   slug,
   initiallyOpened,
-  links,
+  links, // TODO: change variable name to filters
 }) {
   const { classes, theme } = useStyles()
   const hasLinks = Array.isArray(links)
@@ -92,9 +92,7 @@ export default function FiltersGroup({
         className={classes.link}
         label={link.label}
         onClick={() =>
-          setSearchParams((prev) => {
-            const params = new URLSearchParams(prev)
-
+          setSearchParams((params) => {
             if (active === link.slug) {
               params.delete(slug)
             } else {

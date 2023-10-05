@@ -116,10 +116,9 @@ export default function ProductsIndexRoute() {
             value={page}
             onChange={(value) => {
               setPage(value)
-              setSearchParams((prev) => {
-                // TODO: refactor this into a hook tgt with filters group
-                const params = new URLSearchParams(prev)
+              setSearchParams((params) => {
                 params.set('p', value)
+
                 return params
               })
             }}
