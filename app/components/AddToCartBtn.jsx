@@ -37,7 +37,7 @@ export default function AddToCartBtn({ productId, ...props }) {
   }, [addToCartFetcher.state])
 
   return (
-    <addToCartFetcher.Form method="post">
+    <addToCartFetcher.Form method="post" action="/api/addToCart">
       <input type="hidden" name="productId" value={productId} />
       <Button
         my="md"

@@ -1,6 +1,7 @@
 import {
   AspectRatio,
   Card,
+  HoverCard,
   Image,
   Pagination,
   SimpleGrid,
@@ -19,6 +20,7 @@ import {
   useParams,
   useSearchParams,
 } from '@remix-run/react'
+import AddToCartBtn from '../../components/AddToCartBtn'
 
 // TODO: responsive
 const useStyle = createStyles((theme) => ({
@@ -28,6 +30,18 @@ const useStyle = createStyles((theme) => ({
     '&:hover': {
       transform: 'scale(1.01)',
       boxShadow: theme.shadows.md,
+    },
+  },
+
+  dropdown: {
+    padding: 0,
+    backgroundColor: 'transparent',
+    border: 'none',
+  },
+
+  button: {
+    '&:hover': {
+      backgroundColor: theme.colors[theme.primaryColor][1],
     },
   },
 }))
@@ -67,14 +81,27 @@ function ProductsGrid({ products }) {
       key={product.id}
       className={classes.card}
       radius="md"
-      withBorder
       component={Link}
       to={`/product/${product.code}`}
     >
-      {/* TODO: add to cart btn on hover */}
-      <AspectRatio ratio={1}>
-        <Image src={product.imageUrl} />
-      </AspectRatio>
+      <HoverCard
+        offset={-60}
+        keepMounted
+        classNames={{ dropdown: classes.dropdown }}
+      >
+        <HoverCard.Target>
+          <AspectRatio ratio={1}>
+            <Image src={product.imageUrl} radius="sm" />
+          </AspectRatio>
+        </HoverCard.Target>
+        <HoverCard.Dropdown>
+          <AddToCartBtn
+            variant="light"
+            className={classes.button}
+            productId={product.code}
+          />
+        </HoverCard.Dropdown>
+      </HoverCard>
       <Text mt="xs" fw={500}>
         {product.name}
       </Text>

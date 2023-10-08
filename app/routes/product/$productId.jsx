@@ -1,6 +1,5 @@
 import {
   Accordion,
-  Button,
   Grid,
   Image,
   List,
@@ -10,16 +9,11 @@ import {
   getStylesRef,
   rem,
 } from '@mantine/core'
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react'
+import { useLoaderData, useParams } from '@remix-run/react'
 import { json } from '@remix-run/node'
 import { getProduct } from '../../models/product.server'
 import { getStrapiMedia, getStrapiMedias } from '../../utils/apiHelper'
 import { Carousel } from '@mantine/carousel'
-import { commitSession, getCartId, getSession } from '../../session.server'
-import { addCart, addToCart, getCart } from '../../models/cart.server'
-import { notifications } from '@mantine/notifications'
-import { IconCheck, IconX } from '@tabler/icons-react'
-import { useEffect } from 'react'
 import AddToCartBtn from '../../components/AddToCartBtn'
 
 const useStyle = createStyles((theme) => ({
@@ -82,26 +76,6 @@ export async function loader({ params }) {
     category: category.data.attributes.name,
     coverImg: getStrapiMedia(coverImg.data),
   })
-}
-
-export async function action({ request }) {
-  let cartId = await getCartId(request)
-  let options = {}
-
-  if (!cartId) {
-    const session = await getSession(request)
-    const res = await addCart()
-
-    cartId = res.data.attributes.cartId
-    session.set('cartId', cartId)
-    options = { headers: { 'Set-Cookie': await commitSession(session) } }
-  }
-
-  const formData = await request.formData()
-  const productId = formData.get('productId')
-  const res = await addToCart(productId, cartId)
-
-  return json(res, options)
 }
 
 export default function ProductRoute() {
