@@ -20,6 +20,7 @@ import { addCart, addToCart, getCart } from '../../models/cart.server'
 import { notifications } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons-react'
 import { useEffect } from 'react'
+import AddToCartBtn from '../../components/AddToCartBtn'
 
 const useStyle = createStyles((theme) => ({
   carousel: {
@@ -118,37 +119,6 @@ export default function ProductRoute() {
     productImages,
     category,
   } = useLoaderData()
-  const addToCartBtn = useFetcher()
-
-  useEffect(() => {
-    if (addToCartBtn.state === 'idle' && addToCartBtn.data) {
-      if (addToCartBtn.data.error) {
-        notifications.show({
-          title: `Error: ${addToCartBtn.data.error}`,
-          message:
-            'There is something wrong when adding to cart. Please try again.',
-          color: 'red',
-          icon: <IconX size="1.2rem" />,
-        })
-      } else if (addToCartBtn.data.msg) {
-        notifications.show({
-          title: 'Success',
-          message: addToCartBtn.data.msg,
-          color: 'teal',
-          icon: <IconCheck size="1.2rem" />,
-        })
-      } else {
-        notifications.show({
-          title: 'Success',
-          message: 'Product has been added to cart.',
-          color: 'teal',
-          icon: <IconCheck size="1.2rem" />,
-        })
-      }
-      addToCartBtn.data = null
-    }
-  }, [addToCartBtn.state])
-
   const slides = productImages.map((image) => (
     <Carousel.Slide key={image}>
       <Image src={image} fit="contain" />
@@ -175,17 +145,7 @@ export default function ProductRoute() {
         <Grid.Col span={6}>
           <Title order={2}>{name}</Title>
           <Text mt="md">{description}</Text>
-          <addToCartBtn.Form method="post">
-            <input type="hidden" name="productId" value={params.productId} />
-            <Button
-              my="md"
-              type="submit"
-              loading={addToCartBtn.state === 'submitting'}
-              loaderPosition="right"
-            >
-              Add to Cart
-            </Button>
-          </addToCartBtn.Form>
+          <AddToCartBtn productId={params.productId} />
           <Accordion
             variant="separated"
             multiple
