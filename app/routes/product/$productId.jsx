@@ -11,7 +11,10 @@ import {
 } from '@mantine/core'
 import { useLoaderData, useParams } from '@remix-run/react'
 import { json } from '@remix-run/node'
-import { getProduct } from '../../models/product.server'
+import {
+  getProduct,
+  incrementProductViewCount,
+} from '../../models/product.server'
 import { getStrapiMedia, getStrapiMedias } from '../../utils/apiHelper'
 import { Carousel } from '@mantine/carousel'
 import AddToCartBtn from '../../components/AddToCartBtn'
@@ -47,7 +50,6 @@ const useStyle = createStyles((theme) => ({
   },
 }))
 
-// TODO: everytime this loads, increase the viewCount
 export async function loader({ params }) {
   const { productId } = params
   const product = await getProduct(productId)
@@ -63,6 +65,8 @@ export async function loader({ params }) {
     category,
     coverImg,
   } = product.attributes
+
+  await incrementProductViewCount(product.id, viewCount)
 
   return json({
     name,

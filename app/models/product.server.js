@@ -43,3 +43,21 @@ export async function getProducts(page = 1, category, filters = {}) {
 
   return await fetchApi(path, urlParamsObj)
 }
+
+export async function incrementProductViewCount(productId, viewCount) {
+  const path = `/products/${productId}`
+  const options = {
+    method: 'PUT',
+    body: JSON.stringify({
+      data: {
+        viewCount: viewCount + 1,
+      },
+    }),
+  }
+
+  try {
+    return await fetchApi(path, {}, options)
+  } catch {
+    return { error: 'Unable to increment product view count!' }
+  }
+}
