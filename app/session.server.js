@@ -2,6 +2,7 @@ import { createCookieSessionStorage, json } from '@remix-run/node'
 import invariant from 'tiny-invariant'
 import { addCart } from './models/cart.server'
 
+// process.env.SESSION_SECRET = "a-secret-session-token"
 invariant(process.env.SESSION_SECRET, 'SESSION_SECRET must be set')
 
 const sessionStorage = createCookieSessionStorage({
