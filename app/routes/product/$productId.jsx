@@ -1,6 +1,5 @@
 import {
   Accordion,
-  Button,
   Grid,
   Image,
   List,
@@ -10,16 +9,15 @@ import {
   getStylesRef,
   rem,
 } from '@mantine/core'
-import { useFetcher, useLoaderData, useParams } from '@remix-run/react'
+import { useLoaderData, useParams } from '@remix-run/react'
 import { json } from '@remix-run/node'
-import { getProduct } from '../../models/product.server'
+import {
+  getProduct,
+  incrementProductViewCount,
+} from '../../models/product.server'
 import { getStrapiMedia, getStrapiMedias } from '../../utils/apiHelper'
 import { Carousel } from '@mantine/carousel'
-import { commitSession, getCartId, getSession } from '../../session.server'
-import { addCart, addToCart, getCart } from '../../models/cart.server'
-import { notifications } from '@mantine/notifications'
-import { IconCheck, IconX } from '@tabler/icons-react'
-import { useEffect } from 'react'
+import AddToCartBtn from '../../components/AddToCartBtn'
 
 const useStyle = createStyles((theme) => ({
   carousel: {
@@ -52,7 +50,6 @@ const useStyle = createStyles((theme) => ({
   },
 }))
 
-// TODO: everytime this loads, increase the viewCount
 export async function loader({ params }) {
   const { productId } = params
   const product = await getProduct(productId)
@@ -69,6 +66,8 @@ export async function loader({ params }) {
     coverImg,
   } = product.attributes
 
+  await incrementProductViewCount(product.id, viewCount)
+
   return json({
     name,
     code,
@@ -81,26 +80,6 @@ export async function loader({ params }) {
     category: category.data.attributes.name,
     coverImg: getStrapiMedia(coverImg.data),
   })
-}
-
-export async function action({ request }) {
-  let cartId = await getCartId(request)
-  let options = {}
-
-  if (!cartId) {
-    const session = await getSession(request)
-    const res = await addCart()
-
-    cartId = res.data.attributes.cartId
-    session.set('cartId', cartId)
-    options = { headers: { 'Set-Cookie': await commitSession(session) } }
-  }
-
-  const formData = await request.formData()
-  const productId = formData.get('productId')
-  const res = await addToCart(productId, cartId)
-
-  return json(res, options)
 }
 
 export default function ProductRoute() {
@@ -118,37 +97,6 @@ export default function ProductRoute() {
     productImages,
     category,
   } = useLoaderData()
-  const addToCartBtn = useFetcher()
-
-  useEffect(() => {
-    if (addToCartBtn.state === 'idle' && addToCartBtn.data) {
-      if (addToCartBtn.data.error) {
-        notifications.show({
-          title: `Error: ${addToCartBtn.data.error}`,
-          message:
-            'There is something wrong when adding to cart. Please try again.',
-          color: 'red',
-          icon: <IconX size="1.2rem" />,
-        })
-      } else if (addToCartBtn.data.msg) {
-        notifications.show({
-          title: 'Success',
-          message: addToCartBtn.data.msg,
-          color: 'teal',
-          icon: <IconCheck size="1.2rem" />,
-        })
-      } else {
-        notifications.show({
-          title: 'Success',
-          message: 'Product has been added to cart.',
-          color: 'teal',
-          icon: <IconCheck size="1.2rem" />,
-        })
-      }
-      addToCartBtn.data = null
-    }
-  }, [addToCartBtn.state])
-
   const slides = productImages.map((image) => (
     <Carousel.Slide key={image}>
       <Image src={image} fit="contain" />
@@ -175,17 +123,7 @@ export default function ProductRoute() {
         <Grid.Col span={6}>
           <Title order={2}>{name}</Title>
           <Text mt="md">{description}</Text>
-          <addToCartBtn.Form method="post">
-            <input type="hidden" name="productId" value={params.productId} />
-            <Button
-              my="md"
-              type="submit"
-              loading={addToCartBtn.state === 'submitting'}
-              loaderPosition="right"
-            >
-              Add to Cart
-            </Button>
-          </addToCartBtn.Form>
+          <AddToCartBtn productId={params.productId} />
           <Accordion
             variant="separated"
             multiple
