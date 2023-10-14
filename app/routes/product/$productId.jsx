@@ -1,5 +1,6 @@
 import {
   Accordion,
+  Container,
   Grid,
   Image,
   List,
@@ -18,6 +19,7 @@ import {
 import { getStrapiMedia, getStrapiMedias } from '../../utils/apiHelper'
 import { Carousel } from '@mantine/carousel'
 import AddToCartBtn from '../../components/AddToCartBtn'
+import React, { useEffect, useState } from 'react'
 
 const useStyle = createStyles((theme) => ({
   carousel: {
@@ -84,7 +86,6 @@ export async function loader({ params }) {
 
 export default function ProductRoute() {
   // TODO: refactor carousel with the carousel in ProjectsGrid
-  // TODO: increase the gap between carousel slides
   const { classes } = useStyle()
   const params = useParams()
   const {
@@ -97,8 +98,19 @@ export default function ProductRoute() {
     productImages,
     category,
   } = useLoaderData()
-  const slides = productImages.map((image) => (
-    <Carousel.Slide key={image}>
+  const [imageShown, setImageShown] = useState(0)
+  const [embla, setEmbla] = useState(null)
+  const [emblaForSubCarousel, setEmblaForSubCarousel] = useState(null)
+
+  useEffect(() => {
+    if (embla && emblaForSubCarousel) {
+      embla.scrollTo(imageShown)
+      emblaForSubCarousel.scrollTo(imageShown)
+    }
+  }, [embla, emblaForSubCarousel, imageShown])
+
+  const slides = productImages.map((image, index) => (
+    <Carousel.Slide key={index}>
       <Image src={image} fit="contain" />
     </Carousel.Slide>
   ))
@@ -108,18 +120,60 @@ export default function ProductRoute() {
       <h1>Product {params.productId}</h1>
       <Grid>
         <Grid.Col span={6}>
-          <Carousel
-            withIndicators
-            loop
-            classNames={{
-              root: classes.carousel,
-              controls: classes.carouselControls,
-              indicator: classes.carouselIndicator,
-            }}
-          >
-            {slides}
-          </Carousel>
+          <Container>
+            <Carousel
+              onSlideChange={(index) => setImageShown(index)}
+              withIndicators
+              loop
+              classNames={{
+                root: classes.carousel,
+                controls: classes.carouselControls,
+                indicator: classes.carouselIndicator,
+              }}
+              getEmblaApi={setEmbla}
+              slideGap="sm"
+            >
+              {slides}
+            </Carousel>
+            <Carousel
+              mt="xs"
+              onSlideChange={(index) => setImageShown(index)}
+              loop
+              withControls={false}
+              slideSize="25%"
+              slideGap="md"
+              align="start"
+              slidesToScroll={productImages.length >= 4 ? 1 : 4}
+              classNames={{
+                root: classes.carousel,
+                controls: classes.carouselControls,
+                indicator: classes.carouselIndicator,
+              }}
+              getEmblaApi={setEmblaForSubCarousel}
+            >
+              {productImages.map((image, index) => {
+                const isCurrentImageShown = imageShown === index
+                return (
+                  <Carousel.Slide key={index}>
+                    <Image
+                      sx={(theme) => ({
+                        borderStyle: isCurrentImageShown ? 'solid' : null,
+                        borderColor: isCurrentImageShown
+                          ? theme.colors[theme.primaryColor][6]
+                          : null,
+                        borderRadius: isCurrentImageShown ? theme.radius.sm : 0,
+                      })}
+                      src={image}
+                      fit="contain"
+                      onClick={() => setImageShown(index)}
+                    />
+                  </Carousel.Slide>
+                )
+              })}
+            </Carousel>
+          </Container>
         </Grid.Col>
+
         <Grid.Col span={6}>
           <Title order={2}>{name}</Title>
           <Text mt="md">{description}</Text>
