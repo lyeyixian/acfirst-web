@@ -1,5 +1,6 @@
 import {
   Accordion,
+  Container,
   Grid,
   Image,
   List,
@@ -18,6 +19,7 @@ import {
 import { getStrapiMedia, getStrapiMedias } from '../../utils/apiHelper'
 import { Carousel } from '@mantine/carousel'
 import AddToCartBtn from '../../components/AddToCartBtn'
+import React, { useEffect, useState } from 'react';
 
 const useStyle = createStyles((theme) => ({
   carousel: {
@@ -97,8 +99,17 @@ export default function ProductRoute() {
     productImages,
     category,
   } = useLoaderData()
-  const slides = productImages.map((image) => (
-    <Carousel.Slide key={image}>
+  const [imageShown, setImageShown] = useState(0);
+  const [embla, setEmbla] = useState(null);
+
+  useEffect(() => {
+    if (embla) {
+      embla.scrollTo(imageShown);    
+    }
+  }, [embla, imageShown]);
+
+  const slides = productImages.map((image, index) => (
+    <Carousel.Slide key={index}>
       <Image src={image} fit="contain" />
     </Carousel.Slide>
   ))
@@ -108,18 +119,35 @@ export default function ProductRoute() {
       <h1>Product {params.productId}</h1>
       <Grid>
         <Grid.Col span={6}>
-          <Carousel
-            withIndicators
-            loop
-            classNames={{
-              root: classes.carousel,
-              controls: classes.carouselControls,
-              indicator: classes.carouselIndicator,
-            }}
-          >
-            {slides}
-          </Carousel>
+          <Container>
+            <Carousel
+              onSlideChange={(index) => setImageShown(index)}
+              withIndicators
+              loop
+              classNames={{
+                root: classes.carousel,
+                controls: classes.carouselControls,
+                indicator: classes.carouselIndicator,
+              }}
+              getEmblaApi={setEmbla}
+            >
+              {slides}
+            </Carousel>
+              <Grid style={{ marginTop: 10 }}>
+                {productImages.map((image, index) => (
+                  <Grid.Col span={3} key={index}>
+                      <Image
+                        style={{ border: imageShown === index ? 'solid #6366F1' : "", borderRadius: imageShown === index ? 10 : 0}}
+                        src={image}
+                        radius={imageShown===index ? 10 : 0} 
+                        onClick={() => setImageShown(index)}    
+                      />
+                  </Grid.Col>
+                ))}
+              </Grid>
+          </Container>
         </Grid.Col>
+
         <Grid.Col span={6}>
           <Title order={2}>{name}</Title>
           <Text mt="md">{description}</Text>
