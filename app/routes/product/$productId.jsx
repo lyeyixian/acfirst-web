@@ -19,7 +19,7 @@ import {
 import { getStrapiMedia, getStrapiMedias } from '../../utils/apiHelper'
 import { Carousel } from '@mantine/carousel'
 import AddToCartBtn from '../../components/AddToCartBtn'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 
 const useStyle = createStyles((theme) => ({
   carousel: {
@@ -99,14 +99,14 @@ export default function ProductRoute() {
     productImages,
     category,
   } = useLoaderData()
-  const [imageShown, setImageShown] = useState(0);
-  const [embla, setEmbla] = useState(null);
+  const [imageShown, setImageShown] = useState(0)
+  const [embla, setEmbla] = useState(null)
 
   useEffect(() => {
     if (embla) {
-      embla.scrollTo(imageShown);    
+      embla.scrollTo(imageShown)
     }
-  }, [embla, imageShown]);
+  }, [embla, imageShown])
 
   const slides = productImages.map((image, index) => (
     <Carousel.Slide key={index}>
@@ -133,18 +133,26 @@ export default function ProductRoute() {
             >
               {slides}
             </Carousel>
-              <Grid style={{ marginTop: 10 }}>
-                {productImages.map((image, index) => (
+            <Grid mt="xs">
+              {productImages.map((image, index) => {
+                const isCurrentImageShown = imageShown === index
+                return (
                   <Grid.Col span={3} key={index}>
-                      <Image
-                        style={{ border: imageShown === index ? 'solid #6366F1' : "", borderRadius: imageShown === index ? 10 : 0}}
-                        src={image}
-                        radius={imageShown===index ? 10 : 0} 
-                        onClick={() => setImageShown(index)}    
-                      />
+                    <Image
+                      sx={(theme) => ({
+                        borderStyle: isCurrentImageShown ? 'solid' : null,
+                        borderColor: isCurrentImageShown
+                          ? theme.colors[theme.primaryColor][6]
+                          : null,
+                        borderRadius: isCurrentImageShown ? theme.radius.sm : 0,
+                      })}
+                      src={image}
+                      onClick={() => setImageShown(index)}
+                    />
                   </Grid.Col>
-                ))}
-              </Grid>
+                )
+              })}
+            </Grid>
           </Container>
         </Grid.Col>
 
