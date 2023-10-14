@@ -86,7 +86,6 @@ export async function loader({ params }) {
 
 export default function ProductRoute() {
   // TODO: refactor carousel with the carousel in ProjectsGrid
-  // TODO: increase the gap between carousel slides
   const { classes } = useStyle()
   const params = useParams()
   const {
@@ -132,14 +131,15 @@ export default function ProductRoute() {
                 indicator: classes.carouselIndicator,
               }}
               getEmblaApi={setEmbla}
+              slideGap="sm"
             >
               {slides}
             </Carousel>
             <Carousel
-              mt = "xs"
+              mt="xs"
               onSlideChange={(index) => setImageShown(index)}
-              withIndicators
               loop
+              withControls={false}
               slideSize="25%"
               slideGap="md"
               align="start"
@@ -150,26 +150,27 @@ export default function ProductRoute() {
                 indicator: classes.carouselIndicator,
               }}
               getEmblaApi={setEmblaForSubCarousel}
-              >
-               {productImages.map((image, index) => {
-                    const isCurrentImageShown = imageShown === index
-                    return (
-                    <Carousel.Slide key={index}>
-                      <Image 
-                        sx={(theme) => ({
-                          borderStyle: isCurrentImageShown ? 'solid' : null,
-                          borderColor: isCurrentImageShown
-                            ? theme.colors[theme.primaryColor][6]
-                            : null,
-                          borderRadius: isCurrentImageShown ? theme.radius.sm : 0,
-                        })}
-                        src={image} 
-                        fit="contain" 
-                        onClick={() => setImageShown(index)}
-                        />
-                    </Carousel.Slide>)
-                  })}
-              </Carousel>
+            >
+              {productImages.map((image, index) => {
+                const isCurrentImageShown = imageShown === index
+                return (
+                  <Carousel.Slide key={index}>
+                    <Image
+                      sx={(theme) => ({
+                        borderStyle: isCurrentImageShown ? 'solid' : null,
+                        borderColor: isCurrentImageShown
+                          ? theme.colors[theme.primaryColor][6]
+                          : null,
+                        borderRadius: isCurrentImageShown ? theme.radius.sm : 0,
+                      })}
+                      src={image}
+                      fit="contain"
+                      onClick={() => setImageShown(index)}
+                    />
+                  </Carousel.Slide>
+                )
+              })}
+            </Carousel>
           </Container>
         </Grid.Col>
 
