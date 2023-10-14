@@ -101,12 +101,14 @@ export default function ProductRoute() {
   } = useLoaderData()
   const [imageShown, setImageShown] = useState(0)
   const [embla, setEmbla] = useState(null)
+  const [emblaForSubCarousel, setEmblaForSubCarousel] = useState(null)
 
   useEffect(() => {
-    if (embla) {
+    if (embla && emblaForSubCarousel) {
       embla.scrollTo(imageShown)
+      emblaForSubCarousel.scrollTo(imageShown)
     }
-  }, [embla, imageShown])
+  }, [embla, emblaForSubCarousel, imageShown])
 
   const slides = productImages.map((image, index) => (
     <Carousel.Slide key={index}>
@@ -133,26 +135,41 @@ export default function ProductRoute() {
             >
               {slides}
             </Carousel>
-            <Grid mt="xs">
-              {productImages.map((image, index) => {
-                const isCurrentImageShown = imageShown === index
-                return (
-                  <Grid.Col span={3} key={index}>
-                    <Image
-                      sx={(theme) => ({
-                        borderStyle: isCurrentImageShown ? 'solid' : null,
-                        borderColor: isCurrentImageShown
-                          ? theme.colors[theme.primaryColor][6]
-                          : null,
-                        borderRadius: isCurrentImageShown ? theme.radius.sm : 0,
-                      })}
-                      src={image}
-                      onClick={() => setImageShown(index)}
-                    />
-                  </Grid.Col>
-                )
-              })}
-            </Grid>
+            <Carousel
+              mt = "xs"
+              onSlideChange={(index) => setImageShown(index)}
+              withIndicators
+              loop
+              slideSize="25%"
+              slideGap="md"
+              align="start"
+              slidesToScroll={productImages.length >= 4 ? 1 : 4}
+              classNames={{
+                root: classes.carousel,
+                controls: classes.carouselControls,
+                indicator: classes.carouselIndicator,
+              }}
+              getEmblaApi={setEmblaForSubCarousel}
+              >
+               {productImages.map((image, index) => {
+                    const isCurrentImageShown = imageShown === index
+                    return (
+                    <Carousel.Slide key={index}>
+                      <Image 
+                        sx={(theme) => ({
+                          borderStyle: isCurrentImageShown ? 'solid' : null,
+                          borderColor: isCurrentImageShown
+                            ? theme.colors[theme.primaryColor][6]
+                            : null,
+                          borderRadius: isCurrentImageShown ? theme.radius.sm : 0,
+                        })}
+                        src={image} 
+                        fit="contain" 
+                        onClick={() => setImageShown(index)}
+                        />
+                    </Carousel.Slide>)
+                  })}
+              </Carousel>
           </Container>
         </Grid.Col>
 
