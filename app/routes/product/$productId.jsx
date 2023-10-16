@@ -1,7 +1,11 @@
 import {
   Accordion,
+  Anchor,
+  AspectRatio,
+  Breadcrumbs,
   Container,
   Grid,
+  HoverCard,
   Image,
   List,
   Text,
@@ -66,6 +70,7 @@ export async function loader({ params }) {
     productImg,
     category,
     coverImg,
+    similarCode,
   } = product.attributes
 
   await incrementProductViewCount(product.id, viewCount)
@@ -78,10 +83,19 @@ export async function loader({ params }) {
     type,
     description,
     viewCount,
+    similarCode,
     productImages: getStrapiMedias(productImg.data),
     category: category.data.attributes.name,
     coverImg: getStrapiMedia(coverImg.data),
   })
+}
+
+function formatSize(size) {
+  const format = size.split("-")
+  const units = format[0]
+  const length = format[1].split("x")[0]
+  const breadth = format[1].split("x")[1]
+  return (length + units + " x " + breadth + units)
 }
 
 export default function ProductRoute() {
@@ -95,6 +109,7 @@ export default function ProductRoute() {
     surface,
     type,
     description,
+    similarCode,
     productImages,
     category,
   } = useLoaderData()
@@ -102,6 +117,37 @@ export default function ProductRoute() {
   const [embla, setEmbla] = useState(null)
   const [emblaForSubCarousel, setEmblaForSubCarousel] = useState(null)
 
+  const breadcrumbs = [
+    { title: 'Home', href: '/' },
+    { title: 'Products', href: '/products' },
+    { title: params.productId, href: '/product/' + params.productId },
+  ].map((item, index) => (
+      <Anchor href={item.href} key={index}>
+        {item.title}
+      </Anchor>
+  ));
+
+  console.log(similarCode.data);
+
+  const similarCodeLayout = similarCode.data.map((item, index) => (
+    <Grid.Col span={2}>
+      <Anchor href={"/product/" + item.attributes.code} key={index} size="xs">
+      <HoverCard
+        offset={-60}
+        keepMounted
+        >
+        <HoverCard.Target>
+          <AspectRatio ratio={1}>
+            <Image src={getStrapiMedia(item.attributes.coverImg.data)} radius="sm"/>
+          </AspectRatio>
+        </HoverCard.Target>
+      </HoverCard>
+    </Anchor>
+
+    </Grid.Col>
+  ))
+
+  
   useEffect(() => {
     if (embla && emblaForSubCarousel) {
       embla.scrollTo(imageShown)
@@ -114,10 +160,11 @@ export default function ProductRoute() {
       <Image src={image} fit="contain" />
     </Carousel.Slide>
   ))
-
   return (
     <div>
-      <h1>Product {params.productId}</h1>
+      <Container my="xs">
+      <Breadcrumbs>{breadcrumbs}</Breadcrumbs>
+      </Container>
       <Grid>
         <Grid.Col span={6}>
           <Container>
@@ -176,27 +223,22 @@ export default function ProductRoute() {
 
         <Grid.Col span={6}>
           <Title order={2}>{name}</Title>
-          <Text mt="md">{description}</Text>
           <AddToCartBtn productId={params.productId} />
+          <Grid>
+            {similarCodeLayout}
+          </Grid>
           <Accordion
             variant="separated"
             multiple
             defaultValue={['specifications']}
-          >
+            mt="xs"
+          > 
             <Accordion.Item value="specifications">
               <Accordion.Control>
                 <Text className={classes.accordionTitle}>Specifications</Text>
               </Accordion.Control>
               <Accordion.Panel>
                 <List withPadding size="sm">
-                  <List.Item>
-                    <Text c="dark.4">
-                      <Text span fw={600}>
-                        Code:
-                      </Text>{' '}
-                      {code}
-                    </Text>
-                  </List.Item>
                   <List.Item>
                     <Text c="dark.4">
                       <Text span fw={600}>
@@ -226,7 +268,7 @@ export default function ProductRoute() {
                       <Text span fw={600}>
                         Size:
                       </Text>{' '}
-                      {size}
+                      {formatSize(size)}
                     </Text>
                   </List.Item>
                 </List>
