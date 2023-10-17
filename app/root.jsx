@@ -36,6 +36,11 @@ export const links = () => {
 }
 
 export const loader = async ({ request }) => {
+  // to prevent cron job pinging from creating too many cart sessions
+  if (new URL(request.url).pathname === '/healthcheck') {
+    return json({ message: 'ok' })
+  }
+
   const cartId = await getCartId(request)
 
   if (!cartId) {
@@ -46,7 +51,7 @@ export const loader = async ({ request }) => {
   session.set('cartId', cartId)
 
   return json(
-    { cart: await getCart(cartId) },
+    { cart: await getCart(cartId) }, // TODO: it is possible to have cartId, but can't find a cart. in that case we need to createCartSession again.
     { headers: { 'Set-Cookie': await commitSession(session) } }
   )
 }
