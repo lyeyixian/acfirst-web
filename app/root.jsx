@@ -36,11 +36,6 @@ export const links = () => {
 }
 
 export const loader = async ({ request }) => {
-  // to prevent cron job pinging from creating too many cart sessions
-  if (new URL(request.url).pathname === '/healthcheck') {
-    return json({ message: 'ok' })
-  }
-
   const cartId = await getCartId(request)
 
   if (!cartId) {
