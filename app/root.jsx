@@ -42,11 +42,17 @@ export const loader = async ({ request }) => {
     return await createCartSession(request)
   }
 
+  const cart = await getCart(cartId)
+
+  if (!cart) {
+    return await createCartSession(request)
+  }
+
   const session = await getSession(request)
   session.set('cartId', cartId)
 
   return json(
-    { cart: await getCart(cartId) }, // TODO: it is possible to have cartId, but can't find a cart. in that case we need to createCartSession again.
+    { cart },
     { headers: { 'Set-Cookie': await commitSession(session) } }
   )
 }
