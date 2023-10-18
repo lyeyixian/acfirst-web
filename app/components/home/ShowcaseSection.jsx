@@ -83,7 +83,7 @@ function ImageCard({ imgUrl, name, code, category, viewCount }) {
             <Text size="sm" color="dark.0">
               {category}
             </Text>
-            <Group spacing="lg">
+            <Group>
               <Center>
                 <IconEye
                   size="1rem"
