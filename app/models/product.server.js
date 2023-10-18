@@ -23,6 +23,7 @@ export async function getProducts(page = 1, category, filters = {}) {
       pageSize: 6,
     },
     filters: {},
+    sort: 'viewCount:desc',
   }
 
   for (const [key, value] of Object.entries(filters)) {
