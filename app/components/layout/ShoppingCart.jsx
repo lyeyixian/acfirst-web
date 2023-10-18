@@ -6,6 +6,7 @@ import {
   Group,
   Image,
   Indicator,
+  NumberInput,
   Paper,
   Popover,
   ScrollArea,
@@ -17,7 +18,7 @@ import { useState } from 'react'
 
 function CartItem({ product, index }) {
   const deleteCartItemBtn = useFetcher()
-
+  console.log(product.quantity)
   return (
     <div>
       {index !== 0 && <Divider my="md" />}
@@ -34,6 +35,13 @@ function CartItem({ product, index }) {
             <Text>{product.name}</Text>
             <Text color="dimmed">{product.category}</Text>
           </Box>
+          <NumberInput
+            placeholder={product.quantity}
+            allowNegative={false}
+            allowDecimal={false}
+            min={0}
+            startValue={parseInt(product.quantity)}
+          />
           <deleteCartItemBtn.Form method="delete" action="/cart">
             <input type="hidden" name="code" value={product.code} />
             <ActionIcon
@@ -59,6 +67,7 @@ export default function ShoppingCart() {
   if (rootLoaderData) {
     cart = rootLoaderData.cart
     cartSize = cart.attributes.cartItems.length
+    console.log(rootLoaderData)
     cartProducts = cart.attributes.cartItems.map((product, index) => (
       <CartItem key={index} product={product} index={index} />
     ))

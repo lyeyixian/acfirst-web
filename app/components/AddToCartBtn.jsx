@@ -1,10 +1,10 @@
-import { Button } from '@mantine/core'
+import { Button, NumberInput, } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useFetcher } from '@remix-run/react'
 import { IconCheck, IconX } from '@tabler/icons-react'
 import { useEffect } from 'react'
 
-export default function AddToCartBtn({ productId, ...props }) {
+export default function AddToCartBtn({ productId, quantity, ...props }) {
   const addToCartFetcher = useFetcher()
 
   useEffect(() => {
@@ -39,6 +39,15 @@ export default function AddToCartBtn({ productId, ...props }) {
   return (
     <addToCartFetcher.Form method="post" action="/api/addToCart">
       <input type="hidden" name="productId" value={productId} />
+      <NumberInput
+          name="quantity"
+          my="xs"
+          placeholder="0"
+          allowNegative={false}
+          allowDecimal={false}
+          min={0}
+          startValue={0}
+        />
       <Button
         my="md"
         type="submit"

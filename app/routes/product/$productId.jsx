@@ -1,3 +1,6 @@
+import React, { useEffect, useState } from 'react'
+import ReactDOM from 'react-dom';
+import ReactImageZoom from 'react-image-zoom';
 import {
   Accordion,
   Anchor,
@@ -14,16 +17,16 @@ import {
   getStylesRef,
   rem,
 } from '@mantine/core'
+import { Carousel } from '@mantine/carousel'
 import { useLoaderData, useParams } from '@remix-run/react'
 import { json } from '@remix-run/node'
 import {
   getProduct,
+  getProducts,
   incrementProductViewCount,
 } from '../../models/product.server'
 import { getStrapiMedia, getStrapiMedias } from '../../utils/apiHelper'
-import { Carousel } from '@mantine/carousel'
 import AddToCartBtn from '../../components/AddToCartBtn'
-import React, { useEffect, useState } from 'react'
 
 const useStyle = createStyles((theme) => ({
   carousel: {
@@ -58,7 +61,8 @@ const useStyle = createStyles((theme) => ({
 
 export async function loader({ params }) {
   const { productId } = params
-  const product = await getProduct(productId)
+
+  const product = await getProduct(productId);  
   const {
     name,
     code,
@@ -75,6 +79,13 @@ export async function loader({ params }) {
 
   await incrementProductViewCount(product.id, viewCount)
 
+  const relatedProductsByFourFields = await getProducts(1, category.data.attributes.slug, {type, surface, size})
+  const relatedProductsByTypeSurface = await getProducts(1, category.data.attributes.slug, {type, surface})
+  const relatedProductsBySurfaceSize = await getProducts(1, category.data.attributes.slug, {surface, size})
+  const relatedProductsByTypeSize = await getProducts(1, category.data.attributes.slug, {type, size})
+  let relatedProducts = [...relatedProductsByFourFields.data, ...relatedProductsBySurfaceSize.data, ...relatedProductsByTypeSize.data, ...relatedProductsByTypeSurface.data]
+  relatedProducts = Array.from(new Map(relatedProducts.map(obj => [obj["id"], obj])).values());
+
   return json({
     name,
     code,
@@ -87,6 +98,7 @@ export async function loader({ params }) {
     productImages: getStrapiMedias(productImg.data),
     category: category.data.attributes.name,
     coverImg: getStrapiMedia(coverImg.data),
+    relatedProducts
   })
 }
 
@@ -109,13 +121,31 @@ export default function ProductRoute() {
     surface,
     type,
     description,
-    similarCode,
+    similarCode,  
     productImages,
     category,
+    relatedProducts,
   } = useLoaderData()
+
   const [imageShown, setImageShown] = useState(0)
   const [embla, setEmbla] = useState(null)
   const [emblaForSubCarousel, setEmblaForSubCarousel] = useState(null)
+
+  useEffect(() => {
+    if (embla && emblaForSubCarousel) {
+      embla.scrollTo(imageShown)
+      emblaForSubCarousel.scrollTo(imageShown)
+    }
+  }, [embla, emblaForSubCarousel, imageShown])
+
+  const slides = productImages.map((image, index) => {
+    const props = { width: 400,  scale:1.1, zoomPosition: "original", img: image};
+    return (
+    <Carousel.Slide key={index}>
+      <ReactImageZoom {...props}/>
+      {/* <Image src={image} fit="contain"/> */}
+    </Carousel.Slide>
+    )})
 
   const breadcrumbs = [
     { title: 'Home', href: '/' },
@@ -127,38 +157,51 @@ export default function ProductRoute() {
       </Anchor>
   ));
 
-  console.log(similarCode.data);
-
   const similarCodeLayout = similarCode.data.map((item, index) => (
-    <Grid.Col span={2}>
+    <Grid.Col span={2} key={index}>
       <Anchor href={"/product/" + item.attributes.code} key={index} size="xs">
       <HoverCard
         offset={-60}
         keepMounted
+        styles={{
+          dropdown: { background: "rgba(255,255,255,0.5)", border: 0 },
+        }}
         >
         <HoverCard.Target>
           <AspectRatio ratio={1}>
-            <Image src={getStrapiMedia(item.attributes.coverImg.data)} radius="sm"/>
+            <Image src={getStrapiMedia(item.attributes.coverImg.data)} radius="sm"
+            />
           </AspectRatio>
         </HoverCard.Target>
+        <HoverCard.Dropdown
+          mt="xs">
+          <Text>{item.attributes.code}</Text>
+        </HoverCard.Dropdown>
       </HoverCard>
     </Anchor>
-
     </Grid.Col>
   ))
 
-  
-  useEffect(() => {
-    if (embla && emblaForSubCarousel) {
-      embla.scrollTo(imageShown)
-      emblaForSubCarousel.scrollTo(imageShown)
-    }
-  }, [embla, emblaForSubCarousel, imageShown])
-
-  const slides = productImages.map((image, index) => (
+  const relatedProductsCarousel = relatedProducts.filter(item => item.attributes.code !== code).map((item, index) => (
     <Carousel.Slide key={index}>
-      <Image src={image} fit="contain" />
-    </Carousel.Slide>
+      <Anchor href={"/product/" + item.attributes.code} key={index}>
+          <HoverCard
+            offset={-60}
+            keepMounted
+            >
+            <HoverCard.Target>
+              <AspectRatio ratio={1}>
+                <Image h={10} src={getStrapiMedia(item.attributes.coverImg.data)} radius="sm"
+                />
+              </AspectRatio>
+            </HoverCard.Target>
+            <HoverCard.Dropdown
+              mt="xs">
+              <Text>{item.attributes.code}</Text>
+            </HoverCard.Dropdown>
+          </HoverCard>
+        </Anchor>
+         </Carousel.Slide>
   ))
   return (
     <div>
@@ -297,6 +340,24 @@ export default function ProductRoute() {
           </Accordion>
         </Grid.Col>
       </Grid>
+      <Container my="xs">
+        <Title order={3}>Related Products</Title>
+        <Carousel
+         mt="xs"
+         loop
+         withIndicators
+         slideSize="20%"
+         slideGap="md"
+         align="start"
+         classNames={{
+           root: classes.carousel,
+           controls: classes.carouselControls,
+           indicator: classes.carouselIndicator,
+         }}>
+          {relatedProductsCarousel}
+        </Carousel>
+        
+      </Container>
     </div>
   )
 }

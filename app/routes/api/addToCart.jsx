@@ -17,7 +17,8 @@ export async function action({ request }) {
 
   const formData = await request.formData()
   const productId = formData.get('productId')
-  const res = await addToCart(productId, cartId)
+  const quantity = formData.get("quantity")
+  const res = await addToCart(productId, quantity, cartId)
 
   return json(res, options)
 }

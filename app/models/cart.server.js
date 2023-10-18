@@ -51,7 +51,7 @@ export async function clearCart(cartId) {
   }
 }
 
-export async function addToCart(code, cartId) {
+export async function addToCart(code, quantity, cartId) {
   const product = await getProduct(code)
   if (!product) {
     throw new Response('Product not found', { status: 404 })
@@ -75,6 +75,7 @@ export async function addToCart(code, cartId) {
       type: product.attributes.type,
       category: product.attributes.category.data.attributes.name,
       imgUrl: getStrapiMedia(product.attributes.coverImg.data),
+      quantity: quantity
     }
     const path = `/carts/${cart.id}`
     const options = {
