@@ -1,6 +1,8 @@
 import {
   AspectRatio,
   Card,
+  Center,
+  Group,
   HoverCard,
   Image,
   Pagination,
@@ -21,6 +23,7 @@ import {
   useSearchParams,
 } from '@remix-run/react'
 import AddToCartBtn from '../../components/AddToCartBtn'
+import { IconEye } from '@tabler/icons-react'
 
 // TODO: responsive
 const useStyle = createStyles((theme) => ({
@@ -47,12 +50,13 @@ const useStyle = createStyles((theme) => ({
 }))
 
 export async function loader({ request, params }) {
-  const { category } = params
   const url = new URL(request.url)
   const page = url.searchParams.get('p') || 1
   const surface = url.searchParams.get('surface')
   const type = url.searchParams.get('type')
   const size = url.searchParams.get('size')
+
+  const { category } = params
   const products = await getProducts(page, category, { surface, type, size })
   const prunedProducts = products.data.map((product) => {
     const { name, code, viewCount, category, coverImg } = product.attributes
@@ -73,9 +77,8 @@ export async function loader({ request, params }) {
   })
 }
 
-// TODO: put viewCount to the bottom right of the card
 function ProductsGrid({ products }) {
-  const { classes } = useStyle()
+  const { classes, theme } = useStyle()
   const cards = products.map((product) => (
     <Card
       key={product.id}
@@ -105,9 +108,19 @@ function ProductsGrid({ products }) {
       <Text mt="xs" fw={500}>
         {product.name}
       </Text>
-      <Text color="dimmed" size="sm">
-        {product.category}
-      </Text>
+      <Group position="apart">
+        <Text color="dimmed" size="sm">
+          {product.category}
+        </Text>
+        <Group>
+          <Center>
+            <IconEye size="1rem" stroke={2} color={theme.colors.dark[1]} />
+            <Text color="dimmed" size="sm" ml={4}>
+              {product.viewCount}
+            </Text>
+          </Center>
+        </Group>
+      </Group>
     </Card>
   ))
 
