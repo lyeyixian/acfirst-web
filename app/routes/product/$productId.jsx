@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import ReactDOM from 'react-dom';
+import Zoom from "react-img-zoom-gdn";
 import ReactImageZoom from 'react-image-zoom';
 import {
   Accordion,
@@ -86,6 +86,9 @@ export async function loader({ params }) {
   let relatedProducts = [...relatedProductsByFourFields.data, ...relatedProductsBySurfaceSize.data, ...relatedProductsByTypeSize.data, ...relatedProductsByTypeSurface.data]
   relatedProducts = Array.from(new Map(relatedProducts.map(obj => [obj["id"], obj])).values());
 
+  const similarCodeImages = similarCode.data.map((item) => (getStrapiMedia(item.attributes.coverImg.data)))
+  const relatedProductsImages = relatedProducts.filter(item => item.attributes.code !== code).map((item) => (getStrapiMedia(item.attributes.coverImg.data)))
+
   return json({
     name,
     code,
@@ -95,10 +98,12 @@ export async function loader({ params }) {
     description,
     viewCount,
     similarCode,
+    similarCodeImages,
     productImages: getStrapiMedias(productImg.data),
     category: category.data.attributes.name,
     coverImg: getStrapiMedia(coverImg.data),
-    relatedProducts
+    relatedProducts,
+    relatedProductsImages
   })
 }
 
@@ -121,10 +126,12 @@ export default function ProductRoute() {
     surface,
     type,
     description,
-    similarCode,  
+    similarCode,
+    similarCodeImages,
     productImages,
     category,
     relatedProducts,
+    relatedProductsImages,
   } = useLoaderData()
 
   const [imageShown, setImageShown] = useState(0)
@@ -139,11 +146,9 @@ export default function ProductRoute() {
   }, [embla, emblaForSubCarousel, imageShown])
 
   const slides = productImages.map((image, index) => {
-    const props = { width: 400,  scale:1.1, zoomPosition: "original", img: image};
     return (
     <Carousel.Slide key={index}>
-      <ReactImageZoom {...props}/>
-      {/* <Image src={image} fit="contain"/> */}
+      <Zoom img={image} zoomScale={2} width={400} height={400}/>
     </Carousel.Slide>
     )})
 
@@ -169,7 +174,7 @@ export default function ProductRoute() {
         >
         <HoverCard.Target>
           <AspectRatio ratio={1}>
-            <Image src={getStrapiMedia(item.attributes.coverImg.data)} radius="sm"
+            <Image src={similarCodeImages[index]} radius="sm"
             />
           </AspectRatio>
         </HoverCard.Target>
@@ -191,7 +196,7 @@ export default function ProductRoute() {
             >
             <HoverCard.Target>
               <AspectRatio ratio={1}>
-                <Image h={10} src={getStrapiMedia(item.attributes.coverImg.data)} radius="sm"
+                <Image h={10} src={relatedProductsImages[index]} radius="sm"
                 />
               </AspectRatio>
             </HoverCard.Target>
@@ -340,7 +345,7 @@ export default function ProductRoute() {
           </Accordion>
         </Grid.Col>
       </Grid>
-      <Container my="xs">
+      <Container my="md">
         <Title order={3}>Related Products</Title>
         <Carousel
          mt="xs"
