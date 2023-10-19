@@ -3,5 +3,5 @@ export const theme = {
   // primaryColor: 'red',
   activeStyles: {
     transform: 'scale(0.95)',
-  }
+  },
 }

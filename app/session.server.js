@@ -24,6 +24,11 @@ export async function getSession(request) {
 }
 
 export async function createCartSession(request) {
+  // to prevent cron job pinging from creating too many cart sessions
+  if (new URL(request.url).pathname === '/healthcheck') {
+    return json({ message: 'ok' })
+  }
+
   const session = await getSession(request)
   const res = await addCart() // TODO: do try catch on all api calls
   session.set('cartId', res.data.attributes.cartId)
