@@ -1,11 +1,30 @@
 import { Button, NumberInput, } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useFetcher } from '@remix-run/react'
-import { IconCheck, IconX } from '@tabler/icons-react'
-import { useEffect } from 'react'
+import { IconCheck, IconX, IconSquarePlus, IconSquareMinus } from '@tabler/icons-react'
+import { useState, useEffect } from 'react'
 
-export default function AddToCartBtn({ productId, quantity, ...props }) {
+export function isInvalidQuantity(quantity) {
+  return (quantity === "" || quantity === null || quantity === undefined || (quantity <= 0 && /^[0-9]+$/.test(quantity.toString())));
+}
+
+export function InputQuantity({quantity, setQuantity}) {
+  return (
+    <NumberInput
+      name="quantity"
+      my="xs"
+      placeholder="0"
+      value={quantity}
+      onChange={setQuantity}
+      allowNegative={false}
+      allowDecimal={false}
+      min={0}
+    />
+  )
+}
+export default function AddToCartBtn({ productId, ...props }) {
   const addToCartFetcher = useFetcher()
+  const [quantity, setQuantity] = useState(0);
 
   useEffect(() => {
     if (addToCartFetcher.state === 'idle' && addToCartFetcher.data) {
@@ -39,21 +58,18 @@ export default function AddToCartBtn({ productId, quantity, ...props }) {
   return (
     <addToCartFetcher.Form method="post" action="/api/addToCart">
       <input type="hidden" name="productId" value={productId} />
-      <NumberInput
-          name="quantity"
-          my="xs"
-          placeholder="0"
-          allowNegative={false}
-          allowDecimal={false}
-          min={0}
-          startValue={0}
-        />
+      <InputQuantity quantity={quantity} setQuantity={setQuantity}/>
       <Button
+        disabled={isInvalidQuantity(quantity)}
         my="md"
         type="submit"
         loading={addToCartFetcher.state === 'submitting'}
         loaderPosition="right"
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          console.log(quantity);
+          if(isInvalidQuantity(quantity)) e.preventDefault();
+          e.stopPropagation()
+        }}
         {...props}
       >
         Add to Cart

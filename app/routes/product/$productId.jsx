@@ -361,7 +361,6 @@ export default function ProductRoute() {
          }}>
           {relatedProductsCarousel}
         </Carousel>
-        
       </Container>
     </div>
   )
