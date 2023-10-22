@@ -39,8 +39,8 @@ export async function action({ request }) {
 }
 
 export function InputQuantityWrapper({product}) {
-  const { quantity, setQuantity } = useState(product.quantity);
-  return <InputQuantity quantity={quantity} setQuantity={setQuantity} />
+  const [quantity, setQuantity] = useState(parseInt(product.quantity));
+  return <InputQuantity quantity={quantity} setQuantity={setQuantity} onChange={(quantity) => {product.quantity=quantity}}/>
 
 }
 export default function CheckoutRoute() {

@@ -6,7 +6,6 @@ import {
   Group,
   Image,
   Indicator,
-  NumberInput,
   Paper,
   Popover,
   ScrollArea,
@@ -22,7 +21,6 @@ function CartItem({ product, index }) {
   const deleteCartItemBtn = useFetcher()
   const [quantity, setQuantity] = useState(parseInt(product.quantity));
 
-  console.log(product.quantity)
   return (
     <div>
       {index !== 0 && <Divider my="md" />}
@@ -39,7 +37,7 @@ function CartItem({ product, index }) {
             <Text>{product.name}</Text>
             <Text color="dimmed">{product.category}</Text>
           </Box>
-          <InputQuantity quantity={quantity} setQuantity={setQuantity}/>
+          <InputQuantity quantity={quantity} setQuantity={setQuantity} onChange={(quantity) => {product.quantity=quantity}}/>
           <deleteCartItemBtn.Form method="delete" action="/cart">
             <input type="hidden" name="code" value={product.code} />
             <ActionIcon

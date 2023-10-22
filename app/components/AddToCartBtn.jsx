@@ -1,14 +1,14 @@
 import { Button, NumberInput, } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useFetcher } from '@remix-run/react'
-import { IconCheck, IconX, IconSquarePlus, IconSquareMinus } from '@tabler/icons-react'
+import { IconCheck, IconX } from '@tabler/icons-react'
 import { useState, useEffect } from 'react'
 
 export function isInvalidQuantity(quantity) {
   return (quantity === "" || quantity === null || quantity === undefined || (quantity <= 0 && /^[0-9]+$/.test(quantity.toString())));
 }
 
-export function InputQuantity({quantity, setQuantity}) {
+export function InputQuantity({quantity, setQuantity, ...props}) {
   return (
     <NumberInput
       name="quantity"
@@ -19,6 +19,7 @@ export function InputQuantity({quantity, setQuantity}) {
       allowNegative={false}
       allowDecimal={false}
       min={0}
+      {...props}
     />
   )
 }
@@ -58,7 +59,7 @@ export default function AddToCartBtn({ productId, ...props }) {
   return (
     <addToCartFetcher.Form method="post" action="/api/addToCart">
       <input type="hidden" name="productId" value={productId} />
-      <InputQuantity quantity={quantity} setQuantity={setQuantity}/>
+      <InputQuantity quantity={quantity} setQuantity={setQuantity} {...props}/>
       <Button
         disabled={isInvalidQuantity(quantity)}
         my="md"
@@ -66,7 +67,6 @@ export default function AddToCartBtn({ productId, ...props }) {
         loading={addToCartFetcher.state === 'submitting'}
         loaderPosition="right"
         onClick={(e) => {
-          console.log(quantity);
           if(isInvalidQuantity(quantity)) e.preventDefault();
           e.stopPropagation()
         }}

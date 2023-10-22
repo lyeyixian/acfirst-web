@@ -91,6 +91,22 @@ export async function addToCart(code, quantity, cartId) {
     }
   }
 
+  if (cartItem) {
+    cartItem.quantity = quantity; //Update quantity of existing item
+    const path = `/carts/${cart.id}`
+    const options = {
+      method: 'PUT',
+      body: JSON.stringify({
+        data: { cartItems: [...cartItems] },
+      }),
+    }
+    try {
+      return await fetchApi(path, {}, options)
+    } catch {
+      return { error: 'Unable to update existing cart item!' }
+    }
+  }
+
   return { msg: 'OK! Product already in cart.' }
 }
 

@@ -97,13 +97,13 @@ function ProductsGrid({ products }) {
             <Image src={product.imageUrl} radius="sm" />
           </AspectRatio>
         </HoverCard.Target>
-        <HoverCard.Dropdown>
+        {/* <HoverCard.Dropdown>
           <AddToCartBtn
             variant="light"
             className={classes.button}
             productId={product.code}
           />
-        </HoverCard.Dropdown>
+        </HoverCard.Dropdown> */}
       </HoverCard>
       <Text mt="xs" fw={500}>
         {product.name}

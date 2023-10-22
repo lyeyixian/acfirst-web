@@ -13,6 +13,7 @@ export async function createOrder(data) {
         products: {
           connect: [...cartItems.map((item) => item.id)],
         },
+        // quantities: cartItems.map((item) => item.quantity)
       },
     }),
   }
