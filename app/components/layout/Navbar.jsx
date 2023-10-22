@@ -105,7 +105,7 @@ const links = [
     label: 'Products',
   },
   {
-    link: '/projects',
+    link: '/projectCategories',
     label: 'Projects',
   },
   {
