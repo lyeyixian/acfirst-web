@@ -75,7 +75,7 @@ export async function addToCart(code, quantity, cartId) {
       type: product.attributes.type,
       category: product.attributes.category.data.attributes.name,
       imgUrl: getStrapiMedia(product.attributes.coverImg.data),
-      quantity: quantity
+      quantity: parseInt(quantity)
     }
     const path = `/carts/${cart.id}`
     const options = {
@@ -92,7 +92,7 @@ export async function addToCart(code, quantity, cartId) {
   }
 
   if (cartItem) {
-    cartItem.quantity = quantity; //Update quantity of existing item
+    cartItem.quantity = parseInt(cartItem.quantity) + parseInt(quantity); //Update quantity of existing item
     const path = `/carts/${cart.id}`
     const options = {
       method: 'PUT',
