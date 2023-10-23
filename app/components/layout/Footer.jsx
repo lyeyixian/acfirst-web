@@ -150,7 +150,7 @@ const groupsData = [
     title: 'Company',
     links: [
       { label: 'About', link: '/about' },
-      { label: 'Projects', link: '/projectCategories' },
+      { label: 'Projects', link: '/projects' },
       { label: 'Locate Us', link: '/stores' },
       { label: 'Contact', link: '/contact' },
     ],
