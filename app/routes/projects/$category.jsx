@@ -1,9 +1,19 @@
 import { json } from '@remix-run/node'
 import { useLoaderData, useSearchParams, useParams } from '@remix-run/react'
-import { Anchor, Breadcrumbs, Container, Pagination, Stack } from '@mantine/core'
+import {
+  Anchor,
+  Breadcrumbs,
+  Container,
+  Pagination,
+  Stack,
+} from '@mantine/core'
 import { useEffect, useState } from 'react'
 import { getProjects } from '../../models/project.server'
-import { formatDate, getStrapiMedia, getStrapiMedias } from '../../utils/apiHelper'
+import {
+  formatDate,
+  getStrapiMedia,
+  getStrapiMedias,
+} from '../../utils/apiHelper'
 import ProjectsGrid from '../../components/projects/ProjectsGrid'
 
 export async function loader({ request, params }) {
@@ -48,17 +58,17 @@ export default function ProjectsIndexRoute() {
     { title: 'Projects', href: '/projects' },
     { title: params.category, href: '/projectsCategory/' + params.category },
   ].map((item, index) => (
-      <Anchor href={item.href} key={index}>
-        {item.title}
-      </Anchor>
-  ));
+    <Anchor href={item.href} key={index}>
+      {item.title}
+    </Anchor>
+  ))
 
   return (
     <div>
-      <h1>Projects</h1>
+      {/* <h1>{params.category} Projects</h1>
       <Container my="xs">
         <Breadcrumbs>{breadcrumbs}</Breadcrumbs>
-      </Container>
+      </Container> */}
       <Stack justify="space-between" mih={730}>
         <ProjectsGrid projects={projects} />
         <Pagination

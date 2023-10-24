@@ -1,129 +1,117 @@
-import { useLoaderData, useSearchParams, Link } from '@remix-run/react'
-import { createStyles, rem, Card, Pagination, Stack, Image, SimpleGrid, Text,
-    AspectRatio,
-    Skeleton } from '@mantine/core'
+import {
+  useLoaderData,
+  useSearchParams,
+  Link,
+  Outlet,
+  useParams,
+} from '@remix-run/react'
+import {
+  createStyles,
+  rem,
+  Card,
+  Pagination,
+  Stack,
+  Image,
+  SimpleGrid,
+  Text,
+  AspectRatio,
+  Skeleton,
+} from '@mantine/core'
 import { useEffect, useState, useRef } from 'react'
 import { getCategories } from '../models/category.server'
 import { getStrapiMedia } from '../utils/apiHelper'
 import { useSkeletonLoading } from '../components/hooks/skeleton'
 
 const useStyles = createStyles((theme) => ({
-    card: {
-      transition: 'transform 150ms ease, box-shadow 150ms ease',
-  
-      '&:hover': {
-        transform: 'scale(1.01)',
-        boxShadow: theme.shadows.md,
-      },
-    },
-  
-    title: {
-      fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-      fontWeight: 600,
-    },
+  card: {
+    transition: 'transform 150ms ease, box-shadow 150ms ease',
 
-    link: {
-      display: 'block',
-      color:
-        theme.colorScheme === 'dark'
-          ? theme.colors.dark[1]
-          : theme.colors.gray[6],
-      fontSize: theme.fontSizes.sm,
-      paddingTop: rem(3),
-      paddingBottom: rem(3),
-      textDecoration: 'none',
-  
-      '&:hover': {
-        textDecoration: 'underline',
-      },
-    }
-    }))
-  
-export async function loader() {
-    const categories = await getCategories()
-    const prunedCategories = categories.data.map((category) => {
-      const { name, slug, description, coverImg } = category.attributes
-      return {
-        name,
-        slug,
-        description,
-        coverImgUrl: getStrapiMedia(coverImg.data),
-      }
-    })
-  
-    return { categories: prunedCategories }
-}
+    '&:hover': {
+      transform: 'scale(1.01)',
+      boxShadow: theme.shadows.md,
+    },
+  },
+
+  title: {
+    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+    fontWeight: 600,
+  },
+
+  link: {
+    display: 'block',
+    color:
+      theme.colorScheme === 'dark'
+        ? theme.colors.dark[1]
+        : theme.colors.gray[6],
+    fontSize: theme.fontSizes.sm,
+    paddingTop: rem(3),
+    paddingBottom: rem(3),
+    textDecoration: 'none',
+
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  },
+}))
 
 function CategoryCard({ category }) {
-    const { classes } = useStyles()
-    const imageRef = useRef(null)
-    const { loading, handleOnLoad } = useSkeletonLoading(imageRef)
+  const { classes } = useStyles()
+  const imageRef = useRef(null)
+  const { loading, handleOnLoad } = useSkeletonLoading(imageRef)
 
-    return (
-        <Card
-          p="md"
-          radius="md"
-          className={classes.card}
-          component={Link}
-          to={`/projectsCategory/${category.name}`}
-          >
-          <Skeleton visible={loading}>
-            <AspectRatio ratio={1920 / 1080}>
-              <Image
-                imageRef={imageRef}
-                src={category.coverImgUrl}
-                onLoad={handleOnLoad}
-              />
-            </AspectRatio>
-          </Skeleton>
-          <Text className={classes.title} mt={5}>
-            {category.name}
-          </Text>
-          <Text mt={5}>
-            {category.description}
-          </Text>
-        </Card>
-    )
+  return (
+    <Card
+      p="md"
+      radius="md"
+      className={classes.card}
+      component={Link}
+      to={`/projects/${category.name}`}
+    >
+      <Skeleton visible={loading}>
+        <AspectRatio ratio={1920 / 1080}>
+          <Image
+            imageRef={imageRef}
+            src={category.coverImgUrl}
+            onLoad={handleOnLoad}
+          />
+        </AspectRatio>
+      </Skeleton>
+      <Text className={classes.title} mt={5}>
+        {category.name}
+      </Text>
+      <Text mt={5}>{category.description}</Text>
+    </Card>
+  )
 }
 
 export function CategoriesGrid({ categories }) {
-    const cards = categories.map((category) => (
-      <CategoryCard key={category.slug} category={category} />
-    ))
-  
-    return (
-      <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
-        {cards}
-      </SimpleGrid>
-    )
-  }
-  
-  
+  const cards = categories.map((category) => (
+    <CategoryCard key={category.slug} category={category} />
+  ))
+
+  return (
+    <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+      {cards}
+    </SimpleGrid>
+  )
+}
+
 export default function ProjectsRoute() {
-  const [page, setPage] = useState(1)
-  const [_, setSearchParams] = useSearchParams()
+  // const [page, setPage] = useState(1)
+  // const [_, setSearchParams] = useSearchParams()
 
-  useEffect(() => {
-    setSearchParams({ p: page })
-  }, [page])
+  // useEffect(() => {
+  //   setSearchParams({ p: page })
+  // }, [page])
 
-  const loaderData = useLoaderData()
-  const { categories } = loaderData
+  // const loaderData = useLoaderData()
+  // const { categories } = loaderData
+  const params = useParams()
 
   return (
     <div>
-      <h1>Projects</h1>
-      <Stack justify="space-between" mih={730}>
-      <CategoriesGrid categories={categories} />
-        <Pagination
-          value={page}
-          onChange={setPage}
-          total={1}
-          position="center"
-          withEdges
-          mt="md"
-        />
-      </Stack>
+      <h1>{params.category} Projects</h1>
+      <Outlet />
     </div>
   )
 }
