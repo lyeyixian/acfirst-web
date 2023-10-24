@@ -158,7 +158,6 @@ export default function ProductsIndexRoute() {
               setPage(value)
               setSearchParams((params) => {
                 params.set('p', value)
-
                 return params
               })
             }}

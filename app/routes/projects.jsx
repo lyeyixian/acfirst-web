@@ -1,6 +1,4 @@
 import {
-  useLoaderData,
-  useSearchParams,
   Link,
   Outlet,
   useParams,
@@ -9,17 +7,13 @@ import {
   createStyles,
   rem,
   Card,
-  Pagination,
-  Stack,
   Image,
   SimpleGrid,
   Text,
   AspectRatio,
   Skeleton,
 } from '@mantine/core'
-import { useEffect, useState, useRef } from 'react'
-import { getCategories } from '../models/category.server'
-import { getStrapiMedia } from '../utils/apiHelper'
+import { useRef } from 'react'
 import { useSkeletonLoading } from '../components/hooks/skeleton'
 
 const useStyles = createStyles((theme) => ({
@@ -97,15 +91,6 @@ export function CategoriesGrid({ categories }) {
 }
 
 export default function ProjectsRoute() {
-  // const [page, setPage] = useState(1)
-  // const [_, setSearchParams] = useSearchParams()
-
-  // useEffect(() => {
-  //   setSearchParams({ p: page })
-  // }, [page])
-
-  // const loaderData = useLoaderData()
-  // const { categories } = loaderData
   const params = useParams()
 
   return (

@@ -2,8 +2,6 @@ import { json } from '@remix-run/node'
 import { useLoaderData, useSearchParams, useParams } from '@remix-run/react'
 import {
   Anchor,
-  Breadcrumbs,
-  Container,
   Pagination,
   Stack,
 } from '@mantine/core'
@@ -43,42 +41,37 @@ export async function loader({ request, params }) {
 }
 
 export default function ProjectsIndexRoute() {
-  const [page, setPage] = useState(1)
-  const [_, setSearchParams] = useSearchParams()
-  const params = useParams()
-  useEffect(() => {
-    setSearchParams({ p: page })
-  }, [page])
-
+  const [searchParams, setSearchParams] = useSearchParams()
+  const searchParamsPage = searchParams.get('p') || 1
+  const [page, setPage] = useState(searchParamsPage)
   const loaderData = useLoaderData()
   const { projects, pageCount } = loaderData
 
-  const breadcrumbs = [
-    { title: 'Home', href: '/' },
-    { title: 'Projects', href: '/projects' },
-    { title: params.category, href: '/projectsCategory/' + params.category },
-  ].map((item, index) => (
-    <Anchor href={item.href} key={index}>
-      {item.title}
-    </Anchor>
-  ))
+
+  useEffect(() => {
+    setPage(parseInt(searchParamsPage))
+  }, [searchParamsPage])
 
   return (
     <div>
-      {/* <h1>{params.category} Projects</h1>
-      <Container my="xs">
-        <Breadcrumbs>{breadcrumbs}</Breadcrumbs>
-      </Container> */}
       <Stack justify="space-between" mih={730}>
         <ProjectsGrid projects={projects} />
-        <Pagination
-          value={page}
-          onChange={setPage}
-          total={pageCount}
-          position="center"
-          withEdges
-          mt="md"
-        />
+        {projects.length ? (
+          <Pagination
+            value={page}
+            onChange={(value) => {
+              setPage(value)
+              setSearchParams((params) => {
+                params.set('p', value)
+                return params
+              })
+            }}
+            total={pageCount}
+            position="center"
+            mt="lg"
+            withEdges
+          />
+        ) : null}
       </Stack>
     </div>
   )

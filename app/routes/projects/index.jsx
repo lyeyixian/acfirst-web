@@ -25,14 +25,6 @@ export default function () {
   return (
     <Stack justify="space-between" mih={730}>
       <CategoriesGrid categories={categories} />
-      {/* <Pagination
-          value={page}
-          onChange={setPage}
-          total={1}
-          position="center"
-          withEdges
-          mt="md"
-        /> */}
     </Stack>
   )
 }
