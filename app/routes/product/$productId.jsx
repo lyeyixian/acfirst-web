@@ -25,6 +25,7 @@ import {
 } from '../../models/product.server'
 import { getStrapiMedia, getStrapiMedias } from '../../utils/api/helper'
 import AddToCartBtn from '../../components/AddToCartBtn'
+import { formatSize } from '../../utils/formatter'
 
 const useStyle = createStyles((theme) => ({
   carousel: {
@@ -130,14 +131,6 @@ export async function loader({ params }) {
     relatedProducts,
     relatedProductsImages,
   })
-}
-
-function formatSize(size) {
-  const format = size.split('-')
-  const units = format[0]
-  const length = format[1].split('x')[0]
-  const breadth = format[1].split('x')[1]
-  return length + units + ' x ' + breadth + units
 }
 
 export default function ProductRoute() {
