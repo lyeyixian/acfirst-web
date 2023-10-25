@@ -1,5 +1,5 @@
 import qs from 'qs'
-import { getStrapiURL } from './apiHelper'
+import { getStrapiURL } from './helper'
 
 export async function fetchApi(path, urlParamsObj = {}, options = {}) {
   try {

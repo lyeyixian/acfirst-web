@@ -1,4 +1,4 @@
-import { fetchApi } from '../utils/fetchApi'
+import { fetchApi } from '../utils/api/fetchApi'
 
 export async function getProjects(page = 1) {
   const path = '/projects'

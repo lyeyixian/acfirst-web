@@ -1,4 +1,4 @@
-import { fetchApi } from '../utils/fetchApi'
+import { fetchApi } from '../utils/api/fetchApi'
 
 export async function createOrder(data) {
   const { name, phone, enquiry, cartItems } = data

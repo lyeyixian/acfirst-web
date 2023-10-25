@@ -5,7 +5,7 @@ import { Container } from '@mantine/core'
 
 import { getPage } from '../models/page.server'
 import { renderSection } from '../utils/renderer'
-import { getStrapiMedia } from '../utils/apiHelper'
+import { getStrapiMedia } from '../utils/api/helper'
 
 export async function loader() {
   const pageData = await getPage('home')

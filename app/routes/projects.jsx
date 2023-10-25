@@ -3,7 +3,11 @@ import { useLoaderData, useSearchParams } from '@remix-run/react'
 import { Pagination, Stack } from '@mantine/core'
 import { useEffect, useState } from 'react'
 import { getProjects } from '../models/project.server'
-import { formatDate, getStrapiMedia, getStrapiMedias } from '../utils/apiHelper'
+import {
+  formatDate,
+  getStrapiMedia,
+  getStrapiMedias,
+} from '../utils/api/helper'
 import ProjectsGrid from '../components/projects/ProjectsGrid'
 
 export async function loader({ request }) {

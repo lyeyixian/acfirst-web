@@ -23,7 +23,7 @@ import {
   getProducts,
   incrementProductViewCount,
 } from '../../models/product.server'
-import { getStrapiMedia, getStrapiMedias } from '../../utils/apiHelper'
+import { getStrapiMedia, getStrapiMedias } from '../../utils/api/helper'
 import AddToCartBtn from '../../components/AddToCartBtn'
 
 const useStyle = createStyles((theme) => ({
@@ -60,7 +60,7 @@ const useStyle = createStyles((theme) => ({
 export async function loader({ params }) {
   const { productId } = params
 
-  const product = await getProduct(productId);  
+  const product = await getProduct(productId)
   const {
     name,
     code,
@@ -77,15 +77,42 @@ export async function loader({ params }) {
 
   await incrementProductViewCount(product.id, viewCount)
 
-  const relatedProductsByFourFields = await getProducts(1, category.data.attributes.slug, {type, surface, size})
-  const relatedProductsByTypeSurface = await getProducts(1, category.data.attributes.slug, {type, surface})
-  const relatedProductsBySurfaceSize = await getProducts(1, category.data.attributes.slug, {surface, size})
-  const relatedProductsByTypeSize = await getProducts(1, category.data.attributes.slug, {type, size})
-  let relatedProducts = [...relatedProductsByFourFields.data, ...relatedProductsBySurfaceSize.data, ...relatedProductsByTypeSize.data, ...relatedProductsByTypeSurface.data]
-  relatedProducts = Array.from(new Map(relatedProducts.map(obj => [obj["id"], obj])).values());
+  const relatedProductsByFourFields = await getProducts(
+    1,
+    category.data.attributes.slug,
+    { type, surface, size }
+  )
+  const relatedProductsByTypeSurface = await getProducts(
+    1,
+    category.data.attributes.slug,
+    { type, surface }
+  )
+  const relatedProductsBySurfaceSize = await getProducts(
+    1,
+    category.data.attributes.slug,
+    { surface, size }
+  )
+  const relatedProductsByTypeSize = await getProducts(
+    1,
+    category.data.attributes.slug,
+    { type, size }
+  )
+  let relatedProducts = [
+    ...relatedProductsByFourFields.data,
+    ...relatedProductsBySurfaceSize.data,
+    ...relatedProductsByTypeSize.data,
+    ...relatedProductsByTypeSurface.data,
+  ]
+  relatedProducts = Array.from(
+    new Map(relatedProducts.map((obj) => [obj['id'], obj])).values()
+  )
 
-  const similarCodeImages = similarCode.data.map((item) => (getStrapiMedia(item.attributes.coverImg.data)))
-  const relatedProductsImages = relatedProducts.filter(item => item.attributes.code !== code).map((item) => (getStrapiMedia(item.attributes.coverImg.data)))
+  const similarCodeImages = similarCode.data.map((item) =>
+    getStrapiMedia(item.attributes.coverImg.data)
+  )
+  const relatedProductsImages = relatedProducts
+    .filter((item) => item.attributes.code !== code)
+    .map((item) => getStrapiMedia(item.attributes.coverImg.data))
 
   return json({
     name,
@@ -101,16 +128,16 @@ export async function loader({ params }) {
     category: category.data.attributes.name,
     coverImg: getStrapiMedia(coverImg.data),
     relatedProducts,
-    relatedProductsImages
+    relatedProductsImages,
   })
 }
 
 function formatSize(size) {
-  const format = size.split("-")
+  const format = size.split('-')
   const units = format[0]
-  const length = format[1].split("x")[0]
-  const breadth = format[1].split("x")[1]
-  return (length + units + " x " + breadth + units)
+  const length = format[1].split('x')[0]
+  const breadth = format[1].split('x')[1]
+  return length + units + ' x ' + breadth + units
 }
 
 export default function ProductRoute() {
@@ -156,61 +183,56 @@ export default function ProductRoute() {
     { title: 'Products', href: '/products' },
     { title: params.productId, href: '/product/' + params.productId },
   ].map((item, index) => (
-      <Anchor href={item.href} key={index}>
-        {item.title}
-      </Anchor>
-  ));
+    <Anchor href={item.href} key={index}>
+      {item.title}
+    </Anchor>
+  ))
 
   const similarCodeLayout = similarCode.data.map((item, index) => (
     <Grid.Col span={2} key={index}>
-      <Anchor href={"/product/" + item.attributes.code} key={index} size="xs">
-      <HoverCard
-        offset={-60}
-        keepMounted
-        styles={{
-          dropdown: { background: "rgba(255,255,255,0.5)", border: 0 },
-        }}
+      <Anchor href={'/product/' + item.attributes.code} key={index} size="xs">
+        <HoverCard
+          offset={-60}
+          keepMounted
+          styles={{
+            dropdown: { background: 'rgba(255,255,255,0.5)', border: 0 },
+          }}
         >
-        <HoverCard.Target>
-          <AspectRatio ratio={1}>
-            <Image src={similarCodeImages[index]} radius="sm"
-            />
-          </AspectRatio>
-        </HoverCard.Target>
-        <HoverCard.Dropdown
-          mt="xs">
-          <Text>{item.attributes.code}</Text>
-        </HoverCard.Dropdown>
-      </HoverCard>
-    </Anchor>
+          <HoverCard.Target>
+            <AspectRatio ratio={1}>
+              <Image src={similarCodeImages[index]} radius="sm" />
+            </AspectRatio>
+          </HoverCard.Target>
+          <HoverCard.Dropdown mt="xs">
+            <Text>{item.attributes.code}</Text>
+          </HoverCard.Dropdown>
+        </HoverCard>
+      </Anchor>
     </Grid.Col>
   ))
 
-  const relatedProductsCarousel = relatedProducts.filter(item => item.attributes.code !== code).map((item, index) => (
-    <Carousel.Slide key={index}>
-      <Anchor href={"/product/" + item.attributes.code} key={index}>
-          <HoverCard
-            offset={-60}
-            keepMounted
-            >
+  const relatedProductsCarousel = relatedProducts
+    .filter((item) => item.attributes.code !== code)
+    .map((item, index) => (
+      <Carousel.Slide key={index}>
+        <Anchor href={'/product/' + item.attributes.code} key={index}>
+          <HoverCard offset={-60} keepMounted>
             <HoverCard.Target>
               <AspectRatio ratio={1}>
-                <Image h={10} src={relatedProductsImages[index]} radius="sm"
-                />
+                <Image h={10} src={relatedProductsImages[index]} radius="sm" />
               </AspectRatio>
             </HoverCard.Target>
-            <HoverCard.Dropdown
-              mt="xs">
+            <HoverCard.Dropdown mt="xs">
               <Text>{item.attributes.code}</Text>
             </HoverCard.Dropdown>
           </HoverCard>
         </Anchor>
-         </Carousel.Slide>
-  ))
+      </Carousel.Slide>
+    ))
   return (
     <div>
       <Container my="xs">
-      <Breadcrumbs>{breadcrumbs}</Breadcrumbs>
+        <Breadcrumbs>{breadcrumbs}</Breadcrumbs>
       </Container>
       <Grid>
         <Grid.Col span={6}>
@@ -271,15 +293,13 @@ export default function ProductRoute() {
         <Grid.Col span={6}>
           <Title order={2}>{name}</Title>
           <AddToCartBtn productId={params.productId} />
-          <Grid>
-            {similarCodeLayout}
-          </Grid>
+          <Grid>{similarCodeLayout}</Grid>
           <Accordion
             variant="separated"
             multiple
             defaultValue={['specifications']}
             mt="xs"
-          > 
+          >
             <Accordion.Item value="specifications">
               <Accordion.Control>
                 <Text className={classes.accordionTitle}>Specifications</Text>
@@ -347,17 +367,18 @@ export default function ProductRoute() {
       <Container my="md">
         <Title order={3}>Related Products</Title>
         <Carousel
-         mt="xs"
-         loop
-         withIndicators
-         slideSize="20%"
-         slideGap="md"
-         align="start"
-         classNames={{
-           root: classes.carousel,
-           controls: classes.carouselControls,
-           indicator: classes.carouselIndicator,
-         }}>
+          mt="xs"
+          loop
+          withIndicators
+          slideSize="20%"
+          slideGap="md"
+          align="start"
+          classNames={{
+            root: classes.carousel,
+            controls: classes.carouselControls,
+            indicator: classes.carouselIndicator,
+          }}
+        >
           {relatedProductsCarousel}
         </Carousel>
       </Container>

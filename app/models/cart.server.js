@@ -1,5 +1,5 @@
-import { getStrapiMedia } from '../utils/apiHelper'
-import { fetchApi } from '../utils/fetchApi'
+import { getStrapiMedia } from '../utils/api/helper'
+import { fetchApi } from '../utils/api/fetchApi'
 import { getProduct } from './product.server'
 
 export async function getCart(cartId) {
@@ -75,7 +75,7 @@ export async function addToCart(code, quantity, cartId) {
       type: product.attributes.type,
       category: product.attributes.category.data.attributes.name,
       imgUrl: getStrapiMedia(product.attributes.coverImg.data),
-      quantity: parseInt(quantity)
+      quantity: parseInt(quantity),
     }
     const path = `/carts/${cart.id}`
     const options = {
@@ -92,7 +92,7 @@ export async function addToCart(code, quantity, cartId) {
   }
 
   if (cartItem) {
-    cartItem.quantity = parseInt(cartItem.quantity) + parseInt(quantity); //Update quantity of existing item
+    cartItem.quantity = parseInt(cartItem.quantity) + parseInt(quantity) //Update quantity of existing item
     const path = `/carts/${cart.id}`
     const options = {
       method: 'PUT',

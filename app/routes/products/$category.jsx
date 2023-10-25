@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from 'react'
 import { getProducts } from '../../models/product.server'
 import { json } from '@remix-run/node'
-import { getStrapiMedia } from '../../utils/apiHelper'
+import { getStrapiMedia } from '../../utils/api/helper'
 import {
   Link,
   useLoaderData,
