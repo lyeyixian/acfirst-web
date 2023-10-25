@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Zoom from "react-img-zoom-gdn";
 import {
   Accordion,
   Anchor,
@@ -146,11 +145,11 @@ export default function ProductRoute() {
 
   const slides = productImages.map((image, index) => {
     return (
-    <Carousel.Slide key={index}>
-      {/* <Zoom img={image} zoomScale={2} width={400} height={400}/> */}
-      <Image src={image} fit="contain"/>
-    </Carousel.Slide>
-    )})
+      <Carousel.Slide key={index}>
+        <Image src={image} fit="contain" />
+      </Carousel.Slide>
+    )
+  })
 
   const breadcrumbs = [
     { title: 'Home', href: '/' },
