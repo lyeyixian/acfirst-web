@@ -5,10 +5,15 @@ import { IconCheck, IconX } from '@tabler/icons-react'
 import { useState, useEffect } from 'react'
 
 export function isInvalidQuantity(quantity) {
-  return (quantity === "" || quantity === null || quantity === undefined || (quantity <= 0 && /^[0-9]+$/.test(quantity.toString())));
+  return (
+    quantity === '' ||
+    quantity === null ||
+    quantity === undefined ||
+    (quantity <= 0 && /^[0-9]+$/.test(quantity.toString()))
+  )
 }
 
-export function InputQuantity({quantity, setQuantity, ...props}) {
+export function InputQuantity({ quantity, setQuantity, ...props }) {
   return (
     <NumberInput
       name="quantity"
@@ -16,17 +21,16 @@ export function InputQuantity({quantity, setQuantity, ...props}) {
       placeholder="0"
       value={quantity}
       onChange={setQuantity}
-      allowNegative={false}
-      allowDecimal={false}
       type="number"
       min={0}
       {...props}
     />
   )
 }
+
 export default function AddToCartBtn({ productId, ...props }) {
   const addToCartFetcher = useFetcher()
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(0)
 
   useEffect(() => {
     if (addToCartFetcher.state === 'idle' && addToCartFetcher.data) {
@@ -58,26 +62,29 @@ export default function AddToCartBtn({ productId, ...props }) {
     }
   }, [addToCartFetcher.state])
 
-
   return (
     <addToCartFetcher.Form method="post" action="/api/addToCart">
       <input type="hidden" name="productId" value={productId} />
       <Group>
-      <InputQuantity quantity={quantity} setQuantity={setQuantity} {...props}/>
-      <Button
-        disabled={isInvalidQuantity(quantity)}
-        my="md"
-        type="submit"
-        loading={addToCartFetcher.state === 'submitting'}
-        loaderPosition="right"
-        onClick={(e) => {
-          if(isInvalidQuantity(quantity)) e.preventDefault();
-          e.stopPropagation()
-        }}
-        {...props}
-      >
-        Add to Cart
-      </Button>
+        <InputQuantity
+          quantity={quantity}
+          setQuantity={setQuantity}
+          {...props}
+        />
+        <Button
+          disabled={isInvalidQuantity(quantity)}
+          my="md"
+          type="submit"
+          loading={addToCartFetcher.state === 'submitting'}
+          loaderPosition="right"
+          onClick={(e) => {
+            if (isInvalidQuantity(quantity)) e.preventDefault()
+            e.stopPropagation()
+          }}
+          {...props}
+        >
+          Add to Cart
+        </Button>
       </Group>
     </addToCartFetcher.Form>
   )
