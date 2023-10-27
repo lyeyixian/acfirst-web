@@ -3,6 +3,7 @@ import {
   Accordion,
   Anchor,
   AspectRatio,
+  Box,
   Breadcrumbs,
   Container,
   Grid,
@@ -26,6 +27,7 @@ import {
 import { getStrapiMedia, getStrapiMedias } from '../../utils/api/helper'
 import AddToCartBtn from '../../components/AddToCartBtn'
 import { formatSize } from '../../utils/formatter'
+import { IconChevronRight } from '@tabler/icons-react'
 
 const useStyle = createStyles((theme) => ({
   carousel: {
@@ -55,6 +57,17 @@ const useStyle = createStyles((theme) => ({
   accordionTitle: {
     fontWeight: 500,
     color: theme.colors[theme.primaryColor][7],
+  },
+
+  breadcrumb: {
+    opacity: 0.5,
+    transition: 'opacity color 150ms ease',
+
+    '&:hover': {
+      textDecoration: 'none',
+      color: theme.colors[theme.primaryColor][7],
+      opacity: 1,
+    },
   },
 }))
 
@@ -126,16 +139,19 @@ export async function loader({ params }) {
     similarCode,
     similarCodeImages,
     productImages: getStrapiMedias(productImg.data),
-    category: category.data.attributes.name,
-    coverImg: getStrapiMedia(coverImg.data),
-    relatedProducts,
+    category: {
+      name: category.data.attributes.name,
+      slug: category.data.attributes.slug,
+    },
+    coverImg: getStrapiMedia(coverImg.data), // TODO: combine into currentProduct
+    relatedProducts, // TODO: combine into relatedProducts
     relatedProductsImages,
   })
 }
 
 export default function ProductRoute() {
   // TODO: refactor carousel with the carousel in ProjectsGrid
-  const { classes } = useStyle()
+  const { classes, theme } = useStyle()
   const params = useParams()
   const {
     name,
@@ -171,14 +187,21 @@ export default function ProductRoute() {
     )
   })
 
-  const breadcrumbs = [
-    { title: 'Home', href: '/' },
+  const breadcrumbsData = [
     { title: 'Products', href: '/products' },
+    { title: category.name, href: '/products/' + category.slug },
     { title: params.productId, href: '/product/' + params.productId },
-  ].map((item, index) => (
-    <Anchor href={item.href} key={index}>
+  ]
+  const breadcrumbs = breadcrumbsData.map((item, index) => (
+    <Text
+      className={classes.breadcrumb}
+      weight={600}
+      key={index}
+      component={Anchor}
+      href={item.href}
+    >
       {item.title}
-    </Anchor>
+    </Text>
   ))
 
   const similarCodeLayout = similarCode.data.map((item, index) => (
@@ -223,10 +246,7 @@ export default function ProductRoute() {
       </Carousel.Slide>
     ))
   return (
-    <div>
-      <Container my="xs">
-        <Breadcrumbs>{breadcrumbs}</Breadcrumbs>
-      </Container>
+    <Box mt={40}>
       <Grid>
         <Grid.Col span={6}>
           <Container>
@@ -284,7 +304,19 @@ export default function ProductRoute() {
         </Grid.Col>
 
         <Grid.Col span={6}>
-          <Title order={2}>{name}</Title>
+          <Breadcrumbs
+            separator={
+              <IconChevronRight
+                // color={theme.colors[theme.primaryColor][6]}
+                size="1.5rem"
+                stroke={2}
+              />
+            }
+            mb="sm"
+          >
+            {breadcrumbs}
+          </Breadcrumbs>
+          <Title order={1}>{name}</Title>
           <AddToCartBtn productId={params.productId} />
           <Grid>{similarCodeLayout}</Grid>
           <Accordion
@@ -375,6 +407,6 @@ export default function ProductRoute() {
           {relatedProductsCarousel}
         </Carousel>
       </Container>
-    </div>
+    </Box>
   )
 }
