@@ -7,8 +7,9 @@ import {
 import HeroBanner from '../components/home/HeroBanner'
 import ProductsSection from '../components/home/ProductsSection'
 import ShowcaseSection from '../components/home/ShowcaseSection'
-import { Button } from '@mantine/core'
+import { Button, Group, Image, List, Text } from '@mantine/core'
 import { Link } from '@remix-run/react'
+import TestimonialsSection from '../components/home/TestimonialsSection'
 
 export function renderSection(section, index) {
   if (!section) {
@@ -59,6 +60,10 @@ export function renderSection(section, index) {
           categories={categories}
         />
       )
+    case 'testimonials':
+      const { reviews } = section
+
+      return <TestimonialsSection key={index} reviews={reviews} />
     default:
       return null
   }
