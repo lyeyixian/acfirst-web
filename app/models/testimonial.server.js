@@ -71,9 +71,6 @@ const reviews = [
   },
 ]
 
-// TODO: testimonials
-// https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJtyUfS4FXSzARnz64LByc2Dc&fields=reviews&key=AIzaSyC_zEcyP8I-qHW7PibdGEWycO3HE7xkr3g
-
 export async function getReviews() {
   return { type: 'testimonials', reviews }
 }
