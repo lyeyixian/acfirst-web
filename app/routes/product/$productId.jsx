@@ -5,11 +5,14 @@ import {
   AspectRatio,
   Box,
   Breadcrumbs,
+  Card,
+  Center,
   Container,
   Grid,
   HoverCard,
   Image,
   List,
+  SimpleGrid,
   Text,
   Title,
   createStyles,
@@ -17,7 +20,7 @@ import {
   rem,
 } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
-import { useLoaderData, useParams } from '@remix-run/react'
+import { Link, useLoaderData, useParams } from '@remix-run/react'
 import { json } from '@remix-run/node'
 import {
   getProduct,
@@ -67,6 +70,14 @@ const useStyle = createStyles((theme) => ({
       textDecoration: 'none',
       color: theme.colors[theme.primaryColor][7],
       opacity: 1,
+    },
+  },
+
+  card: {
+    transition: 'transform 250ms ease',
+
+    ['&:hover']: {
+      transform: 'scale(1.05)',
     },
   },
 }))
@@ -204,27 +215,21 @@ export default function ProductRoute() {
     </Text>
   ))
 
-  const similarCodeLayout = similarCode.data.map((item, index) => (
-    <Grid.Col span={2} key={index}>
-      <Anchor href={'/product/' + item.attributes.code} key={index} size="xs">
-        <HoverCard
-          offset={-60}
-          keepMounted
-          styles={{
-            dropdown: { background: 'rgba(255,255,255,0.5)', border: 0 },
-          }}
-        >
-          <HoverCard.Target>
-            <AspectRatio ratio={1}>
-              <Image src={similarCodeImages[index]} radius="sm" />
-            </AspectRatio>
-          </HoverCard.Target>
-          <HoverCard.Dropdown mt="xs">
-            <Text>{item.attributes.code}</Text>
-          </HoverCard.Dropdown>
-        </HoverCard>
-      </Anchor>
-    </Grid.Col>
+  const similarCodeProducts = similarCode.data.map((item, index) => (
+    <div key={index}>
+      <Card
+        className={classes.card}
+        shadow="lg"
+        padding={0}
+        component={Link}
+        to={`/product/${item.attributes.code}`}
+      >
+        <Image src={similarCodeImages[index]} radius="xs" />
+        <Center>
+          <Text size="sm">{item.attributes.code}</Text>
+        </Center>
+      </Card>
+    </div>
   ))
 
   const relatedProductsCarousel = relatedProducts
@@ -318,25 +323,34 @@ export default function ProductRoute() {
           </Breadcrumbs>
           <Title order={1}>{name}</Title>
           <AddToCartBtn productId={params.productId} />
-          <Grid>{similarCodeLayout}</Grid>
           <Accordion
             variant="separated"
             multiple
-            defaultValue={['specifications']}
+            defaultValue={['other style & color', 'specifications']}
             mt="xs"
           >
+            <Accordion.Item value="other style & color">
+              <Accordion.Control>
+                <Text className={classes.accordionTitle}>
+                  Other Styles & Colors
+                </Text>
+              </Accordion.Control>
+              <Accordion.Panel>
+                <SimpleGrid cols={3}>{similarCodeProducts}</SimpleGrid>
+              </Accordion.Panel>
+            </Accordion.Item>
             <Accordion.Item value="specifications">
               <Accordion.Control>
                 <Text className={classes.accordionTitle}>Specifications</Text>
               </Accordion.Control>
               <Accordion.Panel>
-                <List withPadding size="sm">
+                <List withPadding>
                   <List.Item>
                     <Text c="dark.4">
                       <Text span fw={600}>
                         Category:
                       </Text>{' '}
-                      {category}
+                      {category.name}
                     </Text>
                   </List.Item>
                   <List.Item>
@@ -389,24 +403,24 @@ export default function ProductRoute() {
           </Accordion>
         </Grid.Col>
       </Grid>
-      <Container my="md">
-        <Title order={3}>Related Products</Title>
-        <Carousel
-          mt="xs"
-          loop
-          withIndicators
-          slideSize="20%"
-          slideGap="md"
-          align="start"
-          classNames={{
-            root: classes.carousel,
-            controls: classes.carouselControls,
-            indicator: classes.carouselIndicator,
-          }}
-        >
-          {relatedProductsCarousel}
-        </Carousel>
-      </Container>
+      {/* <Container my="md"> */}
+      <Title order={3}>Related Products</Title>
+      <Carousel
+        mt="xs"
+        loop
+        withIndicators
+        slideSize="20%"
+        slideGap="md"
+        align="start"
+        classNames={{
+          root: classes.carousel,
+          controls: classes.carouselControls,
+          indicator: classes.carouselIndicator,
+        }}
+      >
+        {relatedProductsCarousel}
+      </Carousel>
+      {/* </Container> */}
     </Box>
   )
 }
