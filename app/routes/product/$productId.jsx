@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react'
 import {
   Accordion,
   Anchor,
@@ -15,7 +14,6 @@ import {
   Title,
   createStyles,
 } from '@mantine/core'
-import { Carousel } from '@mantine/carousel'
 import { Link, useLoaderData, useParams } from '@remix-run/react'
 import { json } from '@remix-run/node'
 import {
@@ -27,8 +25,8 @@ import { getStrapiMedia, getStrapiMedias } from '../../utils/api/helper'
 import AddToCartBtn from '../../components/AddToCartBtn'
 import { formatSize } from '../../utils/formatter'
 import { IconChevronRight } from '@tabler/icons-react'
-import AcfirstCarousel from '../../components/common/AcfirstCarousel'
 import RelatedProducts from '../../components/product/RelatedProducts'
+import ProductImageCarousel from '../../components/product/ProductImageCarousel'
 
 const useStyle = createStyles((theme) => ({
   accordionTitle: {
@@ -142,25 +140,6 @@ export default function ProductRoute() {
     category,
   } = currentProduct
 
-  const [imageShown, setImageShown] = useState(0)
-  const [embla, setEmbla] = useState(null)
-  const [emblaForSubCarousel, setEmblaForSubCarousel] = useState(null)
-
-  useEffect(() => {
-    if (embla && emblaForSubCarousel) {
-      embla.scrollTo(imageShown)
-      emblaForSubCarousel.scrollTo(imageShown)
-    }
-  }, [embla, emblaForSubCarousel, imageShown])
-
-  const slides = productImages.map((image, index) => {
-    return (
-      <Carousel.Slide key={index}>
-        <Image src={image} fit="contain" />
-      </Carousel.Slide>
-    )
-  })
-
   const breadcrumbsData = [
     { title: 'Products', href: '/products' },
     { title: category.name, href: '/products/' + category.slug },
@@ -204,46 +183,7 @@ export default function ProductRoute() {
       <Grid>
         <Grid.Col span={6}>
           <Container>
-            <AcfirstCarousel
-              onSlideChange={(index) => setImageShown(index)}
-              withIndicators
-              loop
-              getEmblaApi={setEmbla}
-              slideGap="sm"
-            >
-              {slides}
-            </AcfirstCarousel>
-            <AcfirstCarousel
-              mt="xs"
-              onSlideChange={(index) => setImageShown(index)}
-              loop
-              withControls={false}
-              slideSize="25%"
-              slideGap="md"
-              align="start"
-              slidesToScroll={productImages.length >= 4 ? 1 : 4}
-              getEmblaApi={setEmblaForSubCarousel}
-            >
-              {productImages.map((image, index) => {
-                const isCurrentImageShown = imageShown === index
-                return (
-                  <Carousel.Slide key={index}>
-                    <Image
-                      sx={(theme) => ({
-                        borderStyle: isCurrentImageShown ? 'solid' : null,
-                        borderColor: isCurrentImageShown
-                          ? theme.colors[theme.primaryColor][6]
-                          : null,
-                        borderRadius: isCurrentImageShown ? theme.radius.sm : 0,
-                      })}
-                      src={image}
-                      fit="contain"
-                      onClick={() => setImageShown(index)}
-                    />
-                  </Carousel.Slide>
-                )
-              })}
-            </AcfirstCarousel>
+            <ProductImageCarousel productImages={productImages} />
           </Container>
         </Grid.Col>
 
