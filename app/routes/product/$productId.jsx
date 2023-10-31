@@ -32,6 +32,7 @@ import { getStrapiMedia, getStrapiMedias } from '../../utils/api/helper'
 import AddToCartBtn from '../../components/AddToCartBtn'
 import { formatSize } from '../../utils/formatter'
 import { IconChevronRight } from '@tabler/icons-react'
+import ProductImageCard from '../../components/common/ProductImageCard'
 
 const useStyle = createStyles((theme) => ({
   carousel: {
@@ -153,11 +154,15 @@ export async function loader({ params }) {
     size
   )
   const prunedRelatedProducts = relatedProducts.data.map((relatedProduct) => {
-    const { code, coverImg } = relatedProduct.attributes
+    const { name, code, category, viewCount, coverImg } =
+      relatedProduct.attributes
 
     return {
+      name,
       code,
-      img: getStrapiMedia(coverImg.data),
+      category: category.data.attributes.name,
+      viewCount,
+      imgUrl: getStrapiMedia(coverImg.data),
     }
   })
 
@@ -257,25 +262,11 @@ export default function ProductRoute() {
   })
 
   const relatedProductsCarousel = relatedProducts.map(
-    (relatedProduct, index) => {
-      const { code, img } = relatedProduct
-      return (
-        <Carousel.Slide key={index}>
-          <Anchor href={'/product/' + code} key={index}>
-            <HoverCard offset={-60} keepMounted>
-              <HoverCard.Target>
-                <AspectRatio ratio={1}>
-                  <Image h={10} src={img} radius="sm" />
-                </AspectRatio>
-              </HoverCard.Target>
-              <HoverCard.Dropdown mt="xs">
-                <Text>{code}</Text>
-              </HoverCard.Dropdown>
-            </HoverCard>
-          </Anchor>
-        </Carousel.Slide>
-      )
-    }
+    (relatedProduct, index) => (
+      <Carousel.Slide key={index}>
+        <ProductImageCard product={relatedProduct} height={225} />
+      </Carousel.Slide>
+    )
   )
 
   return (
@@ -426,11 +417,13 @@ export default function ProductRoute() {
         </Grid.Col>
       </Grid>
 
-      <Title order={3}>Related Products</Title>
+      <Title mt="xl" order={3}>
+        Related Products
+      </Title>
       <Carousel
         mt="xs"
         loop
-        slideSize="20%"
+        slideSize="25%"
         slidesToScroll="auto"
         slideGap="md"
         align="start"
