@@ -140,21 +140,23 @@ export async function loader({ params }) {
     .map((item) => getStrapiMedia(item.attributes.coverImg.data))
 
   return json({
-    name,
-    code,
-    size,
-    surface,
-    type,
-    description,
-    viewCount,
-    similarCode,
-    similarCodeImages,
-    productImages: getStrapiMedias(productImg.data),
-    category: {
-      name: category.data.attributes.name,
-      slug: category.data.attributes.slug,
+    currentProduct: {
+      name,
+      code,
+      size,
+      surface,
+      type,
+      description,
+      viewCount,
+      similarCode,
+      similarCodeImages,
+      productImages: getStrapiMedias(productImg.data),
+      category: {
+        name: category.data.attributes.name,
+        slug: category.data.attributes.slug,
+      },
+      coverImg: getStrapiMedia(coverImg.data),
     },
-    coverImg: getStrapiMedia(coverImg.data), // TODO: combine into currentProduct
     relatedProducts, // TODO: combine into relatedProducts
     relatedProductsImages,
   })
@@ -164,6 +166,8 @@ export default function ProductRoute() {
   // TODO: refactor carousel with the carousel in ProjectsGrid
   const { classes, theme } = useStyle()
   const params = useParams()
+  const { currentProduct, relatedProducts, relatedProductsImages } =
+    useLoaderData()
   const {
     name,
     code,
@@ -175,9 +179,7 @@ export default function ProductRoute() {
     similarCodeImages,
     productImages,
     category,
-    relatedProducts,
-    relatedProductsImages,
-  } = useLoaderData()
+  } = currentProduct
 
   const [imageShown, setImageShown] = useState(0)
   const [embla, setEmbla] = useState(null)
