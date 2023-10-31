@@ -25,6 +25,7 @@ import { json } from '@remix-run/node'
 import {
   getProduct,
   getProducts,
+  getRelatedProducts,
   incrementProductViewCount,
 } from '../../models/product.server'
 import { getStrapiMedia, getStrapiMedias } from '../../utils/api/helper'
@@ -110,39 +111,55 @@ export async function loader({ params }) {
 
   await incrementProductViewCount(product.id, viewCount)
 
-  const relatedProductsByFourFields = await getProducts(
-    1,
-    category.data.attributes.slug,
-    { type, surface, size }
-  )
-  const relatedProductsByTypeSurface = await getProducts(
-    1,
-    category.data.attributes.slug,
-    { type, surface }
-  )
-  const relatedProductsBySurfaceSize = await getProducts(
-    1,
-    category.data.attributes.slug,
-    { surface, size }
-  )
-  const relatedProductsByTypeSize = await getProducts(
-    1,
-    category.data.attributes.slug,
-    { type, size }
-  )
-  let relatedProducts = [
-    ...relatedProductsByFourFields.data,
-    ...relatedProductsBySurfaceSize.data,
-    ...relatedProductsByTypeSize.data,
-    ...relatedProductsByTypeSurface.data,
-  ]
-  relatedProducts = Array.from(
-    new Map(relatedProducts.map((obj) => [obj['id'], obj])).values()
-  )
+  // const relatedProductsByFourFields = await getProducts(
+  //   1,
+  //   category.data.attributes.slug,
+  //   { type, surface, size }
+  // )
+  // const relatedProductsByTypeSurface = await getProducts(
+  //   1,
+  //   category.data.attributes.slug,
+  //   { type, surface }
+  // )
+  // const relatedProductsBySurfaceSize = await getProducts(
+  //   1,
+  //   category.data.attributes.slug,
+  //   { surface, size }
+  // )
+  // const relatedProductsByTypeSize = await getProducts(
+  //   1,
+  //   category.data.attributes.slug,
+  //   { type, size }
+  // )
+  // let relatedProducts = [
+  //   ...relatedProductsByFourFields.data,
+  //   ...relatedProductsBySurfaceSize.data,
+  //   ...relatedProductsByTypeSize.data,
+  //   ...relatedProductsByTypeSurface.data,
+  // ]
+  // relatedProducts = Array.from(
+  //   new Map(relatedProducts.map((obj) => [obj['id'], obj])).values()
+  // )
 
-  const relatedProductsImages = relatedProducts
-    .filter((item) => item.attributes.code !== code)
-    .map((item) => getStrapiMedia(item.attributes.coverImg.data))
+  // const relatedProductsImages = relatedProducts
+  //   .filter((item) => item.attributes.code !== code)
+  //   .map((item) => getStrapiMedia(item.attributes.coverImg.data))
+
+  const relatedProducts = await getRelatedProducts(
+    code,
+    category.data.attributes.slug,
+    type,
+    surface,
+    size
+  )
+  const prunedRelatedProducts = relatedProducts.data.map((relatedProduct) => {
+    const { code, coverImg } = relatedProduct.attributes
+
+    return {
+      code,
+      img: getStrapiMedia(coverImg.data),
+    }
+  })
 
   return json({
     currentProduct: {
@@ -161,17 +178,15 @@ export async function loader({ params }) {
       },
       coverImg: getStrapiMedia(coverImg.data),
     },
-    relatedProducts, // TODO: combine into relatedProducts
-    relatedProductsImages,
+    relatedProducts: prunedRelatedProducts,
   })
 }
 
 export default function ProductRoute() {
   // TODO: refactor carousel with the carousel in ProjectsGrid
-  const { classes, theme } = useStyle()
+  const { classes } = useStyle()
   const params = useParams()
-  const { currentProduct, relatedProducts, relatedProductsImages } =
-    useLoaderData()
+  const { currentProduct, relatedProducts } = useLoaderData()
   const {
     name,
     code,
@@ -241,24 +256,28 @@ export default function ProductRoute() {
     )
   })
 
-  const relatedProductsCarousel = relatedProducts
-    .filter((item) => item.attributes.code !== code)
-    .map((item, index) => (
-      <Carousel.Slide key={index}>
-        <Anchor href={'/product/' + item.attributes.code} key={index}>
-          <HoverCard offset={-60} keepMounted>
-            <HoverCard.Target>
-              <AspectRatio ratio={1}>
-                <Image h={10} src={relatedProductsImages[index]} radius="sm" />
-              </AspectRatio>
-            </HoverCard.Target>
-            <HoverCard.Dropdown mt="xs">
-              <Text>{item.attributes.code}</Text>
-            </HoverCard.Dropdown>
-          </HoverCard>
-        </Anchor>
-      </Carousel.Slide>
-    ))
+  const relatedProductsCarousel = relatedProducts.map(
+    (relatedProduct, index) => {
+      const { code, img } = relatedProduct
+      return (
+        <Carousel.Slide key={index}>
+          <Anchor href={'/product/' + code} key={index}>
+            <HoverCard offset={-60} keepMounted>
+              <HoverCard.Target>
+                <AspectRatio ratio={1}>
+                  <Image h={10} src={img} radius="sm" />
+                </AspectRatio>
+              </HoverCard.Target>
+              <HoverCard.Dropdown mt="xs">
+                <Text>{code}</Text>
+              </HoverCard.Dropdown>
+            </HoverCard>
+          </Anchor>
+        </Carousel.Slide>
+      )
+    }
+  )
+
   return (
     <Box mt={40}>
       <Grid>
@@ -319,13 +338,7 @@ export default function ProductRoute() {
 
         <Grid.Col span={6}>
           <Breadcrumbs
-            separator={
-              <IconChevronRight
-                // color={theme.colors[theme.primaryColor][6]}
-                size="1.5rem"
-                stroke={2}
-              />
-            }
+            separator={<IconChevronRight size="1.5rem" stroke={2} />}
             mb="sm"
           >
             {breadcrumbs}
@@ -412,13 +425,13 @@ export default function ProductRoute() {
           </Accordion>
         </Grid.Col>
       </Grid>
-      {/* <Container my="md"> */}
+
       <Title order={3}>Related Products</Title>
       <Carousel
         mt="xs"
         loop
-        withIndicators
         slideSize="20%"
+        slidesToScroll={3}
         slideGap="md"
         align="start"
         classNames={{
@@ -429,7 +442,6 @@ export default function ProductRoute() {
       >
         {relatedProductsCarousel}
       </Carousel>
-      {/* </Container> */}
     </Box>
   )
 }
