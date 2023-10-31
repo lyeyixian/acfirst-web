@@ -27,8 +27,8 @@ import { getStrapiMedia, getStrapiMedias } from '../../utils/api/helper'
 import AddToCartBtn from '../../components/AddToCartBtn'
 import { formatSize } from '../../utils/formatter'
 import { IconChevronRight } from '@tabler/icons-react'
-import ProductImageCard from '../../components/common/ProductImageCard'
 import AcfirstCarousel from '../../components/common/AcfirstCarousel'
+import RelatedProducts from '../../components/product/RelatedProducts'
 
 const useStyle = createStyles((theme) => ({
   accordionTitle: {
@@ -199,14 +199,6 @@ export default function ProductRoute() {
     )
   })
 
-  const relatedProductsCarousel = relatedProducts.map(
-    (relatedProduct, index) => (
-      <Carousel.Slide key={index}>
-        <ProductImageCard product={relatedProduct} height={225} />
-      </Carousel.Slide>
-    )
-  )
-
   return (
     <Box mt={40}>
       <Grid>
@@ -345,19 +337,7 @@ export default function ProductRoute() {
         </Grid.Col>
       </Grid>
 
-      <Title mt={32} order={3}>
-        Related Products
-      </Title>
-      <AcfirstCarousel
-        mt="md"
-        loop
-        slideSize="25%"
-        slidesToScroll="auto"
-        slideGap="md"
-        align="start"
-      >
-        {relatedProductsCarousel}
-      </AcfirstCarousel>
+      <RelatedProducts products={relatedProducts} />
     </Box>
   )
 }
