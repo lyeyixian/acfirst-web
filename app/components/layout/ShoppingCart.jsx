@@ -19,7 +19,7 @@ import { InputQuantity } from '../AddToCartBtn'
 
 function CartItem({ product, index }) {
   const deleteCartItemBtn = useFetcher()
-  const [quantity, setQuantity] = useState(parseInt(product.quantity));
+  const [quantity, setQuantity] = useState(parseInt(product.quantity))
 
   return (
     <div>
@@ -37,7 +37,13 @@ function CartItem({ product, index }) {
             <Text>{product.name}</Text>
             <Text color="dimmed">{product.category}</Text>
           </Box>
-          <InputQuantity quantity={quantity} setQuantity={setQuantity} onChange={(quantity) => {product.quantity=quantity}}/>
+          <InputQuantity
+            quantity={quantity}
+            setQuantity={setQuantity}
+            onChange={(quantity) => {
+              product.quantity = quantity
+            }}
+          />
           <deleteCartItemBtn.Form method="delete" action="/cart">
             <input type="hidden" name="code" value={product.code} />
             <ActionIcon
@@ -63,7 +69,6 @@ export default function ShoppingCart() {
   if (rootLoaderData) {
     cart = rootLoaderData.cart
     cartSize = cart.attributes.cartItems.length
-    console.log(rootLoaderData)
     cartProducts = cart.attributes.cartItems.map((product, index) => (
       <CartItem key={index} product={product} index={index} />
     ))
