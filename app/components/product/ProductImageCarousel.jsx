@@ -5,15 +5,15 @@ import { useEffect, useState } from 'react'
 
 export default function ProductImageCarousel({ productImages }) {
   const [imageShown, setImageShown] = useState(0)
-  const [embla, setEmbla] = useState(null)
-  const [emblaForSubCarousel, setEmblaForSubCarousel] = useState(null)
+  const [emblaBig, setEmblaBig] = useState(null)
+  const [emblaSmall, setEmblaSmall] = useState(null)
 
   useEffect(() => {
-    if (embla && emblaForSubCarousel) {
-      embla.scrollTo(imageShown)
-      emblaForSubCarousel.scrollTo(imageShown)
+    if (emblaBig && emblaSmall) {
+      emblaBig.scrollTo(imageShown)
+      emblaSmall.scrollTo(imageShown)
     }
-  }, [embla, emblaForSubCarousel, imageShown])
+  }, [emblaBig, emblaSmall, imageShown])
 
   const bigSlides = productImages.map((image, index) => {
     return (
@@ -50,7 +50,7 @@ export default function ProductImageCarousel({ productImages }) {
         onSlideChange={(index) => setImageShown(index)}
         withIndicators
         loop
-        getEmblaApi={setEmbla}
+        getEmblaApi={setEmblaBig}
         slideGap="sm"
       >
         {bigSlides}
@@ -58,13 +58,12 @@ export default function ProductImageCarousel({ productImages }) {
       <AcfirstCarousel
         mt="xs"
         onSlideChange={(index) => setImageShown(index)}
-        loop
         withControls={false}
         slideSize="25%"
         slideGap="md"
         align="start"
         slidesToScroll={productImages.length >= 4 ? 1 : 4}
-        getEmblaApi={setEmblaForSubCarousel}
+        getEmblaApi={setEmblaSmall}
       >
         {smallSlides}
       </AcfirstCarousel>

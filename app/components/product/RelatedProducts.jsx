@@ -20,6 +20,7 @@ export default function RelatedProducts({ products }) {
         slideSize="25%"
         slidesToScroll="auto"
         slideGap="md"
+        align="start"
       >
         {relatedProductsCarousel}
       </AcfirstCarousel>
