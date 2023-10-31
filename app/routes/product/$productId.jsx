@@ -431,7 +431,7 @@ export default function ProductRoute() {
         mt="xs"
         loop
         slideSize="20%"
-        slidesToScroll={3}
+        slidesToScroll="auto"
         slideGap="md"
         align="start"
         classNames={{
