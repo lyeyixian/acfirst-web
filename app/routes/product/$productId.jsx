@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react'
 import {
   Accordion,
   Anchor,
-  AspectRatio,
   Box,
   Breadcrumbs,
   Card,
   Center,
   Container,
   Grid,
-  HoverCard,
   Image,
   List,
   SimpleGrid,
@@ -24,7 +22,6 @@ import { Link, useLoaderData, useParams } from '@remix-run/react'
 import { json } from '@remix-run/node'
 import {
   getProduct,
-  getProducts,
   getRelatedProducts,
   incrementProductViewCount,
 } from '../../models/product.server'
@@ -111,40 +108,6 @@ export async function loader({ params }) {
   })
 
   await incrementProductViewCount(product.id, viewCount)
-
-  // const relatedProductsByFourFields = await getProducts(
-  //   1,
-  //   category.data.attributes.slug,
-  //   { type, surface, size }
-  // )
-  // const relatedProductsByTypeSurface = await getProducts(
-  //   1,
-  //   category.data.attributes.slug,
-  //   { type, surface }
-  // )
-  // const relatedProductsBySurfaceSize = await getProducts(
-  //   1,
-  //   category.data.attributes.slug,
-  //   { surface, size }
-  // )
-  // const relatedProductsByTypeSize = await getProducts(
-  //   1,
-  //   category.data.attributes.slug,
-  //   { type, size }
-  // )
-  // let relatedProducts = [
-  //   ...relatedProductsByFourFields.data,
-  //   ...relatedProductsBySurfaceSize.data,
-  //   ...relatedProductsByTypeSize.data,
-  //   ...relatedProductsByTypeSurface.data,
-  // ]
-  // relatedProducts = Array.from(
-  //   new Map(relatedProducts.map((obj) => [obj['id'], obj])).values()
-  // )
-
-  // const relatedProductsImages = relatedProducts
-  //   .filter((item) => item.attributes.code !== code)
-  //   .map((item) => getStrapiMedia(item.attributes.coverImg.data))
 
   const relatedProducts = await getRelatedProducts(
     code,
@@ -417,11 +380,11 @@ export default function ProductRoute() {
         </Grid.Col>
       </Grid>
 
-      <Title mt="xl" order={3}>
+      <Title mt={32} order={3}>
         Related Products
       </Title>
       <Carousel
-        mt="xs"
+        mt="md"
         loop
         slideSize="25%"
         slidesToScroll="auto"
