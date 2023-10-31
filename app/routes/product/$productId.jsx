@@ -97,8 +97,16 @@ export async function loader({ params }) {
     productImg,
     category,
     coverImg,
-    similarCode,
+    similarProducts,
   } = product.attributes
+  const prunedSimilarProducts = similarProducts.data.map((similarProduct) => {
+    const { code, coverImg } = similarProduct.attributes
+
+    return {
+      code,
+      img: getStrapiMedia(coverImg.data),
+    }
+  })
 
   await incrementProductViewCount(product.id, viewCount)
 
@@ -132,9 +140,6 @@ export async function loader({ params }) {
     new Map(relatedProducts.map((obj) => [obj['id'], obj])).values()
   )
 
-  const similarCodeImages = similarCode.data.map((item) =>
-    getStrapiMedia(item.attributes.coverImg.data)
-  )
   const relatedProductsImages = relatedProducts
     .filter((item) => item.attributes.code !== code)
     .map((item) => getStrapiMedia(item.attributes.coverImg.data))
@@ -148,8 +153,7 @@ export async function loader({ params }) {
       type,
       description,
       viewCount,
-      similarCode,
-      similarCodeImages,
+      similarProducts: prunedSimilarProducts,
       productImages: getStrapiMedias(productImg.data),
       category: {
         name: category.data.attributes.name,
@@ -175,8 +179,7 @@ export default function ProductRoute() {
     surface,
     type,
     description,
-    similarCode,
-    similarCodeImages,
+    similarProducts,
     productImages,
     category,
   } = currentProduct
@@ -217,22 +220,26 @@ export default function ProductRoute() {
     </Text>
   ))
 
-  const similarCodeProducts = similarCode.data.map((item, index) => (
-    <div key={index}>
-      <Card
-        className={classes.card}
-        shadow="lg"
-        padding={0}
-        component={Link}
-        to={`/product/${item.attributes.code}`}
-      >
-        <Image src={similarCodeImages[index]} radius="xs" />
-        <Center>
-          <Text size="sm">{item.attributes.code}</Text>
-        </Center>
-      </Card>
-    </div>
-  ))
+  const otherProducts = similarProducts.map((similarProduct, index) => {
+    const { code, img } = similarProduct
+
+    return (
+      <div key={index}>
+        <Card
+          className={classes.card}
+          shadow="lg"
+          padding={0}
+          component={Link}
+          to={`/product/${code}`}
+        >
+          <Image src={img} radius="xs" />
+          <Center>
+            <Text size="sm">{code}</Text>
+          </Center>
+        </Card>
+      </div>
+    )
+  })
 
   const relatedProductsCarousel = relatedProducts
     .filter((item) => item.attributes.code !== code)
@@ -338,7 +345,7 @@ export default function ProductRoute() {
                 </Text>
               </Accordion.Control>
               <Accordion.Panel>
-                <SimpleGrid cols={3}>{similarCodeProducts}</SimpleGrid>
+                <SimpleGrid cols={3}>{otherProducts}</SimpleGrid>
               </Accordion.Panel>
             </Accordion.Item>
             <Accordion.Item value="specifications">
