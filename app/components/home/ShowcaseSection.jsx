@@ -1,6 +1,7 @@
 import { Carousel } from '@mantine/carousel'
 import SectionContainer from './SectionContainer'
 import ProductImageCard from '../common/ProductImageCard'
+import AcfirstCarousel from '../common/AcfirstCarousel'
 
 function CardsCarousel({ products }) {
   const slides = products.map((product, index) => (
@@ -10,7 +11,7 @@ function CardsCarousel({ products }) {
   ))
 
   return (
-    <Carousel
+    <AcfirstCarousel
       slideSize="33.333333%"
       breakpoints={[
         { maxWidth: 'sm', slideSize: '50%' },
@@ -22,7 +23,7 @@ function CardsCarousel({ products }) {
       loop
     >
       {slides}
-    </Carousel>
+    </AcfirstCarousel>
   )
 }
 

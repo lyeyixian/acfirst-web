@@ -14,8 +14,6 @@ import {
   Text,
   Title,
   createStyles,
-  getStylesRef,
-  rem,
 } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
 import { Link, useLoaderData, useParams } from '@remix-run/react'
@@ -30,32 +28,9 @@ import AddToCartBtn from '../../components/AddToCartBtn'
 import { formatSize } from '../../utils/formatter'
 import { IconChevronRight } from '@tabler/icons-react'
 import ProductImageCard from '../../components/common/ProductImageCard'
+import AcfirstCarousel from '../../components/common/AcfirstCarousel'
 
 const useStyle = createStyles((theme) => ({
-  carousel: {
-    '&:hover': {
-      [`& .${getStylesRef('carouselControls')}`]: {
-        opacity: 1,
-      },
-    },
-  },
-
-  carouselControls: {
-    ref: getStylesRef('carouselControls'),
-    transition: 'opacity 150ms ease',
-    opacity: 0,
-  },
-
-  carouselIndicator: {
-    width: rem(4),
-    height: rem(4),
-    transition: 'width 250ms ease',
-
-    '&[data-active]': {
-      width: rem(16),
-    },
-  },
-
   accordionTitle: {
     fontWeight: 500,
     color: theme.colors[theme.primaryColor][7],
@@ -237,21 +212,16 @@ export default function ProductRoute() {
       <Grid>
         <Grid.Col span={6}>
           <Container>
-            <Carousel
+            <AcfirstCarousel
               onSlideChange={(index) => setImageShown(index)}
               withIndicators
               loop
-              classNames={{
-                root: classes.carousel,
-                controls: classes.carouselControls,
-                indicator: classes.carouselIndicator,
-              }}
               getEmblaApi={setEmbla}
               slideGap="sm"
             >
               {slides}
-            </Carousel>
-            <Carousel
+            </AcfirstCarousel>
+            <AcfirstCarousel
               mt="xs"
               onSlideChange={(index) => setImageShown(index)}
               loop
@@ -260,11 +230,6 @@ export default function ProductRoute() {
               slideGap="md"
               align="start"
               slidesToScroll={productImages.length >= 4 ? 1 : 4}
-              classNames={{
-                root: classes.carousel,
-                controls: classes.carouselControls,
-                indicator: classes.carouselIndicator,
-              }}
               getEmblaApi={setEmblaForSubCarousel}
             >
               {productImages.map((image, index) => {
@@ -286,7 +251,7 @@ export default function ProductRoute() {
                   </Carousel.Slide>
                 )
               })}
-            </Carousel>
+            </AcfirstCarousel>
           </Container>
         </Grid.Col>
 
@@ -383,21 +348,16 @@ export default function ProductRoute() {
       <Title mt={32} order={3}>
         Related Products
       </Title>
-      <Carousel
+      <AcfirstCarousel
         mt="md"
         loop
         slideSize="25%"
         slidesToScroll="auto"
         slideGap="md"
         align="start"
-        classNames={{
-          root: classes.carousel,
-          controls: classes.carouselControls,
-          indicator: classes.carouselIndicator,
-        }}
       >
         {relatedProductsCarousel}
-      </Carousel>
+      </AcfirstCarousel>
     </Box>
   )
 }
