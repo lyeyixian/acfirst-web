@@ -78,7 +78,7 @@ export async function loader({ params }) {
 
     return {
       code,
-      img: getStrapiMedia(coverImg.data),
+      imgUrl: getStrapiMedia(coverImg.data),
     }
   })
 
@@ -179,7 +179,7 @@ export default function ProductRoute() {
   ))
 
   const otherProducts = similarProducts.map((similarProduct, index) => {
-    const { code, img } = similarProduct
+    const { code, imgUrl } = similarProduct
 
     return (
       <div key={index}>
@@ -190,7 +190,7 @@ export default function ProductRoute() {
           component={Link}
           to={`/product/${code}`}
         >
-          <Image src={img} radius="xs" />
+          <Image src={imgUrl} radius="xs" />
           <Center>
             <Text size="sm">{code}</Text>
           </Center>
