@@ -56,7 +56,7 @@ function ImageSlide({ image }) {
   )
 }
 
-export default function ProjectModal({ title, description, projectImgUrls }) {
+export default function ProjectModal({ title, projectImgUrls }) {
   const { classes } = useStyles()
   const slides = projectImgUrls.map((image) => (
     <ImageSlide key={image} image={image} />
@@ -88,10 +88,6 @@ export default function ProjectModal({ title, description, projectImgUrls }) {
           {title}
         </Text>
       </Group>
-
-      {/* <Text fz="sm" c="dimmed" mt="sm">
-        {description}
-      </Text> */}
     </Card>
   )
 }

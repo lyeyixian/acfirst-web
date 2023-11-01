@@ -73,7 +73,6 @@ function CategoryCard({ category }) {
       <Text className={classes.title} mt={5}>
         {category.name}
       </Text>
-      <Text mt={5}>{category.description}</Text>
     </Card>
   )
 }
