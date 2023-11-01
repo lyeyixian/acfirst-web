@@ -58,9 +58,9 @@ function ProjectCard({ project }) {
           />
         </AspectRatio>
       </Skeleton>
-      <Text color="dimmed" size="xs" transform="uppercase" weight={700} mt="md">
+      {/* <Text color="dimmed" size="xs" transform="uppercase" weight={700} mt="md">
         {project.date}
-      </Text>
+      </Text> */}
       <Text className={classes.title} mt={5}>
         {project.title}
       </Text>

@@ -89,9 +89,9 @@ export default function ProjectModal({ title, description, projectImgUrls }) {
         </Text>
       </Group>
 
-      <Text fz="sm" c="dimmed" mt="sm">
+      {/* <Text fz="sm" c="dimmed" mt="sm">
         {description}
-      </Text>
+      </Text> */}
     </Card>
   )
 }
