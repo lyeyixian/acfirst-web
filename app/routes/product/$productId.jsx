@@ -10,7 +10,6 @@ import {
   Grid,
   Image,
   List,
-  SimpleGrid,
   Text,
   Title,
   createStyles,
@@ -71,7 +70,6 @@ export async function loader({ params }) {
     size,
     surface,
     type,
-    description,
     viewCount,
     productImg,
     category,
@@ -116,7 +114,6 @@ export async function loader({ params }) {
       size,
       surface,
       type,
-      description,
       viewCount,
       similarProducts: prunedSimilarProducts,
       productImages: getStrapiMedias(productImg.data),
@@ -132,7 +129,7 @@ export async function loader({ params }) {
 
 export default function ProductRoute() {
   // TODO: refactor carousel with the carousel in ProjectsGrid
-  const { classes, theme } = useStyle()
+  const { classes } = useStyle()
   const params = useParams()
   const { currentProduct, relatedProducts } = useLoaderData()
   const {
@@ -141,7 +138,6 @@ export default function ProductRoute() {
     size,
     surface,
     type,
-    description,
     similarProducts,
     productImages,
     category,
