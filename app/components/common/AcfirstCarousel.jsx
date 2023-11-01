@@ -27,7 +27,7 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-export default function AcfirstCarousel({ children, ...props }) {
+export default function AcfirstCarousel({ children, classNames, ...props }) {
   const { classes } = useStyles()
 
   return (
@@ -36,6 +36,7 @@ export default function AcfirstCarousel({ children, ...props }) {
         root: classes.carousel,
         controls: classes.carouselControls,
         indicator: classes.carouselIndicator,
+        ...classNames,
       }}
       {...props}
     >

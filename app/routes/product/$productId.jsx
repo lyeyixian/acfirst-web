@@ -6,6 +6,7 @@ import {
   Card,
   Center,
   Container,
+  Divider,
   Grid,
   Image,
   List,
@@ -27,6 +28,8 @@ import { formatSize } from '../../utils/formatter'
 import { IconChevronRight } from '@tabler/icons-react'
 import RelatedProducts from '../../components/product/RelatedProducts'
 import ProductImageCarousel from '../../components/product/ProductImageCarousel'
+import AcfirstCarousel from '../../components/common/AcfirstCarousel'
+import { Carousel } from '@mantine/carousel'
 
 const useStyle = createStyles((theme) => ({
   accordionTitle: {
@@ -51,6 +54,10 @@ const useStyle = createStyles((theme) => ({
     ['&:hover']: {
       transform: 'scale(1.05)',
     },
+  },
+
+  carouselViewport: {
+    padding: theme.spacing.md,
   },
 }))
 
@@ -125,7 +132,7 @@ export async function loader({ params }) {
 
 export default function ProductRoute() {
   // TODO: refactor carousel with the carousel in ProjectsGrid
-  const { classes } = useStyle()
+  const { classes, theme } = useStyle()
   const params = useParams()
   const { currentProduct, relatedProducts } = useLoaderData()
   const {
@@ -161,10 +168,10 @@ export default function ProductRoute() {
     const { code, imgUrl } = similarProduct
 
     return (
-      <div key={index}>
+      <Carousel.Slide key={index}>
         <Card
           className={classes.card}
-          shadow="lg"
+          shadow="xs"
           padding={0}
           component={Link}
           to={`/product/${code}`}
@@ -174,7 +181,7 @@ export default function ProductRoute() {
             <Text size="sm">{code}</Text>
           </Center>
         </Card>
-      </div>
+      </Carousel.Slide>
     )
   })
 
@@ -196,63 +203,62 @@ export default function ProductRoute() {
           </Breadcrumbs>
           <Title order={1}>{name}</Title>
           <AddToCartBtn productId={params.productId} />
-          <Accordion
-            variant="separated"
-            multiple
-            defaultValue={['other style & color', 'specifications']}
-            mt="xs"
+          <Text className={classes.accordionTitle}>Other Styles & Colors</Text>
+          <AcfirstCarousel
+            slideSize="25%"
+            slideGap="md"
+            align="start"
+            skipSnaps={true}
+            containScroll="keepSnaps"
+            classNames={{
+              viewport: classes.carouselViewport,
+            }}
           >
-            <Accordion.Item value="other style & color">
-              <Accordion.Control>
-                <Text className={classes.accordionTitle}>
-                  Other Styles & Colors
+            {otherProducts}
+          </AcfirstCarousel>
+          <Divider my="md" />
+          <Text mb="xs" className={classes.accordionTitle}>
+            Specifications
+          </Text>
+          <List withPadding>
+            <List.Item>
+              <Text c="dark.4">
+                <Text span fw={600}>
+                  Category:
+                </Text>{' '}
+                {category.name}
+              </Text>
+            </List.Item>
+            <List.Item>
+              <Text c="dark.4">
+                <Text span fw={600}>
+                  Surface:
+                </Text>{' '}
+                <Text span transform="capitalize">
+                  {surface}
                 </Text>
-              </Accordion.Control>
-              <Accordion.Panel>
-                <SimpleGrid cols={3}>{otherProducts}</SimpleGrid>
-              </Accordion.Panel>
-            </Accordion.Item>
-            <Accordion.Item value="specifications">
-              <Accordion.Control>
-                <Text className={classes.accordionTitle}>Specifications</Text>
-              </Accordion.Control>
-              <Accordion.Panel>
-                <List withPadding>
-                  <List.Item>
-                    <Text c="dark.4">
-                      <Text span fw={600}>
-                        Category:
-                      </Text>{' '}
-                      {category.name}
-                    </Text>
-                  </List.Item>
-                  <List.Item>
-                    <Text c="dark.4">
-                      <Text span fw={600}>
-                        Surface:
-                      </Text>{' '}
-                      {surface}
-                    </Text>
-                  </List.Item>
-                  <List.Item>
-                    <Text c="dark.4">
-                      <Text span fw={600}>
-                        Type:
-                      </Text>{' '}
-                      {type}
-                    </Text>
-                  </List.Item>
-                  <List.Item>
-                    <Text c="dark.4">
-                      <Text span fw={600}>
-                        Size:
-                      </Text>{' '}
-                      {formatSize(size)}
-                    </Text>
-                  </List.Item>
-                </List>
-              </Accordion.Panel>
-            </Accordion.Item>
+              </Text>
+            </List.Item>
+            <List.Item>
+              <Text c="dark.4">
+                <Text span fw={600}>
+                  Type:
+                </Text>{' '}
+                <Text span transform="capitalize">
+                  {type}
+                </Text>
+              </Text>
+            </List.Item>
+            <List.Item>
+              <Text c="dark.4">
+                <Text span fw={600}>
+                  Size:
+                </Text>{' '}
+                {formatSize(size)}
+              </Text>
+            </List.Item>
+          </List>
+          <Accordion variant="separated" mt="md">
             <Accordion.Item value="additional info">
               <Accordion.Control>
                 <Text className={classes.accordionTitle}>
