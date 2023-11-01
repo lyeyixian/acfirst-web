@@ -64,6 +64,8 @@ export default function ProductImageCarousel({ productImages }) {
         align="start"
         slidesToScroll={productImages.length >= 4 ? 1 : 4}
         getEmblaApi={setEmblaSmall}
+        skipSnaps={true}
+        containScroll="keepSnaps"
       >
         {smallSlides}
       </AcfirstCarousel>
