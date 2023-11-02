@@ -168,13 +168,16 @@ export default function ProductRoute() {
         <Card
           className={classes.card}
           shadow="xs"
-          padding={0}
+          withBorder
+          p={0}
           component={Link}
           to={`/product/${code}`}
         >
           <Image src={imgUrl} radius="xs" />
           <Center>
-            <Text size="sm">{code}</Text>
+            <Text weight={500} size="sm">
+              {code}
+            </Text>
           </Center>
         </Card>
       </Carousel.Slide>
