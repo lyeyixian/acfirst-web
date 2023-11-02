@@ -202,20 +202,28 @@ export default function ProductRoute() {
           </Breadcrumbs>
           <Title order={1}>{name}</Title>
           <AddToCartBtn productId={params.productId} />
-          <Text className={classes.accordionTitle}>Other Styles & Colors</Text>
-          <AcfirstCarousel
-            slideSize="25%"
-            slideGap="md"
-            align="start"
-            skipSnaps={true}
-            containScroll="keepSnaps"
-            classNames={{
-              viewport: classes.carouselViewport,
-            }}
-          >
-            {otherProducts}
-          </AcfirstCarousel>
-          <Divider my="md" />
+
+          {otherProducts.length ? (
+            <>
+              <Text className={classes.accordionTitle}>
+                Other Styles & Colors
+              </Text>
+              <AcfirstCarousel
+                slideSize="25%"
+                slideGap="md"
+                align="start"
+                skipSnaps={true}
+                containScroll="keepSnaps"
+                classNames={{
+                  viewport: classes.carouselViewport,
+                }}
+              >
+                {otherProducts}
+              </AcfirstCarousel>
+              <Divider my="md" />
+            </>
+          ) : null}
+
           <Text mb="xs" className={classes.accordionTitle}>
             Specifications
           </Text>
