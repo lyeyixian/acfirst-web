@@ -1,6 +1,6 @@
 import { fetchApi } from '../utils/api/fetchApi'
 
-export async function getProjects(page = 1, category="all") {
+export async function getProjects(page = 1, category) {
   const path = `/projects`
   const urlParamsObj = {
     populate: 'deep',
@@ -11,7 +11,7 @@ export async function getProjects(page = 1, category="all") {
     filters: {},
   }
 
-  if (category && category !== 'all') {
+  if (category) {
     urlParamsObj.filters.category = {
       name: {
         $eq: category,
