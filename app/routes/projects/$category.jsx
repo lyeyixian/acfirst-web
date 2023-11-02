@@ -1,6 +1,11 @@
 import { json } from '@remix-run/node'
-import { useLoaderData, useSearchParams, useParams } from '@remix-run/react'
-import { Anchor, Pagination, Stack } from '@mantine/core'
+import {
+  useLoaderData,
+  useSearchParams,
+  useParams,
+  Link,
+} from '@remix-run/react'
+import { Anchor, Pagination, Stack, Text } from '@mantine/core'
 import { useEffect, useState } from 'react'
 import { getProjects } from '../../models/project.server'
 import {
@@ -9,6 +14,7 @@ import {
   getStrapiMedias,
 } from '../../utils/api/helper'
 import ProjectsGrid from '../../components/projects/ProjectsGrid'
+import { IconFileX } from '@tabler/icons-react'
 
 export async function loader({ request, params }) {
   const url = new URL(request.url)
@@ -49,9 +55,9 @@ export default function ProjectsIndexRoute() {
 
   return (
     <div>
-      <Stack justify="space-between" mih={730}>
-        <ProjectsGrid projects={projects} />
-        {projects.length ? (
+      {projects.length ? (
+        <Stack justify="space-between" mih={730}>
+          <ProjectsGrid projects={projects} />
           <Pagination
             value={page}
             onChange={(value) => {
@@ -66,8 +72,18 @@ export default function ProjectsIndexRoute() {
             mt="lg"
             withEdges
           />
-        ) : null}
-      </Stack>
+        </Stack>
+      ) : (
+        <Stack justify="center" align="center" mih={730} spacing="xs">
+          <IconFileX size="2rem" />
+          <Text size="lg" weight={500}>
+            No projects found
+          </Text>
+          <Anchor component={Link} to="/projects">
+            Browse other categories
+          </Anchor>
+        </Stack>
+      )}
     </div>
   )
 }
