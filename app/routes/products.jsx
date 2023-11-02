@@ -43,8 +43,8 @@ const filterData = [
     slug: 'size',
     icon: IconRuler,
     links: [
-      { label: '300x300', slug: 'mm-300x300' },
-      { label: '600x600', slug: 'mm-600x600' },
+      { label: '300mm x 300mm', slug: 'mm-300x300' },
+      { label: '600mm x 600mm', slug: 'mm-600x600' },
     ],
   },
 ]

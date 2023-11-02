@@ -1,4 +1,4 @@
-import { fetchApi } from '../utils/fetchApi'
+import { fetchApi } from '../utils/api/fetchApi'
 
 export async function createOrder(data) {
   const { name, phone, enquiry, cartItems } = data
@@ -13,6 +13,7 @@ export async function createOrder(data) {
         products: {
           connect: [...cartItems.map((item) => item.id)],
         },
+        // quantities: cartItems.map((item) => item.quantity)
       },
     }),
   }

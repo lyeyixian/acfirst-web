@@ -3,7 +3,6 @@ import {
   Card,
   Center,
   Group,
-  HoverCard,
   Image,
   Pagination,
   SimpleGrid,
@@ -15,14 +14,13 @@ import {
 import { useEffect, useState } from 'react'
 import { getProducts } from '../../models/product.server'
 import { json } from '@remix-run/node'
-import { getStrapiMedia } from '../../utils/apiHelper'
+import { getStrapiMedia } from '../../utils/api/helper'
 import {
   Link,
   useLoaderData,
   useParams,
   useSearchParams,
 } from '@remix-run/react'
-import AddToCartBtn from '../../components/AddToCartBtn'
 import { IconEye } from '@tabler/icons-react'
 
 // TODO: responsive
@@ -87,24 +85,9 @@ function ProductsGrid({ products }) {
       component={Link}
       to={`/product/${product.code}`}
     >
-      <HoverCard
-        offset={-60}
-        keepMounted
-        classNames={{ dropdown: classes.dropdown }}
-      >
-        <HoverCard.Target>
-          <AspectRatio ratio={1}>
-            <Image src={product.imageUrl} radius="sm" />
-          </AspectRatio>
-        </HoverCard.Target>
-        <HoverCard.Dropdown>
-          <AddToCartBtn
-            variant="light"
-            className={classes.button}
-            productId={product.code}
-          />
-        </HoverCard.Dropdown>
-      </HoverCard>
+      <AspectRatio ratio={1}>
+        <Image src={product.imageUrl} radius="sm" />
+      </AspectRatio>
       <Text mt="xs" fw={500}>
         {product.name}
       </Text>

@@ -18,6 +18,8 @@ import { useNavigation, useRouteLoaderData, useSubmit } from '@remix-run/react'
 import { IconTrash } from '@tabler/icons-react'
 import { createOrder } from '../models/order.server'
 import { clearCart } from '../models/cart.server'
+import { InputQuantity } from '../components/AddToCartBtn'
+import { useState } from 'react'
 
 export async function action({ request }) {
   const formData = await request.formData()
@@ -36,6 +38,11 @@ export async function action({ request }) {
   return redirect(`/checkout/success/${res.data.attributes.orderId}`)
 }
 
+export function InputQuantityWrapper({product}) {
+  const [quantity, setQuantity] = useState(parseInt(product.quantity));
+  return <InputQuantity quantity={quantity} setQuantity={setQuantity} onChange={(quantity) => {product.quantity=quantity}}/>
+
+}
 export default function CheckoutRoute() {
   const { cart } = useRouteLoaderData('root')
   // TODO: UI issue
@@ -56,6 +63,7 @@ export default function CheckoutRoute() {
           <Text color="dimmed">{product.size}</Text>
           <Text color="dimmed">{product.type}</Text>
         </Box>
+        <InputQuantityWrapper product={product}/>
         <ActionIcon color="red.4">
           <IconTrash size="1.2rem" />
         </ActionIcon>
@@ -91,7 +99,7 @@ export default function CheckoutRoute() {
     <div>
       <h1>Checkout</h1>
       <Grid>
-        <Grid.Col span={6}>
+        <Grid.Col span={5}>
           <form onSubmit={form.onSubmit(handleSubmit)}>
             <Title order={3}>Contact information</Title>
             <Box mt="md" pr="md">
@@ -146,7 +154,7 @@ export default function CheckoutRoute() {
             </Box>
           </form>
         </Grid.Col>
-        <Grid.Col span={6}>
+        <Grid.Col span={7}>
           <Title order={3}>Order Summary</Title>
           <Card padding="lg" withBorder shadow="sm" radius="md" mt="md">
             {checkoutProducts}

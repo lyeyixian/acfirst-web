@@ -1,6 +1,6 @@
 import { useLoaderData } from '@remix-run/react'
 import { getPage } from '../models/page.server'
-import { getStrapiMedia } from '../utils/apiHelper'
+import { getStrapiMedia } from '../utils/api/helper'
 import { json } from '@remix-run/node'
 import { AspectRatio, Image, Skeleton, Text, Title } from '@mantine/core'
 import { useRef } from 'react'

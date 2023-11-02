@@ -1,59 +1,68 @@
 import {
   Accordion,
+  Anchor,
+  Box,
+  Breadcrumbs,
+  Card,
+  Center,
   Container,
+  Divider,
   Grid,
   Image,
   List,
   Text,
   Title,
   createStyles,
-  getStylesRef,
-  rem,
 } from '@mantine/core'
-import { useLoaderData, useParams } from '@remix-run/react'
+import { Link, useLoaderData, useParams } from '@remix-run/react'
 import { json } from '@remix-run/node'
 import {
   getProduct,
+  getRelatedProducts,
   incrementProductViewCount,
 } from '../../models/product.server'
-import { getStrapiMedia, getStrapiMedias } from '../../utils/apiHelper'
-import { Carousel } from '@mantine/carousel'
+import { getStrapiMedia, getStrapiMedias } from '../../utils/api/helper'
 import AddToCartBtn from '../../components/AddToCartBtn'
-import React, { useEffect, useState } from 'react'
+import { formatSize } from '../../utils/formatter'
+import { IconChevronRight } from '@tabler/icons-react'
+import RelatedProducts from '../../components/product/RelatedProducts'
+import ProductImageCarousel from '../../components/product/ProductImageCarousel'
+import AcfirstCarousel from '../../components/common/AcfirstCarousel'
+import { Carousel } from '@mantine/carousel'
 
 const useStyle = createStyles((theme) => ({
-  carousel: {
-    '&:hover': {
-      [`& .${getStylesRef('carouselControls')}`]: {
-        opacity: 1,
-      },
-    },
-  },
-
-  carouselControls: {
-    ref: getStylesRef('carouselControls'),
-    transition: 'opacity 150ms ease',
-    opacity: 0,
-  },
-
-  carouselIndicator: {
-    width: rem(4),
-    height: rem(4),
-    transition: 'width 250ms ease',
-
-    '&[data-active]': {
-      width: rem(16),
-    },
-  },
-
   accordionTitle: {
     fontWeight: 500,
     color: theme.colors[theme.primaryColor][7],
+  },
+
+  breadcrumb: {
+    opacity: 0.5,
+    transition: 'opacity color 150ms ease',
+
+    '&:hover': {
+      textDecoration: 'none',
+      color: theme.colors[theme.primaryColor][7],
+      opacity: 1,
+    },
+  },
+
+  card: {
+    transition: 'transform 250ms ease',
+
+    ['&:hover']: {
+      transform: 'scale(1.05)',
+    },
+  },
+
+  carouselViewport: {
+    padding: theme.spacing.md,
   },
 }))
 
 export async function loader({ params }) {
   const { productId } = params
+
   const product = await getProduct(productId)
   const {
     name,
@@ -61,26 +70,60 @@ export async function loader({ params }) {
     size,
     surface,
     type,
-    description,
     viewCount,
     productImg,
     category,
     coverImg,
+    similarProducts,
   } = product.attributes
+  const prunedSimilarProducts = similarProducts.data.map((similarProduct) => {
+    const { code, coverImg } = similarProduct.attributes
+
+    return {
+      code,
+      imgUrl: getStrapiMedia(coverImg.data),
+    }
+  })
 
   await incrementProductViewCount(product.id, viewCount)
 
-  return json({
-    name,
+  const relatedProducts = await getRelatedProducts(
     code,
-    size,
-    surface,
+    category.data.attributes.slug,
     type,
-    description,
-    viewCount,
-    productImages: getStrapiMedias(productImg.data),
-    category: category.data.attributes.name,
-    coverImg: getStrapiMedia(coverImg.data),
+    surface,
+    size
+  )
+  const prunedRelatedProducts = relatedProducts.data.map((relatedProduct) => {
+    const { name, code, category, viewCount, coverImg } =
+      relatedProduct.attributes
+
+    return {
+      name,
+      code,
+      category: category.data.attributes.name,
+      viewCount,
+      imgUrl: getStrapiMedia(coverImg.data),
+    }
+  })
+
+  return json({
+    currentProduct: {
+      name,
+      code,
+      size,
+      surface,
+      type,
+      viewCount,
+      similarProducts: prunedSimilarProducts,
+      productImages: getStrapiMedias(productImg.data),
+      category: {
+        name: category.data.attributes.name,
+        slug: category.data.attributes.slug,
+      },
+      coverImg: getStrapiMedia(coverImg.data),
+    },
+    relatedProducts: prunedRelatedProducts,
   })
 }
 
@@ -88,150 +131,133 @@ export default function ProductRoute() {
   // TODO: refactor carousel with the carousel in ProjectsGrid
   const { classes } = useStyle()
   const params = useParams()
+  const { currentProduct, relatedProducts } = useLoaderData()
   const {
     name,
     code,
     size,
     surface,
     type,
-    description,
+    similarProducts,
     productImages,
     category,
-  } = useLoaderData()
-  const [imageShown, setImageShown] = useState(0)
-  const [embla, setEmbla] = useState(null)
-  const [emblaForSubCarousel, setEmblaForSubCarousel] = useState(null)
+  } = currentProduct
 
-  useEffect(() => {
-    if (embla && emblaForSubCarousel) {
-      embla.scrollTo(imageShown)
-      emblaForSubCarousel.scrollTo(imageShown)
-    }
-  }, [embla, emblaForSubCarousel, imageShown])
-
-  const slides = productImages.map((image, index) => (
-    <Carousel.Slide key={index}>
-      <Image src={image} fit="contain" />
-    </Carousel.Slide>
+  const breadcrumbsData = [
+    { title: 'Products', href: '/products' },
+    { title: category.name, href: '/products/' + category.slug },
+    { title: params.productId, href: '/product/' + params.productId },
+  ]
+  const breadcrumbs = breadcrumbsData.map((item, index) => (
+    <Text
+      className={classes.breadcrumb}
+      weight={600}
+      key={index}
+      component={Anchor}
+      href={item.href}
+    >
+      {item.title}
+    </Text>
   ))
 
+  const otherProducts = similarProducts.map((similarProduct, index) => {
+    const { code, imgUrl } = similarProduct
+
+    return (
+      <Carousel.Slide key={index}>
+        <Card
+          className={classes.card}
+          shadow="xs"
+          withBorder
+          p={0}
+          component={Link}
+          to={`/product/${code}`}
+        >
+          <Image src={imgUrl} radius="xs" />
+          <Center>
+            <Text weight={500} size="sm">
+              {code}
+            </Text>
+          </Center>
+        </Card>
+      </Carousel.Slide>
+    )
+  })
+
   return (
-    <div>
-      <h1>Product {params.productId}</h1>
+    <Box mt={40}>
       <Grid>
         <Grid.Col span={6}>
           <Container>
-            <Carousel
-              onSlideChange={(index) => setImageShown(index)}
-              withIndicators
-              loop
-              classNames={{
-                root: classes.carousel,
-                controls: classes.carouselControls,
-                indicator: classes.carouselIndicator,
-              }}
-              getEmblaApi={setEmbla}
-              slideGap="sm"
-            >
-              {slides}
-            </Carousel>
-            <Carousel
-              mt="xs"
-              onSlideChange={(index) => setImageShown(index)}
-              loop
-              withControls={false}
-              slideSize="25%"
-              slideGap="md"
-              align="start"
-              slidesToScroll={productImages.length >= 4 ? 1 : 4}
-              classNames={{
-                root: classes.carousel,
-                controls: classes.carouselControls,
-                indicator: classes.carouselIndicator,
-              }}
-              getEmblaApi={setEmblaForSubCarousel}
-            >
-              {productImages.map((image, index) => {
-                const isCurrentImageShown = imageShown === index
-                return (
-                  <Carousel.Slide key={index}>
-                    <Image
-                      sx={(theme) => ({
-                        borderStyle: isCurrentImageShown ? 'solid' : null,
-                        borderColor: isCurrentImageShown
-                          ? theme.colors[theme.primaryColor][6]
-                          : null,
-                        borderRadius: isCurrentImageShown ? theme.radius.sm : 0,
-                      })}
-                      src={image}
-                      fit="contain"
-                      onClick={() => setImageShown(index)}
-                    />
-                  </Carousel.Slide>
-                )
-              })}
-            </Carousel>
+            <ProductImageCarousel productImages={productImages} />
           </Container>
         </Grid.Col>
 
         <Grid.Col span={6}>
-          <Title order={2}>{name}</Title>
-          <Text mt="md">{description}</Text>
-          <AddToCartBtn productId={params.productId} />
-          <Accordion
-            variant="separated"
-            multiple
-            defaultValue={['specifications']}
+          <Breadcrumbs
+            separator={<IconChevronRight size="1.5rem" stroke={2} />}
+            mb="sm"
           >
-            <Accordion.Item value="specifications">
-              <Accordion.Control>
-                <Text className={classes.accordionTitle}>Specifications</Text>
-              </Accordion.Control>
-              <Accordion.Panel>
-                <List withPadding size="sm">
-                  <List.Item>
-                    <Text c="dark.4">
-                      <Text span fw={600}>
-                        Code:
-                      </Text>{' '}
-                      {code}
-                    </Text>
-                  </List.Item>
-                  <List.Item>
-                    <Text c="dark.4">
-                      <Text span fw={600}>
-                        Category:
-                      </Text>{' '}
-                      {category}
-                    </Text>
-                  </List.Item>
-                  <List.Item>
-                    <Text c="dark.4">
-                      <Text span fw={600}>
-                        Surface:
-                      </Text>{' '}
-                      {surface}
-                    </Text>
-                  </List.Item>
-                  <List.Item>
-                    <Text c="dark.4">
-                      <Text span fw={600}>
-                        Type:
-                      </Text>{' '}
-                      {type}
-                    </Text>
-                  </List.Item>
-                  <List.Item>
-                    <Text c="dark.4">
-                      <Text span fw={600}>
-                        Size:
-                      </Text>{' '}
-                      {size}
-                    </Text>
-                  </List.Item>
-                </List>
-              </Accordion.Panel>
-            </Accordion.Item>
+            {breadcrumbs}
+          </Breadcrumbs>
+          <Title order={1}>{name}</Title>
+          <AddToCartBtn productId={params.productId} />
+          <Text className={classes.accordionTitle}>Other Styles & Colors</Text>
+          <AcfirstCarousel
+            slideSize="25%"
+            slideGap="md"
+            align="start"
+            skipSnaps={true}
+            containScroll="keepSnaps"
+            classNames={{
+              viewport: classes.carouselViewport,
+            }}
+          >
+            {otherProducts}
+          </AcfirstCarousel>
+          <Divider my="md" />
+          <Text mb="xs" className={classes.accordionTitle}>
+            Specifications
+          </Text>
+          <List withPadding>
+            <List.Item>
+              <Text c="dark.4">
+                <Text span fw={600}>
+                  Category:
+                </Text>{' '}
+                {category.name}
+              </Text>
+            </List.Item>
+            <List.Item>
+              <Text c="dark.4">
+                <Text span fw={600}>
+                  Surface:
+                </Text>{' '}
+                <Text span transform="capitalize">
+                  {surface}
+                </Text>
+              </Text>
+            </List.Item>
+            <List.Item>
+              <Text c="dark.4">
+                <Text span fw={600}>
+                  Type:
+                </Text>{' '}
+                <Text span transform="capitalize">
+                  {type}
+                </Text>
+              </Text>
+            </List.Item>
+            <List.Item>
+              <Text c="dark.4">
+                <Text span fw={600}>
+                  Size:
+                </Text>{' '}
+                {formatSize(size)}
+              </Text>
+            </List.Item>
+          </List>
+          <Accordion variant="separated" mt="md">
             <Accordion.Item value="additional info">
               <Accordion.Control>
                 <Text className={classes.accordionTitle}>
@@ -255,6 +281,8 @@ export default function ProductRoute() {
           </Accordion>
         </Grid.Col>
       </Grid>
-    </div>
+
+      <RelatedProducts products={relatedProducts} />
+    </Box>
   )
 }
