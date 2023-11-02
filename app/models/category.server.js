@@ -1,13 +1,9 @@
 import { fetchApi } from '../utils/api/fetchApi'
 
-export async function getCategories(page=1) {
+export async function getCategories() {
   const path = '/categories'
   const urlParamsObj = {
     populate: 'deep',
-    pagination: {
-      page,
-      pageSize: 4,
-    },
   }
 
   return await fetchApi(path, urlParamsObj)
