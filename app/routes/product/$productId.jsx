@@ -50,7 +50,7 @@ const useStyle = createStyles((theme) => ({
   card: {
     transition: 'transform 250ms ease',
 
-    ['&:hover']: {
+    '&:hover': {
       transform: 'scale(1.05)',
     },
   },

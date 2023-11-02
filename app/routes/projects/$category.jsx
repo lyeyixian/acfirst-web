@@ -1,10 +1,5 @@
 import { json } from '@remix-run/node'
-import {
-  useLoaderData,
-  useSearchParams,
-  useParams,
-  Link,
-} from '@remix-run/react'
+import { useLoaderData, useSearchParams, Link } from '@remix-run/react'
 import { Anchor, Pagination, Stack, Text } from '@mantine/core'
 import { useEffect, useState } from 'react'
 import { getProjects } from '../../models/project.server'

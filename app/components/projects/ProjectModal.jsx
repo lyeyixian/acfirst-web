@@ -1,5 +1,5 @@
 import { Carousel, useAnimationOffsetEffect } from '@mantine/carousel'
-import { Card, Group, Image, Skeleton, Text } from '@mantine/core'
+import { Card, Image, Skeleton, Text } from '@mantine/core'
 import { useRef, useState } from 'react'
 import { useSkeletonLoading } from '../hooks/skeleton'
 import AcfirstCarousel from '../common/AcfirstCarousel'
