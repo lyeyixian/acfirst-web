@@ -58,9 +58,6 @@ function ProjectCard({ project }) {
           />
         </AspectRatio>
       </Skeleton>
-      <Text color="dimmed" size="xs" transform="uppercase" weight={700} mt="md">
-        {project.date}
-      </Text>
       <Text className={classes.title} mt={5}>
         {project.title}
       </Text>
@@ -74,7 +71,7 @@ export default function ProjectsGrid({ projects }) {
   ))
 
   return (
-    <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+    <SimpleGrid cols={3} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
       {cards}
     </SimpleGrid>
   )
