@@ -7,10 +7,9 @@ import {
   SimpleGrid,
   Text,
   AspectRatio,
-  Skeleton,
 } from '@mantine/core'
 import { useRef } from 'react'
-import { useSkeletonLoading } from '../components/hooks/skeleton'
+import AcfirstSkeleton from '../components/common/AcfirstSkeleton'
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -47,7 +46,6 @@ const useStyles = createStyles((theme) => ({
 function CategoryCard({ category }) {
   const { classes } = useStyles()
   const imageRef = useRef(null)
-  const { loading, handleOnLoad } = useSkeletonLoading(imageRef)
 
   return (
     <Card
@@ -57,15 +55,17 @@ function CategoryCard({ category }) {
       component={Link}
       to={`/projects/${category.name}`}
     >
-      <Skeleton visible={loading}>
-        <AspectRatio ratio={1920 / 1080}>
-          <Image
-            imageRef={imageRef}
-            src={category.coverImgUrl}
-            onLoad={handleOnLoad}
-          />
-        </AspectRatio>
-      </Skeleton>
+      <AcfirstSkeleton imageRef={imageRef}>
+        {(handleOnLoad) => (
+          <AspectRatio ratio={1920 / 1080}>
+            <Image
+              imageRef={imageRef}
+              src={category.coverImgUrl}
+              onLoad={handleOnLoad}
+            />
+          </AspectRatio>
+        )}
+      </AcfirstSkeleton>
       <Text className={classes.title} mt={5}>
         {category.name}
       </Text>

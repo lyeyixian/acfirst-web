@@ -1,23 +1,24 @@
 import { Carousel, useAnimationOffsetEffect } from '@mantine/carousel'
-import { Card, Image, Skeleton, Text } from '@mantine/core'
+import { Card, Image, Text } from '@mantine/core'
 import { useRef, useState } from 'react'
-import { useSkeletonLoading } from '../hooks/skeleton'
 import AcfirstCarousel from '../common/AcfirstCarousel'
+import AcfirstSkeleton from '../common/AcfirstSkeleton'
 
 function ImageSlide({ image }) {
   const imageRef = useRef(null)
-  const { loading, handleOnLoad } = useSkeletonLoading(imageRef)
 
   return (
     <Carousel.Slide>
-      <Skeleton visible={loading}>
-        <Image
-          imageRef={imageRef}
-          src={image}
-          height={220}
-          onLoad={handleOnLoad}
-        />
-      </Skeleton>
+      <AcfirstSkeleton imageRef={imageRef}>
+        {(handleOnLoad) => (
+          <Image
+            imageRef={imageRef}
+            src={image}
+            height={220}
+            onLoad={handleOnLoad}
+          />
+        )}
+      </AcfirstSkeleton>
     </Carousel.Slide>
   )
 }

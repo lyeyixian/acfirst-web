@@ -5,12 +5,11 @@ import {
   Image,
   Text,
   AspectRatio,
-  Skeleton,
 } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import ProjectModal from './ProjectModal'
 import { useRef } from 'react'
-import { useSkeletonLoading } from '../hooks/skeleton'
+import AcfirstSkeleton from '../common/AcfirstSkeleton'
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -31,7 +30,6 @@ const useStyles = createStyles((theme) => ({
 function ProjectCard({ project }) {
   const { classes } = useStyles()
   const imageRef = useRef(null)
-  const { loading, handleOnLoad } = useSkeletonLoading(imageRef)
 
   return (
     <Card
@@ -49,15 +47,17 @@ function ProjectCard({ project }) {
       }}
       className={classes.card}
     >
-      <Skeleton visible={loading}>
-        <AspectRatio ratio={1920 / 1080}>
-          <Image
-            imageRef={imageRef}
-            src={project.coverImgUrl}
-            onLoad={handleOnLoad}
-          />
-        </AspectRatio>
-      </Skeleton>
+      <AcfirstSkeleton imageRef={imageRef}>
+        {(handleOnLoad) => (
+          <AspectRatio ratio={1920 / 1080}>
+            <Image
+              imageRef={imageRef}
+              src={project.coverImgUrl}
+              onLoad={handleOnLoad}
+            />
+          </AspectRatio>
+        )}
+      </AcfirstSkeleton>
       <Text className={classes.title} mt={5}>
         {project.title}
       </Text>

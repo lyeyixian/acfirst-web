@@ -2,9 +2,9 @@ import { useLoaderData } from '@remix-run/react'
 import { getPage } from '../models/page.server'
 import { getStrapiMedia } from '../utils/api/helper'
 import { json } from '@remix-run/node'
-import { AspectRatio, Image, Skeleton, Text, Title } from '@mantine/core'
+import { AspectRatio, Image, Text, Title } from '@mantine/core'
 import { useRef } from 'react'
-import { useSkeletonLoading } from '../components/hooks/skeleton'
+import AcfirstSkeleton from '../components/common/AcfirstSkeleton'
 
 export async function loader() {
   const pageData = await getPage('about')
@@ -40,21 +40,22 @@ export default function About() {
   })
 
   const imageRef = useRef(null)
-  const { loading, handleOnLoad } = useSkeletonLoading(imageRef)
 
   return (
     <div>
       <h1>About Acfirst</h1>
-      <AspectRatio ratio={21 / 9}>
-        <Skeleton visible={loading}>
-          <Image
-            imageRef={imageRef}
-            onLoad={handleOnLoad}
-            src={imgUrl}
-            radius="sm"
-          />
-        </Skeleton>
-      </AspectRatio>
+      <AcfirstSkeleton imageRef={imageRef}>
+        {(handleOnLoad) => (
+          <AspectRatio ratio={21 / 9}>
+            <Image
+              imageRef={imageRef}
+              onLoad={handleOnLoad}
+              src={imgUrl}
+              radius="sm"
+            />
+          </AspectRatio>
+        )}
+      </AcfirstSkeleton>
       {content}
     </div>
   )
