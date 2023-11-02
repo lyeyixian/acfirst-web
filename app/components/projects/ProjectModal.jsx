@@ -32,14 +32,14 @@ export default function ProjectModal({ title, projectImgUrls }) {
   useAnimationOffsetEffect(embla, 300)
 
   return (
-    <Card radius="md" padding="xl">
+    <Card radius="md" padding="md">
       <Card.Section>
         <AcfirstCarousel withIndicators loop getEmblaApi={setEmbla}>
           {slides}
         </AcfirstCarousel>
       </Card.Section>
 
-      <Text fw={500} mt="lg" fz="lg">
+      <Text fw={500} mt="md" fz="lg">
         {title}
       </Text>
     </Card>
