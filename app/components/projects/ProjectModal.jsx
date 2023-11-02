@@ -39,11 +39,9 @@ export default function ProjectModal({ title, projectImgUrls }) {
         </AcfirstCarousel>
       </Card.Section>
 
-      <Group position="apart" mt="lg">
-        <Text fw={500} fz="lg">
-          {title}
-        </Text>
-      </Group>
+      <Text fw={500} mt="lg" fz="lg">
+        {title}
+      </Text>
     </Card>
   )
 }
