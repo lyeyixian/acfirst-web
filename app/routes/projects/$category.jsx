@@ -1,17 +1,13 @@
 import { json } from '@remix-run/node'
 import { useLoaderData, useSearchParams, useParams } from '@remix-run/react'
-import {
-  Anchor,
-  Pagination,
-  Stack,
-} from '@mantine/core'
+import { Anchor, Pagination, Stack } from '@mantine/core'
 import { useEffect, useState } from 'react'
 import { getProjects } from '../../models/project.server'
 import {
   formatDate,
   getStrapiMedia,
   getStrapiMedias,
-} from '../../utils/apiHelper'
+} from '../../utils/api/helper'
 import ProjectsGrid from '../../components/projects/ProjectsGrid'
 
 export async function loader({ request, params }) {
@@ -46,7 +42,6 @@ export default function ProjectsIndexRoute() {
   const [page, setPage] = useState(searchParamsPage)
   const loaderData = useLoaderData()
   const { projects, pageCount } = loaderData
-
 
   useEffect(() => {
     setPage(parseInt(searchParamsPage))

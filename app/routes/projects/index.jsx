@@ -2,7 +2,7 @@ import { Stack } from '@mantine/core'
 import { CategoriesGrid } from '../projects'
 import { useLoaderData } from '@remix-run/react'
 import { getCategories } from '../../models/category.server'
-import { getStrapiMedia } from '../../utils/apiHelper'
+import { getStrapiMedia } from '../../utils/api/helper'
 
 export async function loader() {
   const categories = await getCategories()
