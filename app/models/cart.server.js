@@ -1,5 +1,5 @@
-import { getStrapiMedia } from '../utils/apiHelper'
-import { fetchApi } from '../utils/fetchApi'
+import { getStrapiMedia } from '../utils/api/helper'
+import { fetchApi } from '../utils/api/fetchApi'
 import { getProduct } from './product.server'
 
 export async function getCart(cartId) {
@@ -51,7 +51,7 @@ export async function clearCart(cartId) {
   }
 }
 
-export async function addToCart(code, cartId) {
+export async function addToCart(code, quantity, cartId) {
   const product = await getProduct(code)
   if (!product) {
     throw new Response('Product not found', { status: 404 })
@@ -75,6 +75,7 @@ export async function addToCart(code, cartId) {
       type: product.attributes.type,
       category: product.attributes.category.data.attributes.name,
       imgUrl: getStrapiMedia(product.attributes.coverImg.data),
+      quantity: parseInt(quantity),
     }
     const path = `/carts/${cart.id}`
     const options = {
@@ -87,6 +88,22 @@ export async function addToCart(code, cartId) {
       return await fetchApi(path, {}, options)
     } catch {
       return { error: 'Unable to add to cart!' }
+    }
+  }
+
+  if (cartItem) {
+    cartItem.quantity = parseInt(cartItem.quantity) + parseInt(quantity) //Update quantity of existing item
+    const path = `/carts/${cart.id}`
+    const options = {
+      method: 'PUT',
+      body: JSON.stringify({
+        data: { cartItems: [...cartItems] },
+      }),
+    }
+    try {
+      return await fetchApi(path, {}, options)
+    } catch {
+      return { error: 'Unable to update existing cart item!' }
     }
   }
 

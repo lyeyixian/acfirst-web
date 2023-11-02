@@ -1,8 +1,4 @@
-import {
-  Link,
-  Outlet,
-  useParams,
-} from '@remix-run/react'
+import { Link, Outlet, useParams } from '@remix-run/react'
 import {
   createStyles,
   rem,

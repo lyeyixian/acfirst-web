@@ -1,42 +1,8 @@
 import { Carousel, useAnimationOffsetEffect } from '@mantine/carousel'
-import {
-  Card,
-  Group,
-  Image,
-  Skeleton,
-  Text,
-  createStyles,
-  getStylesRef,
-  rem,
-} from '@mantine/core'
+import { Card, Group, Image, Skeleton, Text } from '@mantine/core'
 import { useRef, useState } from 'react'
 import { useSkeletonLoading } from '../hooks/skeleton'
-
-const useStyles = createStyles((theme) => ({
-  carousel: {
-    '&:hover': {
-      [`& .${getStylesRef('carouselControls')}`]: {
-        opacity: 1,
-      },
-    },
-  },
-
-  carouselControls: {
-    ref: getStylesRef('carouselControls'),
-    transition: 'opacity 150ms ease',
-    opacity: 0,
-  },
-
-  carouselIndicator: {
-    width: rem(4),
-    height: rem(4),
-    transition: 'width 250ms ease',
-
-    '&[data-active]': {
-      width: rem(16),
-    },
-  },
-}))
+import AcfirstCarousel from '../common/AcfirstCarousel'
 
 function ImageSlide({ image }) {
   const imageRef = useRef(null)
@@ -57,7 +23,6 @@ function ImageSlide({ image }) {
 }
 
 export default function ProjectModal({ title, projectImgUrls }) {
-  const { classes } = useStyles()
   const slides = projectImgUrls.map((image) => (
     <ImageSlide key={image} image={image} />
   ))
@@ -69,18 +34,9 @@ export default function ProjectModal({ title, projectImgUrls }) {
   return (
     <Card radius="md" padding="xl">
       <Card.Section>
-        <Carousel
-          withIndicators
-          loop
-          classNames={{
-            root: classes.carousel,
-            controls: classes.carouselControls,
-            indicator: classes.carouselIndicator,
-          }}
-          getEmblaApi={setEmbla}
-        >
+        <AcfirstCarousel withIndicators loop getEmblaApi={setEmbla}>
           {slides}
-        </Carousel>
+        </AcfirstCarousel>
       </Card.Section>
 
       <Group position="apart" mt="lg">

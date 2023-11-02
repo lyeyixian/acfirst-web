@@ -5,7 +5,8 @@ import { Container } from '@mantine/core'
 
 import { getPage } from '../models/page.server'
 import { renderSection } from '../utils/renderer'
-import { getStrapiMedia } from '../utils/apiHelper'
+import { getStrapiMedia } from '../utils/api/helper'
+import { getReviews } from '../models/testimonial.server'
 
 export async function loader() {
   const pageData = await getPage('home')
@@ -61,6 +62,8 @@ export async function loader() {
         return null
     }
   })
+
+  sections.push(await getReviews())
 
   return json(sections)
 }

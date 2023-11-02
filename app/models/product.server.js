@@ -1,4 +1,4 @@
-import { fetchApi } from '../utils/fetchApi'
+import { fetchApi } from '../utils/api/fetchApi'
 
 export async function getProduct(code) {
   const path = `/products`
@@ -40,6 +40,54 @@ export async function getProducts(page = 1, category, filters = {}) {
         $eq: category,
       },
     }
+  }
+
+  return await fetchApi(path, urlParamsObj)
+}
+
+export async function getRelatedProducts(code, category, type, surface, size) {
+  const path = '/products'
+  const isEitherFour = {
+    $or: [
+      {
+        category: {
+          slug: {
+            $eq: category,
+          },
+        },
+      },
+      {
+        type: {
+          $eq: type,
+        },
+      },
+      {
+        surface: {
+          $eq: surface,
+        },
+      },
+      {
+        size: {
+          $eq: size,
+        },
+      },
+    ],
+  }
+  const isNotCurrentProduct = {
+    code: {
+      $ne: code,
+    },
+  }
+  const urlParamsObj = {
+    populate: 'deep',
+    filters: {
+      $and: [isEitherFour, isNotCurrentProduct],
+    },
+    pagination: {
+      start: 0,
+      limit: 10,
+    },
+    sort: 'viewCount:desc',
   }
 
   return await fetchApi(path, urlParamsObj)
