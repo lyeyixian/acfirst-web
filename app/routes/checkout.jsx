@@ -19,7 +19,8 @@ import { IconTrash } from '@tabler/icons-react'
 import { createOrder } from '../models/order.server'
 import { clearCart } from '../models/cart.server'
 import { InputQuantity } from '../components/AddToCartBtn'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import AcfirstSkeleton from '../components/common/AcfirstSkeleton'
 
 export async function action({ request }) {
   const formData = await request.formData()
@@ -38,36 +39,62 @@ export async function action({ request }) {
   return redirect(`/checkout/success/${res.data.attributes.orderId}`)
 }
 
-export function InputQuantityWrapper({product}) {
-  const [quantity, setQuantity] = useState(parseInt(product.quantity));
-  return <InputQuantity quantity={quantity} setQuantity={setQuantity} onChange={(quantity) => {product.quantity=quantity}}/>
-
+export function InputQuantityWrapper({ product }) {
+  const [quantity, setQuantity] = useState(parseInt(product.quantity))
+  return (
+    <InputQuantity
+      quantity={quantity}
+      setQuantity={setQuantity}
+      onChange={(quantity) => {
+        product.quantity = quantity
+      }}
+    />
+  )
 }
+
+function ProductSummary({ product }) {
+  const imageRef = useRef(null)
+
+  return (
+    <Group>
+      <AcfirstSkeleton imageRef={imageRef}>
+        {(handleOnLoad) => (
+          <Image
+            src={product.imgUrl}
+            maw={75}
+            radius="sm"
+            imageRef={imageRef}
+            onLoad={handleOnLoad}
+          />
+        )}
+      </AcfirstSkeleton>
+      <Box
+        mr="md"
+        sx={{
+          flexGrow: 1,
+        }}
+      >
+        <Text>{product.name}</Text>
+        <Text color="dimmed">{product.category}</Text>
+        <Text color="dimmed">{product.code}</Text>
+        <Text color="dimmed">{product.surface}</Text>
+        <Text color="dimmed">{product.size}</Text>
+        <Text color="dimmed">{product.type}</Text>
+      </Box>
+      <InputQuantityWrapper product={product} />
+      <ActionIcon color="red.4">
+        <IconTrash size="1.2rem" />
+      </ActionIcon>
+    </Group>
+  )
+}
+
 export default function CheckoutRoute() {
   const { cart } = useRouteLoaderData('root')
   // TODO: UI issue
   const checkoutProducts = cart.attributes.cartItems.map((product, index) => (
     <Card.Section key={index} withBorder inheritPadding py="lg">
-      <Group>
-        <Image src={product.imgUrl} maw={75} radius="sm" />
-        <Box
-          mr="md"
-          sx={{
-            flexGrow: 1,
-          }}
-        >
-          <Text>{product.name}</Text>
-          <Text color="dimmed">{product.category}</Text>
-          <Text color="dimmed">{product.code}</Text>
-          <Text color="dimmed">{product.surface}</Text>
-          <Text color="dimmed">{product.size}</Text>
-          <Text color="dimmed">{product.type}</Text>
-        </Box>
-        <InputQuantityWrapper product={product}/>
-        <ActionIcon color="red.4">
-          <IconTrash size="1.2rem" />
-        </ActionIcon>
-      </Group>
+      <ProductSummary product={product} />
     </Card.Section>
   ))
 
