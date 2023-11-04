@@ -1,7 +1,6 @@
 import {
   createStyles,
   Text,
-  rem,
   getStylesRef,
   Card,
   Group,
@@ -68,7 +67,7 @@ export default function ProductImageCard({ product, height }) {
     >
       <div
         className={classes.image}
-        style={{ backgroundImage: `url(${imgUrl})` }} // TODO: check if need skeleton or not
+        style={{ backgroundImage: `url(${imgUrl})` }}
       />
       <div className={classes.overlay} />
 
