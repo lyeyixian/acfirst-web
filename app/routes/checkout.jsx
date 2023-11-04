@@ -19,7 +19,7 @@ import { IconTrash } from '@tabler/icons-react'
 import { createOrder } from '../models/order.server'
 import { clearCart } from '../models/cart.server'
 import { InputQuantity } from '../components/AddToCartBtn'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import AcfirstSkeleton from '../components/common/AcfirstSkeleton'
 
 export async function action({ request }) {
@@ -53,12 +53,10 @@ export function InputQuantityWrapper({ product }) {
 }
 
 function ProductSummary({ product }) {
-  const imageRef = useRef(null)
-
   return (
     <Group>
-      <AcfirstSkeleton imageRef={imageRef}>
-        {(handleOnLoad) => (
+      <AcfirstSkeleton>
+        {(handleOnLoad, imageRef) => (
           <Image
             src={product.imgUrl}
             maw={75}

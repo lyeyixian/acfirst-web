@@ -30,7 +30,6 @@ import ProductImageCarousel from '../../components/product/ProductImageCarousel'
 import AcfirstCarousel from '../../components/common/AcfirstCarousel'
 import { Carousel } from '@mantine/carousel'
 import AcfirstSkeleton from '../../components/common/AcfirstSkeleton'
-import { useRef } from 'react'
 
 const useStyle = createStyles((theme) => ({
   accordionTitle: {
@@ -131,7 +130,6 @@ export async function loader({ params }) {
 
 function Slide({ imgUrl, code }) {
   const { classes } = useStyle()
-  const imageRef = useRef(null)
 
   return (
     <Carousel.Slide>
@@ -143,8 +141,8 @@ function Slide({ imgUrl, code }) {
         component={Link}
         to={`/product/${code}`}
       >
-        <AcfirstSkeleton imageRef={imageRef}>
-          {(handleOnLoad) => (
+        <AcfirstSkeleton>
+          {(handleOnLoad, imageRef) => (
             <Image
               src={imgUrl}
               radius="xs"

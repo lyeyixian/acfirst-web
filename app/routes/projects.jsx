@@ -8,7 +8,6 @@ import {
   Text,
   AspectRatio,
 } from '@mantine/core'
-import { useRef } from 'react'
 import AcfirstSkeleton from '../components/common/AcfirstSkeleton'
 
 const useStyles = createStyles((theme) => ({
@@ -45,7 +44,6 @@ const useStyles = createStyles((theme) => ({
 
 function CategoryCard({ category }) {
   const { classes } = useStyles()
-  const imageRef = useRef(null)
 
   return (
     <Card
@@ -55,8 +53,8 @@ function CategoryCard({ category }) {
       component={Link}
       to={`/projects/${category.name}`}
     >
-      <AcfirstSkeleton imageRef={imageRef}>
-        {(handleOnLoad) => (
+      <AcfirstSkeleton>
+        {(handleOnLoad, imageRef) => (
           <AspectRatio ratio={1920 / 1080}>
             <Image
               imageRef={imageRef}

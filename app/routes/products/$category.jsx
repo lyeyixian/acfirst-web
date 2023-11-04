@@ -11,7 +11,7 @@ import {
   Title,
   createStyles,
 } from '@mantine/core'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getProducts } from '../../models/product.server'
 import { json } from '@remix-run/node'
 import { getStrapiMedia } from '../../utils/api/helper'
@@ -78,7 +78,6 @@ export async function loader({ request, params }) {
 
 function ProductCard({ product }) {
   const { classes, theme } = useStyle()
-  const imageRef = useRef(null)
 
   return (
     <Card
@@ -88,8 +87,8 @@ function ProductCard({ product }) {
       component={Link}
       to={`/product/${product.code}`}
     >
-      <AcfirstSkeleton imageRef={imageRef}>
-        {(handleOnLoad) => (
+      <AcfirstSkeleton>
+        {(handleOnLoad, imageRef) => (
           <AspectRatio ratio={1}>
             <Image
               src={product.imageUrl}

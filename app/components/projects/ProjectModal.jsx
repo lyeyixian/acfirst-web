@@ -1,16 +1,14 @@
 import { Carousel, useAnimationOffsetEffect } from '@mantine/carousel'
 import { Card, Image, Text } from '@mantine/core'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import AcfirstCarousel from '../common/AcfirstCarousel'
 import AcfirstSkeleton from '../common/AcfirstSkeleton'
 
 function ImageSlide({ image }) {
-  const imageRef = useRef(null)
-
   return (
     <Carousel.Slide>
-      <AcfirstSkeleton imageRef={imageRef}>
-        {(handleOnLoad) => (
+      <AcfirstSkeleton>
+        {(handleOnLoad, imageRef) => (
           <Image
             imageRef={imageRef}
             src={image}

@@ -1,16 +1,14 @@
 import { Carousel } from '@mantine/carousel'
 import { Image } from '@mantine/core'
 import AcfirstCarousel from '../common/AcfirstCarousel'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import AcfirstSkeleton from '../common/AcfirstSkeleton'
 
 function BigSlide({ imageUrl }) {
-  const imageRef = useRef(null)
-
   return (
     <Carousel.Slide>
-      <AcfirstSkeleton imageRef={imageRef}>
-        {(handleOnLoad) => (
+      <AcfirstSkeleton>
+        {(handleOnLoad, imageRef) => (
           <Image
             imageRef={imageRef}
             src={imageUrl}
@@ -24,11 +22,10 @@ function BigSlide({ imageUrl }) {
 }
 
 function SmallSlide({ imageUrl, isCurrentImageShown, ...props }) {
-  const imageRef = useRef(null)
   return (
     <Carousel.Slide>
-      <AcfirstSkeleton imageRef={imageRef}>
-        {(handleOnLoad) => (
+      <AcfirstSkeleton>
+        {(handleOnLoad, imageRef) => (
           <Image
             sx={(theme) => ({
               borderStyle: isCurrentImageShown ? 'solid' : null,

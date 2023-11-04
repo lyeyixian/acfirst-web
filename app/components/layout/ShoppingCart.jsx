@@ -13,7 +13,7 @@ import {
 } from '@mantine/core'
 import { Link, useFetcher, useRouteLoaderData } from '@remix-run/react'
 import { IconShoppingCart, IconTrash } from '@tabler/icons-react'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 
 import { InputQuantity } from '../AddToCartBtn'
 import AcfirstSkeleton from '../common/AcfirstSkeleton'
@@ -21,15 +21,14 @@ import AcfirstSkeleton from '../common/AcfirstSkeleton'
 function CartItem({ product, index }) {
   const deleteCartItemBtn = useFetcher()
   const [quantity, setQuantity] = useState(parseInt(product.quantity))
-  const imageRef = useRef(null)
 
   return (
     <div>
       {index !== 0 && <Divider my="md" />}
       <Paper>
         <Group noWrap>
-          <AcfirstSkeleton imageRef={imageRef}>
-            {(handleOnLoad) => (
+          <AcfirstSkeleton>
+            {(handleOnLoad, imageRef) => (
               <Image
                 imageRef={imageRef}
                 src={product.imgUrl}

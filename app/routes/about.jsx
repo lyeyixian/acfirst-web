@@ -3,7 +3,6 @@ import { getPage } from '../models/page.server'
 import { getStrapiMedia } from '../utils/api/helper'
 import { json } from '@remix-run/node'
 import { AspectRatio, Image, Text, Title } from '@mantine/core'
-import { useRef } from 'react'
 import AcfirstSkeleton from '../components/common/AcfirstSkeleton'
 
 export async function loader() {
@@ -39,13 +38,11 @@ export default function About() {
     )
   })
 
-  const imageRef = useRef(null)
-
   return (
     <div>
       <h1>About Acfirst</h1>
-      <AcfirstSkeleton imageRef={imageRef}>
-        {(handleOnLoad) => (
+      <AcfirstSkeleton>
+        {(handleOnLoad, imageRef) => (
           <AspectRatio ratio={21 / 9}>
             <Image
               imageRef={imageRef}

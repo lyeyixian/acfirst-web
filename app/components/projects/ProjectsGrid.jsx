@@ -8,7 +8,6 @@ import {
 } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import ProjectModal from './ProjectModal'
-import { useRef } from 'react'
 import AcfirstSkeleton from '../common/AcfirstSkeleton'
 
 const useStyles = createStyles((theme) => ({
@@ -29,7 +28,6 @@ const useStyles = createStyles((theme) => ({
 
 function ProjectCard({ project }) {
   const { classes } = useStyles()
-  const imageRef = useRef(null)
 
   return (
     <Card
@@ -47,8 +45,8 @@ function ProjectCard({ project }) {
       }}
       className={classes.card}
     >
-      <AcfirstSkeleton imageRef={imageRef}>
-        {(handleOnLoad) => (
+      <AcfirstSkeleton>
+        {(handleOnLoad, imageRef) => (
           <AspectRatio ratio={1920 / 1080}>
             <Image
               imageRef={imageRef}
