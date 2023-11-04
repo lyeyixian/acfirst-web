@@ -16,6 +16,7 @@ import { IconShoppingCart, IconTrash } from '@tabler/icons-react'
 import { useState } from 'react'
 
 import { InputQuantity } from '../AddToCartBtn'
+import AcfirstSkeleton from '../common/AcfirstSkeleton'
 
 function CartItem({ product, index }) {
   const deleteCartItemBtn = useFetcher()
@@ -25,8 +26,18 @@ function CartItem({ product, index }) {
     <div>
       {index !== 0 && <Divider my="md" />}
       <Paper>
-        <Group>
-          <Image src={product.imgUrl} maw={75} radius="sm" />
+        <Group noWrap>
+          <AcfirstSkeleton>
+            {(handleOnLoad, imageRef) => (
+              <Image
+                imageRef={imageRef}
+                src={product.imgUrl}
+                maw={75}
+                radius="sm"
+                onLoad={handleOnLoad}
+              />
+            )}
+          </AcfirstSkeleton>
           <Box
             mr="md"
             miw={100}

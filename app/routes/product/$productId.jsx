@@ -29,6 +29,7 @@ import RelatedProducts from '../../components/product/RelatedProducts'
 import ProductImageCarousel from '../../components/product/ProductImageCarousel'
 import AcfirstCarousel from '../../components/common/AcfirstCarousel'
 import { Carousel } from '@mantine/carousel'
+import AcfirstSkeleton from '../../components/common/AcfirstSkeleton'
 
 const useStyle = createStyles((theme) => ({
   accordionTitle: {
@@ -127,6 +128,39 @@ export async function loader({ params }) {
   })
 }
 
+function Slide({ imgUrl, code }) {
+  const { classes } = useStyle()
+
+  return (
+    <Carousel.Slide>
+      <Card
+        className={classes.card}
+        shadow="xs"
+        withBorder
+        p={0}
+        component={Link}
+        to={`/product/${code}`}
+      >
+        <AcfirstSkeleton>
+          {(handleOnLoad, imageRef) => (
+            <Image
+              src={imgUrl}
+              radius="xs"
+              imageRef={imageRef}
+              onLoad={handleOnLoad}
+            />
+          )}
+        </AcfirstSkeleton>
+        <Center>
+          <Text weight={500} size="sm">
+            {code}
+          </Text>
+        </Center>
+      </Card>
+    </Carousel.Slide>
+  )
+}
+
 export default function ProductRoute() {
   // TODO: refactor carousel with the carousel in ProjectsGrid
   const { classes } = useStyle()
@@ -163,25 +197,7 @@ export default function ProductRoute() {
   const otherProducts = similarProducts.map((similarProduct, index) => {
     const { code, imgUrl } = similarProduct
 
-    return (
-      <Carousel.Slide key={index}>
-        <Card
-          className={classes.card}
-          shadow="xs"
-          withBorder
-          p={0}
-          component={Link}
-          to={`/product/${code}`}
-        >
-          <Image src={imgUrl} radius="xs" />
-          <Center>
-            <Text weight={500} size="sm">
-              {code}
-            </Text>
-          </Center>
-        </Card>
-      </Carousel.Slide>
-    )
+    return <Slide key={index} imgUrl={imgUrl} code={code} />
   })
 
   return (

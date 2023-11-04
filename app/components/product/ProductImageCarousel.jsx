@@ -2,6 +2,49 @@ import { Carousel } from '@mantine/carousel'
 import { Image } from '@mantine/core'
 import AcfirstCarousel from '../common/AcfirstCarousel'
 import { useEffect, useState } from 'react'
+import AcfirstSkeleton from '../common/AcfirstSkeleton'
+
+function BigSlide({ imageUrl }) {
+  return (
+    <Carousel.Slide>
+      <AcfirstSkeleton>
+        {(handleOnLoad, imageRef) => (
+          <Image
+            imageRef={imageRef}
+            src={imageUrl}
+            fit="contain"
+            onLoad={handleOnLoad}
+          />
+        )}
+      </AcfirstSkeleton>
+    </Carousel.Slide>
+  )
+}
+
+function SmallSlide({ imageUrl, isCurrentImageShown, ...props }) {
+  return (
+    <Carousel.Slide>
+      <AcfirstSkeleton>
+        {(handleOnLoad, imageRef) => (
+          <Image
+            sx={(theme) => ({
+              borderStyle: isCurrentImageShown ? 'solid' : null,
+              borderColor: isCurrentImageShown
+                ? theme.colors[theme.primaryColor][6]
+                : null,
+              borderRadius: isCurrentImageShown ? theme.radius.sm : 0,
+            })}
+            src={imageUrl}
+            fit="contain"
+            onLoad={handleOnLoad}
+            imageRef={imageRef}
+            {...props}
+          />
+        )}
+      </AcfirstSkeleton>
+    </Carousel.Slide>
+  )
+}
 
 export default function ProductImageCarousel({ productImages }) {
   const [imageShown, setImageShown] = useState(0)
@@ -15,34 +58,18 @@ export default function ProductImageCarousel({ productImages }) {
     }
   }, [emblaBig, emblaSmall, imageShown])
 
-  const bigSlides = productImages.map((image, index) => {
-    return (
-      <Carousel.Slide key={index}>
-        <Image src={image} fit="contain" />
-      </Carousel.Slide>
-    )
-  })
+  const bigSlides = productImages.map((image, index) => (
+    <BigSlide key={index} imageUrl={image} />
+  ))
 
-  const smallSlides = productImages.map((image, index) => {
-    const isCurrentImageShown = imageShown === index
-
-    return (
-      <Carousel.Slide key={index}>
-        <Image
-          sx={(theme) => ({
-            borderStyle: isCurrentImageShown ? 'solid' : null,
-            borderColor: isCurrentImageShown
-              ? theme.colors[theme.primaryColor][6]
-              : null,
-            borderRadius: isCurrentImageShown ? theme.radius.sm : 0,
-          })}
-          src={image}
-          fit="contain"
-          onClick={() => setImageShown(index)}
-        />
-      </Carousel.Slide>
-    )
-  })
+  const smallSlides = productImages.map((image, index) => (
+    <SmallSlide
+      key={index}
+      imageUrl={image}
+      isCurrentImageShown={imageShown === index}
+      onClick={() => setImageShown(index)}
+    />
+  ))
 
   return (
     <>

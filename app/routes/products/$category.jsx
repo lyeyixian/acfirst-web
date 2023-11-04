@@ -22,6 +22,7 @@ import {
   useSearchParams,
 } from '@remix-run/react'
 import { IconEye } from '@tabler/icons-react'
+import AcfirstSkeleton from '../../components/common/AcfirstSkeleton'
 
 // TODO: responsive
 const useStyle = createStyles((theme) => ({
@@ -75,9 +76,10 @@ export async function loader({ request, params }) {
   })
 }
 
-function ProductsGrid({ products }) {
+function ProductCard({ product }) {
   const { classes, theme } = useStyle()
-  const cards = products.map((product) => (
+
+  return (
     <Card
       key={product.id}
       className={classes.card}
@@ -85,9 +87,18 @@ function ProductsGrid({ products }) {
       component={Link}
       to={`/product/${product.code}`}
     >
-      <AspectRatio ratio={1}>
-        <Image src={product.imageUrl} radius="sm" />
-      </AspectRatio>
+      <AcfirstSkeleton>
+        {(handleOnLoad, imageRef) => (
+          <AspectRatio ratio={1}>
+            <Image
+              src={product.imageUrl}
+              radius="sm"
+              imageRef={imageRef}
+              onLoad={handleOnLoad}
+            />
+          </AspectRatio>
+        )}
+      </AcfirstSkeleton>
       <Text mt="xs" fw={500}>
         {product.name}
       </Text>
@@ -105,6 +116,12 @@ function ProductsGrid({ products }) {
         </Group>
       </Group>
     </Card>
+  )
+}
+
+function ProductsGrid({ products }) {
+  const cards = products.map((product) => (
+    <ProductCard key={product.id} product={product} />
   ))
 
   return cards.length ? (
