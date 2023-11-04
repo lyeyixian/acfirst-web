@@ -3,10 +3,7 @@ import { useEffect, useState } from 'react'
 export const useSkeletonLoading = (ref) => {
   const [loading, setLoading] = useState(true)
   const handler = () => {
-    // mimic network latency
-    setTimeout(() => {
-      setLoading(false)
-    }, 2000)
+    setLoading(false)
   }
 
   useEffect(() => {
