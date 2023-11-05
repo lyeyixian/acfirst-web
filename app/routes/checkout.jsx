@@ -88,9 +88,9 @@ function ProductSummary({ product }) {
 }
 
 export default function CheckoutRoute() {
-  const { cart } = useRouteLoaderData('root')
+  const { cartItems, cartId } = useCart()
   // TODO: UI issue
-  const checkoutProducts = cart.attributes.cartItems.map((product, index) => (
+  const checkoutProducts = cartItems.map((product, index) => (
     <Card.Section key={index} withBorder inheritPadding py="lg">
       <ProductSummary product={product} />
     </Card.Section>
@@ -101,8 +101,8 @@ export default function CheckoutRoute() {
       name: '',
       phone: '',
       enquiry: '',
-      cartItems: JSON.stringify(cart.attributes.cartItems),
-      cartId: cart.attributes.cartId,
+      cartItems: JSON.stringify(cartItems),
+      cartId: cartId,
     },
     validate: {
       name: (value) => (value.trim().length < 1 ? 'Name is required' : null),
