@@ -64,7 +64,7 @@ function CartItem({ product, index }) {
 }
 
 export default function ShoppingCart() {
-  const { cartItems, cartSize } = useCart()
+  const { cartItems } = useCart()
   const [cartOpened, setCartOpened] = useState(false)
 
   const cartProducts = cartItems.map((product, index) => (
@@ -74,7 +74,7 @@ export default function ShoppingCart() {
   return (
     <Popover shadow="sm" opened={cartOpened} onChange={setCartOpened}>
       <Popover.Target>
-        <Indicator color="red" label={cartSize} size={16}>
+        <Indicator color="red" label={cartItems.length} size={16}>
           <ActionIcon variant="subtle" onClick={() => setCartOpened((o) => !o)}>
             <IconShoppingCart stroke={1.5} size="2rem" />
           </ActionIcon>
