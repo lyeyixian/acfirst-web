@@ -162,7 +162,6 @@ function Slide({ imgUrl, code }) {
 }
 
 export default function ProductRoute() {
-  // TODO: refactor carousel with the carousel in ProjectsGrid
   const { classes } = useStyle()
   const params = useParams()
   const { currentProduct, relatedProducts } = useLoaderData()

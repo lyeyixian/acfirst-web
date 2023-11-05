@@ -15,6 +15,7 @@ import { Link, useFetcher, useRouteLoaderData } from '@remix-run/react'
 import { IconShoppingCart, IconTrash } from '@tabler/icons-react'
 import { useState } from 'react'
 import AcfirstSkeleton from '../common/AcfirstSkeleton'
+import { useCart } from '../hooks/cart'
 
 function CartItem({ product, index }) {
   const deleteCartItemBtn = useFetcher()
@@ -63,20 +64,12 @@ function CartItem({ product, index }) {
 }
 
 export default function ShoppingCart() {
-  const rootLoaderData = useRouteLoaderData('root')
-  let cart = null
-  let cartSize = 0
-  let cartProducts = []
-
-  if (rootLoaderData) {
-    cart = rootLoaderData.cart
-    cartSize = cart.attributes.cartItems.length
-    cartProducts = cart.attributes.cartItems.map((product, index) => (
-      <CartItem key={index} product={product} index={index} />
-    ))
-  }
-
+  const { cartItems, cartSize } = useCart()
   const [cartOpened, setCartOpened] = useState(false)
+
+  const cartProducts = cartItems.map((product, index) => (
+    <CartItem key={index} product={product} index={index} />
+  ))
 
   return (
     <Popover shadow="sm" opened={cartOpened} onChange={setCartOpened}>
