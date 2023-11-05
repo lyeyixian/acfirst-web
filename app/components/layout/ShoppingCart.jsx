@@ -14,13 +14,10 @@ import {
 import { Link, useFetcher, useRouteLoaderData } from '@remix-run/react'
 import { IconShoppingCart, IconTrash } from '@tabler/icons-react'
 import { useState } from 'react'
-
-import { InputQuantity } from '../AddToCartBtn'
 import AcfirstSkeleton from '../common/AcfirstSkeleton'
 
 function CartItem({ product, index }) {
   const deleteCartItemBtn = useFetcher()
-  const [quantity, setQuantity] = useState(parseInt(product.quantity))
 
   return (
     <div>
@@ -47,14 +44,8 @@ function CartItem({ product, index }) {
           >
             <Text>{product.name}</Text>
             <Text color="dimmed">{product.category}</Text>
+            <Text color="dimmed">Qty: {product.quantity}</Text>
           </Box>
-          <InputQuantity
-            quantity={quantity}
-            setQuantity={setQuantity}
-            onChange={(quantity) => {
-              product.quantity = quantity
-            }}
-          />
           <deleteCartItemBtn.Form method="delete" action="/cart">
             <input type="hidden" name="code" value={product.code} />
             <ActionIcon
