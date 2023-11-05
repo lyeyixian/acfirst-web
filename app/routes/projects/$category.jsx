@@ -18,15 +18,13 @@ export async function loader({ request, params }) {
   const { category } = params
   const projects = await getProjects(page, category)
   const prunedProjects = projects.data.map((project) => {
-    const { title, date, coverImg, description, projectImg } =
-      project.attributes
+    const { title, date, coverImg, projectImg } = project.attributes
 
     return {
       id: project.id,
       title,
       date: formatDate(date),
       coverImgUrl: getStrapiMedia(coverImg.data),
-      description,
       projectImgUrls: getStrapiMedias(projectImg.data),
     }
   })
