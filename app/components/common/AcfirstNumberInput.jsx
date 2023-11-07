@@ -1,7 +1,7 @@
 import { ActionIcon, Group, NumberInput, rem } from '@mantine/core'
 import { useRef } from 'react'
 
-export default function AcfirstNumberInput() {
+export default function AcfirstNumberInput({ ...props }) {
   const handlers = useRef()
 
   return (
@@ -21,6 +21,7 @@ export default function AcfirstNumberInput() {
         defaultValue={1}
         handlersRef={handlers}
         styles={{ input: { width: rem(54), textAlign: 'center' } }}
+        {...props}
       />
       <ActionIcon
         size={36}

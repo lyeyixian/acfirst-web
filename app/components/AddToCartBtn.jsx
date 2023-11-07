@@ -2,7 +2,7 @@ import { Button, Group } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useFetcher } from '@remix-run/react'
 import { IconCheck, IconX } from '@tabler/icons-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import AcfirstNumberInput from './common/AcfirstNumberInput'
 
 export function isInvalidQuantity(quantity) {
@@ -16,6 +16,7 @@ export function isInvalidQuantity(quantity) {
 
 export default function AddToCartBtn({ productId, ...props }) {
   const addToCartFetcher = useFetcher()
+  const [quantity, setQuantity] = useState(1)
 
   useEffect(() => {
     if (addToCartFetcher.state === 'idle' && addToCartFetcher.data) {
@@ -44,6 +45,7 @@ export default function AddToCartBtn({ productId, ...props }) {
       }
 
       addToCartFetcher.data = null
+      setQuantity(1)
     }
   }, [addToCartFetcher.state])
 
@@ -51,7 +53,7 @@ export default function AddToCartBtn({ productId, ...props }) {
     <addToCartFetcher.Form method="post" action="/api/addToCart">
       <input type="hidden" name="productId" value={productId} />
       <Group>
-        <AcfirstNumberInput />
+        <AcfirstNumberInput value={quantity} onChange={setQuantity} />
         <Button
           my="md"
           type="submit"
