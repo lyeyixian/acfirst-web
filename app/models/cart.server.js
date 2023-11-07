@@ -57,7 +57,7 @@ export async function addToCart(code, quantity, cartId) {
     throw new Response('Product not found', { status: 404 })
   }
 
-  let cart = await getCart(cartId)
+  const cart = await getCart(cartId)
   if (!cart) {
     throw new Response('Cart not found', { status: 404 })
   }
@@ -65,7 +65,9 @@ export async function addToCart(code, quantity, cartId) {
   const cartItems = cart.attributes.cartItems
   const cartItem = cartItems.find((item) => item.code === code)
 
-  if (!cartItem) {
+  if (cartItem) {
+    cartItem.quantity = parseInt(cartItem.quantity) + parseInt(quantity)
+  } else {
     const prunedProduct = {
       id: product.id,
       name: product.attributes.name,
@@ -77,37 +79,23 @@ export async function addToCart(code, quantity, cartId) {
       imgUrl: getStrapiMedia(product.attributes.coverImg.data),
       quantity: parseInt(quantity),
     }
-    const path = `/carts/${cart.id}`
-    const options = {
-      method: 'PUT',
-      body: JSON.stringify({
-        data: { cartItems: [...cartItems, prunedProduct] },
-      }),
-    }
-    try {
-      return await fetchApi(path, {}, options)
-    } catch {
-      return { error: 'Unable to add to cart!' }
-    }
+
+    cartItems.push(prunedProduct)
   }
 
-  if (cartItem) {
-    cartItem.quantity = parseInt(cartItem.quantity) + parseInt(quantity) //Update quantity of existing item
-    const path = `/carts/${cart.id}`
-    const options = {
-      method: 'PUT',
-      body: JSON.stringify({
-        data: { cartItems: [...cartItems] },
-      }),
-    }
-    try {
-      return await fetchApi(path, {}, options)
-    } catch {
-      return { error: 'Unable to update existing cart item!' }
-    }
+  const path = `/carts/${cart.id}`
+  const options = {
+    method: 'PUT',
+    body: JSON.stringify({
+      data: { cartItems: [...cartItems] },
+    }),
   }
 
-  return { msg: 'OK! Product already in cart.' }
+  try {
+    return await fetchApi(path, {}, options)
+  } catch {
+    return { error: 'Unable to update existing cart item!' }
+  }
 }
 
 export async function removeFromCart(code, cartId) {
