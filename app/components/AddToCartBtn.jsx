@@ -50,7 +50,7 @@ export default function AddToCartBtn({ productId, ...props }) {
   }, [addToCartFetcher.state])
 
   return (
-    <addToCartFetcher.Form method="post" action="/api/addToCart">
+    <addToCartFetcher.Form method="post" action="/api/cart">
       <input type="hidden" name="productId" value={productId} />
       <Group>
         <AcfirstNumberInput value={quantity} onChange={setQuantity} />

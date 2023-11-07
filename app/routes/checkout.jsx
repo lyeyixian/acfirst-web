@@ -48,7 +48,7 @@ function ProductSummary({ product }) {
     const timer = setTimeout(() => {
       updateCartFetcher.submit(
         { productId: product.code, quantity: quantity },
-        { method: 'put', action: '/api/updateCart' }
+        { method: 'put', action: '/api/cart' }
       )
     }, 2000)
 
