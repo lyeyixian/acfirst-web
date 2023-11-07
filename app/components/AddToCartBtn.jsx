@@ -28,13 +28,6 @@ export default function AddToCartBtn({ productId, ...props }) {
           color: 'red',
           icon: <IconX size="1.2rem" />,
         })
-      } else if (addToCartFetcher.data.msg) {
-        notifications.show({
-          title: 'Success',
-          message: addToCartFetcher.data.msg,
-          color: 'teal',
-          icon: <IconCheck size="1.2rem" />,
-        })
       } else {
         notifications.show({
           title: 'Success',
