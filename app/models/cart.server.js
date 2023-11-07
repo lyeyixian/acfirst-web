@@ -52,11 +52,6 @@ export async function clearCart(cartId) {
 }
 
 export async function addToCart(code, quantity, cartId) {
-  const product = await getProduct(code)
-  if (!product) {
-    throw new Response('Product not found', { status: 404 })
-  }
-
   const cart = await getCart(cartId)
   if (!cart) {
     throw new Response('Cart not found', { status: 404 })
@@ -68,6 +63,12 @@ export async function addToCart(code, quantity, cartId) {
   if (cartItem) {
     cartItem.quantity = parseInt(cartItem.quantity) + parseInt(quantity)
   } else {
+    const product = await getProduct(code)
+
+    if (!product) {
+      throw new Response('Product not found', { status: 404 })
+    }
+
     const prunedProduct = {
       id: product.id,
       name: product.attributes.name,
