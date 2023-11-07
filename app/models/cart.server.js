@@ -95,6 +95,34 @@ export async function addToCart(code, quantity, cartId) {
   try {
     return await fetchApi(path, {}, options)
   } catch {
+    return { error: 'Unable to update cart!' }
+  }
+}
+
+export async function updateCart(code, quantity, cartId) {
+  const cart = await getCart(cartId)
+  if (!cart) {
+    throw new Response('Cart not found', { status: 404 })
+  }
+
+  const cartItems = cart.attributes.cartItems
+  const cartItem = cartItems.find((item) => item.code === code)
+
+  if (cartItem) {
+    cartItem.quantity = parseInt(quantity)
+  }
+
+  const path = `/carts/${cart.id}`
+  const options = {
+    method: 'PUT',
+    body: JSON.stringify({
+      data: { cartItems: [...cartItems] },
+    }),
+  }
+
+  try {
+    return await fetchApi(path, {}, options)
+  } catch {
     return { error: 'Unable to update existing cart item!' }
   }
 }

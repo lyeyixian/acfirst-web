@@ -1,5 +1,5 @@
 import { json } from '@remix-run/node'
-import { addCart, addToCart } from '../../models/cart.server'
+import { addCart, updateCart } from '../../models/cart.server'
 import { commitSession, getCartId, getSession } from '../../session.server'
 
 export async function action({ request }) {
@@ -18,7 +18,7 @@ export async function action({ request }) {
   const formData = await request.formData()
   const productId = formData.get('productId')
   const quantity = formData.get('quantity')
-  const res = await addToCart(productId, quantity, cartId)
+  const res = await updateCart(productId, quantity, cartId)
 
   return json(res, options)
 }

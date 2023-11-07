@@ -14,13 +14,14 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { redirect } from '@remix-run/node'
-import { useNavigation, useSubmit } from '@remix-run/react'
+import { useFetcher, useNavigation, useSubmit } from '@remix-run/react'
 import { IconTrash } from '@tabler/icons-react'
 import { createOrder } from '../models/order.server'
 import { clearCart } from '../models/cart.server'
 import AcfirstSkeleton from '../components/common/AcfirstSkeleton'
 import AcfirstNumberInput from '../components/common/AcfirstNumberInput'
 import { useCart } from '../components/hooks/cart'
+import { useEffect, useState } from 'react'
 
 export async function action({ request }) {
   const formData = await request.formData()
@@ -40,6 +41,20 @@ export async function action({ request }) {
 }
 
 function ProductSummary({ product }) {
+  const updateCartFetcher = useFetcher()
+  const [quantity, setQuantity] = useState(product.quantity)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      updateCartFetcher.submit(
+        { productId: product.code, quantity: quantity },
+        { method: 'put', action: '/api/updateCart' }
+      )
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [quantity])
+
   return (
     <Group>
       <AcfirstSkeleton>
@@ -65,9 +80,8 @@ function ProductSummary({ product }) {
         <Text color="dimmed">{product.surface}</Text>
         <Text color="dimmed">{product.size}</Text>
         <Text color="dimmed">{product.type}</Text>
-        <Text color="dimmed">Qty: {product.quantity}</Text>
       </Box>
-      {/* <AcfirstNumberInput /> */}
+      <AcfirstNumberInput value={quantity} onChange={setQuantity} />
       <ActionIcon color="red.4">
         <IconTrash size="1.2rem" />
       </ActionIcon>
