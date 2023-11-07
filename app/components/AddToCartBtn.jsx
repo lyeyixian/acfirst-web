@@ -1,8 +1,9 @@
-import { Button, NumberInput, Group } from '@mantine/core'
+import { Button, Group } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useFetcher } from '@remix-run/react'
 import { IconCheck, IconX } from '@tabler/icons-react'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
+import AcfirstNumberInput from './common/AcfirstNumberInput'
 
 export function isInvalidQuantity(quantity) {
   return (
@@ -13,24 +14,8 @@ export function isInvalidQuantity(quantity) {
   )
 }
 
-export function InputQuantity({ quantity, setQuantity, ...props }) {
-  return (
-    <NumberInput
-      name="quantity"
-      my="xs"
-      placeholder="0"
-      value={quantity}
-      onChange={setQuantity}
-      type="number"
-      min={0}
-      {...props}
-    />
-  )
-}
-
 export default function AddToCartBtn({ productId, ...props }) {
   const addToCartFetcher = useFetcher()
-  const [quantity, setQuantity] = useState(0)
 
   useEffect(() => {
     if (addToCartFetcher.state === 'idle' && addToCartFetcher.data) {
@@ -50,7 +35,6 @@ export default function AddToCartBtn({ productId, ...props }) {
           icon: <IconCheck size="1.2rem" />,
         })
       } else {
-        setQuantity(0)
         notifications.show({
           title: 'Success',
           message: 'Product has been added to cart.',
@@ -58,6 +42,7 @@ export default function AddToCartBtn({ productId, ...props }) {
           icon: <IconCheck size="1.2rem" />,
         })
       }
+
       addToCartFetcher.data = null
     }
   }, [addToCartFetcher.state])
@@ -66,21 +51,12 @@ export default function AddToCartBtn({ productId, ...props }) {
     <addToCartFetcher.Form method="post" action="/api/addToCart">
       <input type="hidden" name="productId" value={productId} />
       <Group>
-        <InputQuantity
-          quantity={quantity}
-          setQuantity={setQuantity}
-          {...props}
-        />
+        <AcfirstNumberInput />
         <Button
-          disabled={isInvalidQuantity(quantity)}
           my="md"
           type="submit"
           loading={addToCartFetcher.state === 'submitting'}
           loaderPosition="right"
-          onClick={(e) => {
-            if (isInvalidQuantity(quantity)) e.preventDefault()
-            e.stopPropagation()
-          }}
           {...props}
         >
           Add to Cart

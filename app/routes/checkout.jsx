@@ -14,13 +14,13 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { redirect } from '@remix-run/node'
-import { useNavigation, useRouteLoaderData, useSubmit } from '@remix-run/react'
+import { useNavigation, useSubmit } from '@remix-run/react'
 import { IconTrash } from '@tabler/icons-react'
 import { createOrder } from '../models/order.server'
 import { clearCart } from '../models/cart.server'
-import { InputQuantity } from '../components/AddToCartBtn'
-import { useState } from 'react'
 import AcfirstSkeleton from '../components/common/AcfirstSkeleton'
+import AcfirstNumberInput from '../components/common/AcfirstNumberInput'
+import { useCart } from '../components/hooks/cart'
 
 export async function action({ request }) {
   const formData = await request.formData()
@@ -37,19 +37,6 @@ export async function action({ request }) {
   await clearCart(cartId)
 
   return redirect(`/checkout/success/${res.data.attributes.orderId}`)
-}
-
-export function InputQuantityWrapper({ product }) {
-  const [quantity, setQuantity] = useState(parseInt(product.quantity))
-  return (
-    <InputQuantity
-      quantity={quantity}
-      setQuantity={setQuantity}
-      onChange={(quantity) => {
-        product.quantity = quantity
-      }}
-    />
-  )
 }
 
 function ProductSummary({ product }) {
@@ -78,8 +65,9 @@ function ProductSummary({ product }) {
         <Text color="dimmed">{product.surface}</Text>
         <Text color="dimmed">{product.size}</Text>
         <Text color="dimmed">{product.type}</Text>
+        <Text color="dimmed">Qty: {product.quantity}</Text>
       </Box>
-      <InputQuantityWrapper product={product} />
+      {/* <AcfirstNumberInput /> */}
       <ActionIcon color="red.4">
         <IconTrash size="1.2rem" />
       </ActionIcon>
