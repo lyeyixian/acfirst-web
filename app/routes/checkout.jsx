@@ -21,7 +21,8 @@ import { clearCart } from '../models/cart.server'
 import AcfirstSkeleton from '../components/common/AcfirstSkeleton'
 import AcfirstNumberInput from '../components/common/AcfirstNumberInput'
 import { useCart } from '../components/hooks/cart'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useNotification } from '../components/hooks/notification'
 import { useEffectAfterMount } from '../components/hooks/helper'
 
 export async function action({ request }) {
@@ -55,6 +56,12 @@ function ProductSummary({ product }) {
 
     return () => clearTimeout(timer)
   }, [quantity])
+
+  useNotification(
+    updateCartFetcher,
+    `${product.name} has been updated.`,
+    'There is something wrong when updating the product. Please try again.'
+  )
 
   return (
     <Group>
