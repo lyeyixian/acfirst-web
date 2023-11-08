@@ -52,12 +52,7 @@ export async function clearCart(cartId) {
 }
 
 export async function addToCart(code, quantity, cartId) {
-  const product = await getProduct(code)
-  if (!product) {
-    throw new Response('Product not found', { status: 404 })
-  }
-
-  let cart = await getCart(cartId)
+  const cart = await getCart(cartId)
   if (!cart) {
     throw new Response('Cart not found', { status: 404 })
   }
@@ -65,7 +60,15 @@ export async function addToCart(code, quantity, cartId) {
   const cartItems = cart.attributes.cartItems
   const cartItem = cartItems.find((item) => item.code === code)
 
-  if (!cartItem) {
+  if (cartItem) {
+    cartItem.quantity = parseInt(cartItem.quantity) + parseInt(quantity)
+  } else {
+    const product = await getProduct(code)
+
+    if (!product) {
+      throw new Response('Product not found', { status: 404 })
+    }
+
     const prunedProduct = {
       id: product.id,
       name: product.attributes.name,
@@ -77,37 +80,51 @@ export async function addToCart(code, quantity, cartId) {
       imgUrl: getStrapiMedia(product.attributes.coverImg.data),
       quantity: parseInt(quantity),
     }
-    const path = `/carts/${cart.id}`
-    const options = {
-      method: 'PUT',
-      body: JSON.stringify({
-        data: { cartItems: [...cartItems, prunedProduct] },
-      }),
-    }
-    try {
-      return await fetchApi(path, {}, options)
-    } catch {
-      return { error: 'Unable to add to cart!' }
-    }
+
+    cartItems.push(prunedProduct)
   }
+
+  const path = `/carts/${cart.id}`
+  const options = {
+    method: 'PUT',
+    body: JSON.stringify({
+      data: { cartItems: [...cartItems] },
+    }),
+  }
+
+  try {
+    return await fetchApi(path, {}, options)
+  } catch {
+    return { error: 'Unable to update cart!' }
+  }
+}
+
+export async function updateCart(code, quantity, cartId) {
+  const cart = await getCart(cartId)
+  if (!cart) {
+    throw new Response('Cart not found', { status: 404 })
+  }
+
+  const cartItems = cart.attributes.cartItems
+  const cartItem = cartItems.find((item) => item.code === code)
 
   if (cartItem) {
-    cartItem.quantity = parseInt(cartItem.quantity) + parseInt(quantity) //Update quantity of existing item
-    const path = `/carts/${cart.id}`
-    const options = {
-      method: 'PUT',
-      body: JSON.stringify({
-        data: { cartItems: [...cartItems] },
-      }),
-    }
-    try {
-      return await fetchApi(path, {}, options)
-    } catch {
-      return { error: 'Unable to update existing cart item!' }
-    }
+    cartItem.quantity = parseInt(quantity)
   }
 
-  return { msg: 'OK! Product already in cart.' }
+  const path = `/carts/${cart.id}`
+  const options = {
+    method: 'PUT',
+    body: JSON.stringify({
+      data: { cartItems: [...cartItems] },
+    }),
+  }
+
+  try {
+    return await fetchApi(path, {}, options)
+  } catch {
+    return { error: 'Unable to update existing cart item!' }
+  }
 }
 
 export async function removeFromCart(code, cartId) {

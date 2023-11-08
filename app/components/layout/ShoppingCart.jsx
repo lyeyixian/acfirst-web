@@ -14,13 +14,11 @@ import {
 import { Link, useFetcher, useRouteLoaderData } from '@remix-run/react'
 import { IconShoppingCart, IconTrash } from '@tabler/icons-react'
 import { useState } from 'react'
-
-import { InputQuantity } from '../AddToCartBtn'
 import AcfirstSkeleton from '../common/AcfirstSkeleton'
+import { useCart } from '../hooks/cart'
 
 function CartItem({ product, index }) {
   const deleteCartItemBtn = useFetcher()
-  const [quantity, setQuantity] = useState(parseInt(product.quantity))
 
   return (
     <div>
@@ -47,14 +45,8 @@ function CartItem({ product, index }) {
           >
             <Text>{product.name}</Text>
             <Text color="dimmed">{product.category}</Text>
+            <Text color="dimmed">Qty: {product.quantity}</Text>
           </Box>
-          <InputQuantity
-            quantity={quantity}
-            setQuantity={setQuantity}
-            onChange={(quantity) => {
-              product.quantity = quantity
-            }}
-          />
           <deleteCartItemBtn.Form method="delete" action="/cart">
             <input type="hidden" name="code" value={product.code} />
             <ActionIcon
@@ -72,25 +64,17 @@ function CartItem({ product, index }) {
 }
 
 export default function ShoppingCart() {
-  const rootLoaderData = useRouteLoaderData('root')
-  let cart = null
-  let cartSize = 0
-  let cartProducts = []
-
-  if (rootLoaderData) {
-    cart = rootLoaderData.cart
-    cartSize = cart.attributes.cartItems.length
-    cartProducts = cart.attributes.cartItems.map((product, index) => (
-      <CartItem key={index} product={product} index={index} />
-    ))
-  }
-
+  const { cartItems } = useCart()
   const [cartOpened, setCartOpened] = useState(false)
+
+  const cartProducts = cartItems.map((product, index) => (
+    <CartItem key={index} product={product} index={index} />
+  ))
 
   return (
     <Popover shadow="sm" opened={cartOpened} onChange={setCartOpened}>
       <Popover.Target>
-        <Indicator color="red" label={cartSize} size={16}>
+        <Indicator color="red" label={cartItems.length} size={16}>
           <ActionIcon variant="subtle" onClick={() => setCartOpened((o) => !o)}>
             <IconShoppingCart stroke={1.5} size="2rem" />
           </ActionIcon>

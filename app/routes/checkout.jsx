@@ -14,13 +14,16 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { redirect } from '@remix-run/node'
-import { useNavigation, useRouteLoaderData, useSubmit } from '@remix-run/react'
+import { useFetcher, useNavigation, useSubmit } from '@remix-run/react'
 import { IconTrash } from '@tabler/icons-react'
 import { createOrder } from '../models/order.server'
 import { clearCart } from '../models/cart.server'
-import { InputQuantity } from '../components/AddToCartBtn'
-import { useState } from 'react'
 import AcfirstSkeleton from '../components/common/AcfirstSkeleton'
+import AcfirstNumberInput from '../components/common/AcfirstNumberInput'
+import { useCart } from '../components/hooks/cart'
+import { useState } from 'react'
+import { useNotification } from '../components/hooks/notification'
+import { useEffectAfterMount } from '../components/hooks/helper'
 
 export async function action({ request }) {
   const formData = await request.formData()
@@ -39,20 +42,27 @@ export async function action({ request }) {
   return redirect(`/checkout/success/${res.data.attributes.orderId}`)
 }
 
-export function InputQuantityWrapper({ product }) {
-  const [quantity, setQuantity] = useState(parseInt(product.quantity))
-  return (
-    <InputQuantity
-      quantity={quantity}
-      setQuantity={setQuantity}
-      onChange={(quantity) => {
-        product.quantity = quantity
-      }}
-    />
-  )
-}
-
 function ProductSummary({ product }) {
+  const updateCartFetcher = useFetcher()
+  const [quantity, setQuantity] = useState(product.quantity)
+
+  useEffectAfterMount(() => {
+    const timer = setTimeout(() => {
+      updateCartFetcher.submit(
+        { productId: product.code, quantity: quantity },
+        { method: 'put', action: '/api/cart' }
+      )
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [quantity])
+
+  useNotification(
+    updateCartFetcher,
+    `${product.name} has been updated.`,
+    'There is something wrong when updating the product. Please try again.'
+  )
+
   return (
     <Group>
       <AcfirstSkeleton>
@@ -79,7 +89,7 @@ function ProductSummary({ product }) {
         <Text color="dimmed">{product.size}</Text>
         <Text color="dimmed">{product.type}</Text>
       </Box>
-      <InputQuantityWrapper product={product} />
+      <AcfirstNumberInput value={quantity} onChange={setQuantity} />
       <ActionIcon color="red.4">
         <IconTrash size="1.2rem" />
       </ActionIcon>
@@ -88,9 +98,9 @@ function ProductSummary({ product }) {
 }
 
 export default function CheckoutRoute() {
-  const { cart } = useRouteLoaderData('root')
+  const { cartItems, cartId } = useCart()
   // TODO: UI issue
-  const checkoutProducts = cart.attributes.cartItems.map((product, index) => (
+  const checkoutProducts = cartItems.map((product, index) => (
     <Card.Section key={index} withBorder inheritPadding py="lg">
       <ProductSummary product={product} />
     </Card.Section>
@@ -101,8 +111,8 @@ export default function CheckoutRoute() {
       name: '',
       phone: '',
       enquiry: '',
-      cartItems: JSON.stringify(cart.attributes.cartItems),
-      cartId: cart.attributes.cartId,
+      cartItems: JSON.stringify(cartItems),
+      cartId: cartId,
     },
     validate: {
       name: (value) => (value.trim().length < 1 ? 'Name is required' : null),
