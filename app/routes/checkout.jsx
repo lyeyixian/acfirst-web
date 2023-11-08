@@ -22,6 +22,7 @@ import AcfirstSkeleton from '../components/common/AcfirstSkeleton'
 import AcfirstNumberInput from '../components/common/AcfirstNumberInput'
 import { useCart } from '../components/hooks/cart'
 import { useEffect, useState } from 'react'
+import { useEffectAfterMount } from '../components/hooks/helper'
 
 export async function action({ request }) {
   const formData = await request.formData()
@@ -44,7 +45,7 @@ function ProductSummary({ product }) {
   const updateCartFetcher = useFetcher()
   const [quantity, setQuantity] = useState(product.quantity)
 
-  useEffect(() => {
+  useEffectAfterMount(() => {
     const timer = setTimeout(() => {
       updateCartFetcher.submit(
         { productId: product.code, quantity: quantity },

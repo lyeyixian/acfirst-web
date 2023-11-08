@@ -10,7 +10,6 @@ export const useCart = () => {
 
     cartId = cart.cartId
     cartItems = cart.cartItems
-    console.log('--> cartItems: ', cartItems)
   }
 
   return { cartItems, cartId }
