@@ -92,19 +92,17 @@ export function ErrorBoundary() {
   let errorUI = null
 
   if (isRouteErrorResponse(error)) {
-    errorUI = (
-      <GracefulError status={error.status} statusText={error.statusText} />
-    )
+    errorUI = <GracefulError status={error.status} statusText={error.data} />
   } else if (error instanceof Error) {
     errorUI = (
       <GracefulError
-        status={null}
+        status={500}
         statusText="Unexpected Error"
         statusDescription={error.message}
       />
     )
   } else {
-    errorUI = <GracefulError status={null} statusText="Unknown error" />
+    errorUI = <GracefulError status={500} statusText="Unknown error" />
   }
 
   return (
