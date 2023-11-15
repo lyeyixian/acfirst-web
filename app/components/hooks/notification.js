@@ -11,6 +11,8 @@ export const useNotification = (fetcher, successMsg, errorMsg, func) => {
           message: errorMsg,
           color: 'red',
           icon: <IconX size="1.2rem" />,
+          withBorder: true,
+          styles: { root: { backgroundColor: '#F8F8FA' }}
         })
       } else {
         notifications.show({
@@ -18,6 +20,9 @@ export const useNotification = (fetcher, successMsg, errorMsg, func) => {
           message: successMsg,
           color: 'teal',
           icon: <IconCheck size="1.2rem" />,
+          background: 'red',
+          withBorder: true,
+          styles: { root: { backgroundColor: '#F8F8FA' }}
         })
       }
 
