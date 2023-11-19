@@ -7,6 +7,7 @@ import {
   Group,
   Image,
   SimpleGrid,
+  Stack,
   Text,
   TextInput,
   Textarea,
@@ -24,7 +25,8 @@ import { useCart } from '../components/hooks/cart'
 import { useState } from 'react'
 import { useNotification } from '../components/hooks/notification'
 import { useEffectAfterMount } from '../components/hooks/helper'
-
+import { formatSize } from '../utils/formatter'
+import { _ } from 'lodash'
 export async function action({ request }) {
   const formData = await request.formData()
   const cartId = formData.get('cartId')
@@ -83,16 +85,19 @@ function ProductSummary({ product }) {
         }}
       >
         <Text>{product.name}</Text>
-        <Text color="dimmed">{product.category}</Text>
         <Text color="dimmed">{product.code}</Text>
-        <Text color="dimmed">{product.surface}</Text>
-        <Text color="dimmed">{product.size}</Text>
-        <Text color="dimmed">{product.type}</Text>
+        <Text color="dimmed">{product.category + "/" + _.capitalize(product.type) + "/" + _.capitalize(product.surface)}</Text>
+        <Text color="dimmed">{formatSize(product.size)}</Text>
       </Box>
-      <AcfirstNumberInput value={quantity} onChange={setQuantity} />
-      <ActionIcon color="red.4">
-        <IconTrash size="1.2rem" />
-      </ActionIcon>
+      <Stack
+        align="flex-end"
+        gap="xl"
+      >
+        <ActionIcon color="red.4" mb="1.5rem">
+          <IconTrash size="1.2rem"/>
+        </ActionIcon>
+        <AcfirstNumberInput value={quantity} onChange={setQuantity} />
+      </Stack>
     </Group>
   )
 }
