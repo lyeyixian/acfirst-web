@@ -10,11 +10,7 @@ import {
   rem,
   NavLink,
 } from '@mantine/core'
-import {
-  IconCalendarStats,
-  IconChevronLeft,
-  IconChevronRight,
-} from '@tabler/icons-react'
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react'
 import { useSearchParams } from '@remix-run/react'
 
 const useStyles = createStyles((theme) => ({
@@ -65,15 +61,19 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
+const formatSlugToLabel = (slug, filters) => {
+  return filters.find((filter) => filter.slug === slug)?.label
+}
+
 export default function FiltersGroup({
   icon: Icon,
   label,
   slug,
   initiallyOpened,
-  links, // TODO: change variable name to filters
+  filters,
 }) {
   const { classes, theme } = useStyles()
-  const hasLinks = Array.isArray(links)
+  const hasFilters = Array.isArray(filters)
   const [opened, setOpened] = useState(initiallyOpened || true)
   const ChevronIcon = theme.dir === 'ltr' ? IconChevronRight : IconChevronLeft
 
@@ -83,20 +83,20 @@ export default function FiltersGroup({
   useEffect(() => {
     setActive(filterValue)
   }, [filterValue])
-  // TODO: NavLink overflow to grid
-  const items = (hasLinks ? links : []).map((link, index) => (
+
+  const items = (hasFilters ? filters : []).map((filter, index) => (
     <div key={index}>
       {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
       <NavLink
-        active={active === link.slug}
+        active={active === filter.slug}
         className={classes.link}
-        label={link.label}
+        label={filter.label}
         onClick={() =>
           setSearchParams((params) => {
-            if (active === link.slug) {
+            if (active === filter.slug) {
               params.delete(slug)
             } else {
-              params.set(slug, link.slug)
+              params.set(slug, filter.slug)
             }
 
             params.set('p', 1)
@@ -114,17 +114,20 @@ export default function FiltersGroup({
         onClick={() => setOpened((o) => !o)}
         className={classes.control}
       >
-        <Group position="apart" spacing={0}>
+        <Group position="apart" spacing={0} noWrap>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             {Icon && (
               <ThemeIcon variant="outline" size={30}>
                 <Icon size="1.1rem" />
               </ThemeIcon>
             )}
-            <Box ml="md">{`${label}${active ? `: ${active}` : ''}`}</Box>{' '}
-            {/* TODO: use link label instead of slug. fix ui when text too long */}
+            <Text ml="sm" lineClamp={1}>
+              {`${label}${
+                active ? `: ${formatSlugToLabel(active, filters)}` : ''
+              }`}
+            </Text>{' '}
           </Box>
-          {hasLinks && (
+          {hasFilters && (
             <ChevronIcon
               className={classes.chevron}
               size="1rem"
@@ -138,31 +141,7 @@ export default function FiltersGroup({
           )}
         </Group>
       </UnstyledButton>
-      {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
+      {hasFilters ? <Collapse in={opened}>{items}</Collapse> : null}
     </>
   )
 }
-
-const mockdata = {
-  label: 'Releases',
-  icon: IconCalendarStats,
-  links: [
-    { label: 'Upcoming releases', link: '/' },
-    { label: 'Previous releases', link: '/' },
-    { label: 'Releases schedule', link: '/' },
-  ],
-}
-
-// export function NavbarLinksGroup() {
-//   return (
-//     <Box
-//       sx={(theme) => ({
-//         minHeight: rem(220),
-//         padding: theme.spacing.md,
-//         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white,
-//       })}
-//     >
-//       <LinksGroup {...mockdata} />
-//     </Box>
-//   );
-// }

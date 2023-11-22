@@ -17,7 +17,7 @@ const filterData = [
     label: 'Surface',
     slug: 'surface',
     icon: IconSquaresFilled,
-    links: [
+    filters: [
       { label: 'Matt', slug: 'matt' },
       { label: 'Satin', slug: 'satin' },
       { label: 'Gloss', slug: 'gloss' },
@@ -32,7 +32,7 @@ const filterData = [
     label: 'Type',
     slug: 'type',
     icon: IconCategory,
-    links: [
+    filters: [
       { label: 'Wall Tiles', slug: 'wall' },
       { label: 'Floor Tiles', slug: 'floor' },
       { label: 'Outdoor Tiles', slug: 'outdoor' },
@@ -42,7 +42,7 @@ const filterData = [
     label: 'Size',
     slug: 'size',
     icon: IconRuler,
-    links: [
+    filters: [
       { label: '300mm x 300mm', slug: 'mm-300x300' },
       { label: '600mm x 600mm', slug: 'mm-600x600' },
     ],
