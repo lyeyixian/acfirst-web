@@ -85,7 +85,7 @@ function ProductCard({ product }) {
       className={classes.card}
       radius="md"
       component={Link}
-      to={`/product/${product.code}`}
+      to={`/products/c/${product.code}`}
     >
       <AcfirstSkeleton>
         {(handleOnLoad, imageRef) => (

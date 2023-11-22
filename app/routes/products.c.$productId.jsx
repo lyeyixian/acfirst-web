@@ -20,16 +20,16 @@ import {
   getProduct,
   getRelatedProducts,
   incrementProductViewCount,
-} from '../../models/product.server'
-import { getStrapiMedia, getStrapiMedias } from '../../utils/api/helper'
-import AddToCartBtn from '../../components/AddToCartBtn'
-import { formatSize } from '../../utils/formatter'
+} from '../models/product.server'
+import { getStrapiMedia, getStrapiMedias } from '../utils/api/helper'
+import AddToCartBtn from '../components/AddToCartBtn'
+import { formatSize } from '../utils/formatter'
 import { IconChevronRight } from '@tabler/icons-react'
-import RelatedProducts from '../../components/product/RelatedProducts'
-import ProductImageCarousel from '../../components/product/ProductImageCarousel'
-import AcfirstCarousel from '../../components/common/AcfirstCarousel'
+import RelatedProducts from '../components/product/RelatedProducts'
+import ProductImageCarousel from '../components/product/ProductImageCarousel'
+import AcfirstCarousel from '../components/common/AcfirstCarousel'
 import { Carousel } from '@mantine/carousel'
-import AcfirstSkeleton from '../../components/common/AcfirstSkeleton'
+import AcfirstSkeleton from '../components/common/AcfirstSkeleton'
 
 const useStyle = createStyles((theme) => ({
   accordionTitle: {
@@ -139,7 +139,7 @@ function Slide({ imgUrl, code }) {
         withBorder
         p={0}
         component={Link}
-        to={`/product/${code}`}
+        to={`/products/c/${code}`}
       >
         <AcfirstSkeleton>
           {(handleOnLoad, imageRef) => (
@@ -179,7 +179,7 @@ export default function ProductRoute() {
   const breadcrumbsData = [
     { title: 'Products', href: '/products' },
     { title: category.name, href: '/products/' + category.slug },
-    { title: params.productId, href: '/product/' + params.productId },
+    { title: params.productId, href: '/products/c/' + params.productId },
   ]
   const breadcrumbs = breadcrumbsData.map((item, index) => (
     <Text
