@@ -8,46 +8,10 @@ import {
 } from '@remix-run/react'
 import { useEffect, useState } from 'react'
 import FiltersGroup from '../components/FiltersGroup'
-import { IconCategory, IconRuler, IconSquaresFilled } from '@tabler/icons-react'
 import { getCategories } from '../models/category.server'
-import { renderCategoryIcon } from '../utils/renderer'
-
-const filterData = [
-  {
-    label: 'Surface',
-    slug: 'surface',
-    icon: IconSquaresFilled,
-    filters: [
-      { label: 'Matt', slug: 'matt' },
-      { label: 'Satin', slug: 'satin' },
-      { label: 'Gloss', slug: 'gloss' },
-      { label: 'Polished', slug: 'polished' },
-      { label: 'Rough', slug: 'rough' },
-      { label: 'Honed', slug: 'honed' },
-      { label: 'Lappato', slug: 'lappato' },
-      { label: 'Structured Surface', slug: 'structuredSurface' },
-    ],
-  },
-  {
-    label: 'Type',
-    slug: 'type',
-    icon: IconCategory,
-    filters: [
-      { label: 'Wall Tiles', slug: 'wall' },
-      { label: 'Floor Tiles', slug: 'floor' },
-      { label: 'Outdoor Tiles', slug: 'outdoor' },
-    ],
-  },
-  {
-    label: 'Size',
-    slug: 'size',
-    icon: IconRuler,
-    filters: [
-      { label: '300mm x 300mm', slug: 'mm-300x300' },
-      { label: '600mm x 600mm', slug: 'mm-600x600' },
-    ],
-  },
-]
+import { renderCategoryIcon, renderFilterIcon } from '../utils/renderer'
+import { getProductSchema } from '../models/contentType.server'
+import { formatSize, formatSlug } from '../utils/formatter'
 
 // TODO: dont make the loader run when search params changed
 export async function loader() {
@@ -59,23 +23,41 @@ export async function loader() {
       slug,
     }
   })
+  const productSchema = await getProductSchema()
+  const filterData = ['type', 'surface', 'size'].map((key) => {
+    return {
+      label: key[0].toUpperCase() + key.slice(1),
+      slug: key,
+      filters: productSchema.data.schema.attributes[key].enum.map((item) => {
+        return {
+          label: key == 'size' ? formatSize(item) : formatSlug(item),
+          slug: item,
+        }
+      }),
+    }
+  })
 
-  return { categories: prunedCategories }
+  return { categories: prunedCategories, filterData }
 }
 
 export default function ProductsRoute() {
-  const specificationFilters = filterData.map((item) => (
-    <FiltersGroup {...item} key={item.label} />
-  ))
-
   const { category } = useParams()
   const [active, setActive] = useState(category)
   useEffect(() => {
     setActive(category)
   }, [category])
 
-  const [searchParams, setSearchParams] = useSearchParams()
-  const { categories } = useLoaderData()
+  const { categories, filterData } = useLoaderData()
+
+  const specificationFilters = filterData.map((item) => (
+    <FiltersGroup
+      {...item}
+      icon={renderFilterIcon(item.slug)}
+      key={item.label}
+    />
+  ))
+
+  const [searchParams] = useSearchParams()
   const categoryFilters = categories.map((category, index) => {
     const CategoryIcon = renderCategoryIcon(category)
     const preserveSearchParams = (str) => {
