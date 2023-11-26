@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Badge,
   Box,
   Button,
   Card,
@@ -7,6 +8,7 @@ import {
   Group,
   Image,
   SimpleGrid,
+  Stack,
   Text,
   TextInput,
   Textarea,
@@ -24,6 +26,8 @@ import { useCart } from '../components/hooks/cart'
 import { useState } from 'react'
 import { useNotification } from '../components/hooks/notification'
 import { useEffectAfterMount } from '../components/hooks/helper'
+import { formatSize } from '../utils/formatter'
+import { _ } from 'lodash'
 
 export async function action({ request }) {
   const formData = await request.formData()
@@ -64,7 +68,7 @@ function ProductSummary({ product }) {
   )
 
   return (
-    <Group>
+    <Group noWrap>
       <AcfirstSkeleton>
         {(handleOnLoad, imageRef) => (
           <Image
@@ -83,16 +87,21 @@ function ProductSummary({ product }) {
         }}
       >
         <Text>{product.name}</Text>
-        <Text color="dimmed">{product.category}</Text>
-        <Text color="dimmed">{product.code}</Text>
-        <Text color="dimmed">{product.surface}</Text>
-        <Text color="dimmed">{product.size}</Text>
-        <Text color="dimmed">{product.type}</Text>
+        <Text size="sm" color="dimmed">
+          {product.category}
+        </Text>
+        <Group spacing="xs" mt="xs">
+          <Badge variant="dot">{_.startCase(product.type)}</Badge>
+          <Badge variant="dot">{_.startCase(product.surface)}</Badge>
+          <Badge variant="dot">{formatSize(product.size)}</Badge>
+        </Group>
       </Box>
-      <AcfirstNumberInput value={quantity} onChange={setQuantity} />
-      <ActionIcon color="red.4">
-        <IconTrash size="1.2rem" />
-      </ActionIcon>
+      <Stack align="flex-end" gap="xl" style={{ flexShrink: 0 }}>
+        <ActionIcon color="red.4" mb="1.5rem">
+          <IconTrash size="1.2rem" />
+        </ActionIcon>
+        <AcfirstNumberInput value={quantity} onChange={setQuantity} />
+      </Stack>
     </Group>
   )
 }
