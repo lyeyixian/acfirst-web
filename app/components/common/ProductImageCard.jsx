@@ -63,7 +63,7 @@ export default function ProductImageCard({ product, height }) {
       className={classes.card}
       radius="md"
       component={Link}
-      to={`/product/${code}`}
+      to={`/products/c/${code}`}
     >
       <div
         className={classes.image}

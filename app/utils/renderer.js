@@ -1,13 +1,16 @@
 import {
   IconBath,
   IconCar,
+  IconCategory,
+  IconRuler,
   IconSofa,
+  IconSquaresFilled,
   IconToolsKitchen2,
 } from '@tabler/icons-react'
 import HeroBanner from '../components/home/HeroBanner'
 import ProductsSection from '../components/home/ProductsSection'
 import ShowcaseSection from '../components/home/ShowcaseSection'
-import { Button, Group, Image, List, Text } from '@mantine/core'
+import { Button } from '@mantine/core'
 import { Link } from '@remix-run/react'
 import TestimonialsSection from '../components/home/TestimonialsSection'
 
@@ -122,4 +125,21 @@ export function renderErrorButton(statusCode, pathname) {
       {buttonText}
     </Button>
   )
+}
+
+export function renderFilterIcon(filter) {
+  if (!filter) {
+    return null
+  }
+
+  switch (filter) {
+    case 'surface':
+      return IconSquaresFilled
+    case 'type':
+      return IconCategory
+    case 'size':
+      return IconRuler
+    default:
+      return null
+  }
 }
