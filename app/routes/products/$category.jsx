@@ -1,4 +1,5 @@
 import {
+  Anchor,
   AspectRatio,
   Card,
   Center,
@@ -21,7 +22,7 @@ import {
   useParams,
   useSearchParams,
 } from '@remix-run/react'
-import { IconEye } from '@tabler/icons-react'
+import { IconEye, IconFileX } from '@tabler/icons-react'
 import AcfirstSkeleton from '../../components/common/AcfirstSkeleton'
 
 // TODO: responsive
@@ -127,9 +128,15 @@ function ProductsGrid({ products }) {
   return cards.length ? (
     <SimpleGrid cols={3}>{cards}</SimpleGrid>
   ) : (
-    <Text align="center" color="dimmed" mt="xl">
-      No products found.
-    </Text>
+    <Stack justify="center" align="center" mih={600} spacing="xs">
+      <IconFileX size="2rem" />
+      <Text size="lg" weight={500}>
+        No products found
+      </Text>
+      <Anchor component={Link} to="/products">
+        Browse other products
+      </Anchor>
+    </Stack>
   )
 }
 
