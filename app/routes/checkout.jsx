@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Badge,
   Box,
   Button,
   Card,
@@ -27,6 +28,7 @@ import { useNotification } from '../components/hooks/notification'
 import { useEffectAfterMount } from '../components/hooks/helper'
 import { formatSize } from '../utils/formatter'
 import { _ } from 'lodash'
+
 export async function action({ request }) {
   const formData = await request.formData()
   const cartId = formData.get('cartId')
@@ -66,7 +68,7 @@ function ProductSummary({ product }) {
   )
 
   return (
-    <Group>
+    <Group noWrap>
       <AcfirstSkeleton>
         {(handleOnLoad, imageRef) => (
           <Image
@@ -85,16 +87,18 @@ function ProductSummary({ product }) {
         }}
       >
         <Text>{product.name}</Text>
-        <Text color="dimmed">{product.code}</Text>
-        <Text color="dimmed">{product.category + "/" + _.capitalize(product.type) + "/" + _.capitalize(product.surface)}</Text>
-        <Text color="dimmed">{formatSize(product.size)}</Text>
+        <Text size="sm" color="dimmed">
+          {product.category}
+        </Text>
+        <Group spacing="xs" mt="xs">
+          <Badge variant="dot">{_.startCase(product.type)}</Badge>
+          <Badge variant="dot">{_.startCase(product.surface)}</Badge>
+          <Badge variant="dot">{formatSize(product.size)}</Badge>
+        </Group>
       </Box>
-      <Stack
-        align="flex-end"
-        gap="xl"
-      >
+      <Stack align="flex-end" gap="xl" style={{ flexShrink: 0 }}>
         <ActionIcon color="red.4" mb="1.5rem">
-          <IconTrash size="1.2rem"/>
+          <IconTrash size="1.2rem" />
         </ActionIcon>
         <AcfirstNumberInput value={quantity} onChange={setQuantity} />
       </Stack>
