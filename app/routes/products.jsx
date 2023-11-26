@@ -11,7 +11,8 @@ import FiltersGroup from '../components/FiltersGroup'
 import { getCategories } from '../models/category.server'
 import { renderCategoryIcon, renderFilterIcon } from '../utils/renderer'
 import { getProductSchema } from '../models/contentType.server'
-import { formatSize, formatSlug } from '../utils/formatter'
+import { formatSize } from '../utils/formatter'
+import { _ } from 'lodash'
 
 // TODO: dont make the loader run when search params changed
 export async function loader() {
@@ -26,11 +27,11 @@ export async function loader() {
   const productSchema = await getProductSchema()
   const filterData = ['type', 'surface', 'size'].map((key) => {
     return {
-      label: key[0].toUpperCase() + key.slice(1),
+      label: _.startCase(key),
       slug: key,
       filters: productSchema.data.schema.attributes[key].enum.map((item) => {
         return {
-          label: key == 'size' ? formatSize(item) : formatSlug(item),
+          label: key == 'size' ? formatSize(item) : _.startCase(item),
           slug: item,
         }
       }),
