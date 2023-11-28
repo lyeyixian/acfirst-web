@@ -13,10 +13,11 @@ import {
   TextInput,
   Textarea,
   Title,
+  createStyles,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { redirect } from '@remix-run/node'
-import { useFetcher, useNavigation, useSubmit } from '@remix-run/react'
+import { Link, useFetcher, useNavigation, useSubmit } from '@remix-run/react'
 import { IconTrash } from '@tabler/icons-react'
 import { createOrder } from '../models/order.server'
 import { clearCart } from '../models/cart.server'
@@ -28,6 +29,14 @@ import { useNotification } from '../components/hooks/notification'
 import { useEffectAfterMount } from '../components/hooks/helper'
 import { formatSize } from '../utils/formatter'
 import { _ } from 'lodash'
+
+const useStyles = createStyles((theme) => ({
+  link: {
+    '&:hover': {
+      color: theme.colors[theme.primaryColor][7],
+    },
+  },
+}))
 
 export async function action({ request }) {
   const formData = await request.formData()
@@ -47,6 +56,7 @@ export async function action({ request }) {
 }
 
 function ProductSummary({ product }) {
+  const { classes } = useStyles()
   const updateCartFetcher = useFetcher()
   const [quantity, setQuantity] = useState(product.quantity)
 
@@ -86,7 +96,13 @@ function ProductSummary({ product }) {
           flexGrow: 1,
         }}
       >
-        <Text>{product.name}</Text>
+        <Text
+          component={Link}
+          to={`/products/c/${product.code}`}
+          className={classes.link}
+        >
+          {product.name}
+        </Text>
         <Text size="sm" color="dimmed">
           {product.category}
         </Text>

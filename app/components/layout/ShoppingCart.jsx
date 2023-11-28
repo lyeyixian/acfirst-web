@@ -10,14 +10,24 @@ import {
   Popover,
   ScrollArea,
   Text,
+  createStyles,
 } from '@mantine/core'
-import { Link, useFetcher, useRouteLoaderData } from '@remix-run/react'
+import { Link, useFetcher } from '@remix-run/react'
 import { IconShoppingCart, IconTrash } from '@tabler/icons-react'
 import { useState } from 'react'
 import AcfirstSkeleton from '../common/AcfirstSkeleton'
 import { useCart } from '../hooks/cart'
 
+const useStyles = createStyles((theme) => ({
+  link: {
+    '&:hover': {
+      color: theme.colors[theme.primaryColor][7],
+    },
+  },
+}))
+
 function CartItem({ product, index }) {
+  const { classes } = useStyles()
   const deleteCartItemBtn = useFetcher()
 
   return (
@@ -43,7 +53,13 @@ function CartItem({ product, index }) {
               flexGrow: 1,
             }}
           >
-            <Text>{product.name}</Text>
+            <Text
+              component={Link}
+              to={`/products/c/${product.code}`}
+              className={classes.link}
+            >
+              {product.name}
+            </Text>
             <Text color="dimmed">{product.category}</Text>
             <Text color="dimmed">Qty: {product.quantity}</Text>
           </Box>
