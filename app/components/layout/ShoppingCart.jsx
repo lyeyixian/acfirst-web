@@ -12,11 +12,12 @@ import {
   Text,
   createStyles,
 } from '@mantine/core'
-import { Link, useFetcher } from '@remix-run/react'
-import { IconShoppingCart, IconTrash } from '@tabler/icons-react'
+import { Link } from '@remix-run/react'
+import { IconShoppingCart } from '@tabler/icons-react'
 import { useState } from 'react'
 import AcfirstSkeleton from '../common/AcfirstSkeleton'
 import { useCart } from '../hooks/cart'
+import DeleteCartItemBtn from '../common/DeleteCartItemBtn'
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -28,7 +29,6 @@ const useStyles = createStyles((theme) => ({
 
 function CartItem({ product, index }) {
   const { classes } = useStyles()
-  const deleteCartItemBtn = useFetcher()
 
   return (
     <div>
@@ -63,16 +63,7 @@ function CartItem({ product, index }) {
             <Text color="dimmed">{product.category}</Text>
             <Text color="dimmed">Qty: {product.quantity}</Text>
           </Box>
-          <deleteCartItemBtn.Form method="delete" action="/cart">
-            <input type="hidden" name="code" value={product.code} />
-            <ActionIcon
-              color="red.4"
-              type="submit"
-              loading={deleteCartItemBtn.state === 'submitting'}
-            >
-              <IconTrash size="1.2rem" />
-            </ActionIcon>
-          </deleteCartItemBtn.Form>
+          <DeleteCartItemBtn code={product.code} />
         </Group>
       </Paper>
     </div>

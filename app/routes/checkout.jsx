@@ -1,5 +1,4 @@
 import {
-  ActionIcon,
   Badge,
   Box,
   Button,
@@ -18,7 +17,6 @@ import {
 import { useForm } from '@mantine/form'
 import { redirect } from '@remix-run/node'
 import { Link, useFetcher, useNavigation, useSubmit } from '@remix-run/react'
-import { IconTrash } from '@tabler/icons-react'
 import { createOrder } from '../models/order.server'
 import { clearCart } from '../models/cart.server'
 import AcfirstSkeleton from '../components/common/AcfirstSkeleton'
@@ -29,6 +27,7 @@ import { useNotification } from '../components/hooks/notification'
 import { useEffectAfterMount } from '../components/hooks/helper'
 import { formatSize } from '../utils/formatter'
 import { _ } from 'lodash'
+import DeleteCartItemBtn from '../components/common/DeleteCartItemBtn'
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -113,9 +112,7 @@ function ProductSummary({ product }) {
         </Group>
       </Box>
       <Stack align="flex-end" gap="xl" style={{ flexShrink: 0 }}>
-        <ActionIcon color="red.4" mb="1.5rem">
-          <IconTrash size="1.2rem" />
-        </ActionIcon>
+        <DeleteCartItemBtn code={product.code} />
         <AcfirstNumberInput value={quantity} onChange={setQuantity} />
       </Stack>
     </Group>

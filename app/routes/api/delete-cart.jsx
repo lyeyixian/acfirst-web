@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node'
-import { getCartId } from '../session.server'
-import { removeFromCart } from '../models/cart.server'
+import { removeFromCart } from '../../models/cart.server'
+import { getCartId } from '../../session.server'
 
 export async function action({ request }) {
   const formData = await request.formData()
