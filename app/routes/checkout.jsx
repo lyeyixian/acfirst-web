@@ -3,11 +3,11 @@ import {
   Box,
   Button,
   Card,
+  Flex,
   Grid,
   Group,
   Image,
   SimpleGrid,
-  Stack,
   Text,
   TextInput,
   Textarea,
@@ -82,6 +82,7 @@ function ProductSummary({ product }) {
         {(handleOnLoad, imageRef) => (
           <Image
             src={product.imgUrl}
+            miw={75}
             maw={75}
             radius="sm"
             imageRef={imageRef}
@@ -89,39 +90,47 @@ function ProductSummary({ product }) {
           />
         )}
       </AcfirstSkeleton>
-      <Box
-        mr="md"
+      <Flex
+        direction={{ base: 'column', sm: 'row' }}
+        gap={{ base: 'lg', sm: 0 }}
         sx={{
           flexGrow: 1,
         }}
       >
-        <Text
-          component={Link}
-          to={`/products/c/${product.code}`}
-          className={classes.link}
+        <Box mr="md">
+          <Text
+            component={Link}
+            to={`/products/c/${product.code}`}
+            className={classes.link}
+          >
+            {product.name}
+          </Text>
+          <Text size="sm" color="dimmed">
+            {product.category}
+          </Text>
+          <Group spacing="xs" mt="xs">
+            <Badge variant="dot">{_.startCase(product.type)}</Badge>
+            <Badge variant="dot">{_.startCase(product.surface)}</Badge>
+            <Badge variant="dot">{formatSize(product.size)}</Badge>
+          </Group>
+        </Box>
+        <Flex
+          direction={{ base: 'row-reverse', sm: 'column' }}
+          align={{ base: 'center', sm: 'flex-end' }}
+          justify={{ base: 'space-between', sm: 'center' }}
+          gap={{ sm: 'xl' }}
+          style={{ flexShrink: 0 }}
         >
-          {product.name}
-        </Text>
-        <Text size="sm" color="dimmed">
-          {product.category}
-        </Text>
-        <Group spacing="xs" mt="xs">
-          <Badge variant="dot">{_.startCase(product.type)}</Badge>
-          <Badge variant="dot">{_.startCase(product.surface)}</Badge>
-          <Badge variant="dot">{formatSize(product.size)}</Badge>
-        </Group>
-      </Box>
-      <Stack align="flex-end" gap="xl" style={{ flexShrink: 0 }}>
-        <DeleteCartItemBtn code={product.code} />
-        <AcfirstNumberInput value={quantity} onChange={setQuantity} />
-      </Stack>
+          <DeleteCartItemBtn code={product.code} />
+          <AcfirstNumberInput value={quantity} onChange={setQuantity} />
+        </Flex>
+      </Flex>
     </Group>
   )
 }
 
 export default function CheckoutRoute() {
   const { cartItems, cartId } = useCart()
-  // TODO: UI issue
   const checkoutProducts = cartItems.map((product, index) => (
     <Card.Section key={index} withBorder inheritPadding py="lg">
       <ProductSummary product={product} />
@@ -155,11 +164,11 @@ export default function CheckoutRoute() {
   return (
     <div>
       <h1>Checkout</h1>
-      <Grid>
-        <Grid.Col span={5}>
+      <Grid gutter="xl">
+        <Grid.Col order={2} sm={5} orderSm={1}>
           <form onSubmit={form.onSubmit(handleSubmit)}>
             <Title order={3}>Contact information</Title>
-            <Box mt="md" pr="md">
+            <Box mt="md">
               <SimpleGrid cols={1}>
                 <TextInput
                   label="Name"
@@ -211,7 +220,7 @@ export default function CheckoutRoute() {
             </Box>
           </form>
         </Grid.Col>
-        <Grid.Col span={7}>
+        <Grid.Col order={1} sm={7} orderSm={2}>
           <Title order={3}>Order Summary</Title>
           <Card padding="lg" withBorder shadow="sm" radius="md" mt="md">
             {checkoutProducts}
