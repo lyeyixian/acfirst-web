@@ -30,7 +30,6 @@ export default function AddToCartBtn({ productId, ...props }) {
       <Group>
         <AcfirstNumberInput value={quantity} onChange={setQuantity} />
         <Button
-          my="md"
           type="submit"
           loading={addToCartFetcher.state === 'submitting'}
           loaderPosition="right"

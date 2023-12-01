@@ -21,6 +21,10 @@ export default function RelatedProducts({ products }) {
         slidesToScroll="auto"
         slideGap="md"
         align="start"
+        breakpoints={[
+          { maxWidth: 'sm', slideSize: '33.333333%' },
+          { maxWidth: 'xs', slideSize: '50%' },
+        ]}
       >
         {relatedProductsCarousel}
       </AcfirstCarousel>

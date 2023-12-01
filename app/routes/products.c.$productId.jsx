@@ -5,17 +5,18 @@ import {
   Breadcrumbs,
   Card,
   Center,
-  Container,
   Divider,
   Grid,
   Image,
   List,
+  MediaQuery,
   Text,
   Title,
   createStyles,
 } from '@mantine/core'
 import { Link, useLoaderData, useParams } from '@remix-run/react'
 import { json } from '@remix-run/node'
+import { _ } from 'lodash'
 import {
   getProduct,
   getRelatedProducts,
@@ -161,21 +162,9 @@ function Slide({ imgUrl, code }) {
   )
 }
 
-export default function ProductRoute() {
+function AcfirstBreadcrumb({ category, ...props }) {
   const { classes } = useStyle()
   const params = useParams()
-  const { currentProduct, relatedProducts } = useLoaderData()
-  const {
-    name,
-    code,
-    size,
-    surface,
-    type,
-    similarProducts,
-    productImages,
-    category,
-  } = currentProduct
-
   const breadcrumbsData = [
     { title: 'Products', href: '/products' },
     { title: category.name, href: '/products/' + category.slug },
@@ -193,31 +182,80 @@ export default function ProductRoute() {
     </Text>
   ))
 
+  return (
+    <Breadcrumbs
+      separator={<IconChevronRight size="1.5rem" stroke={2} />}
+      mb="sm"
+      {...props}
+    >
+      {breadcrumbs}
+    </Breadcrumbs>
+  )
+}
+
+export default function ProductRoute() {
+  const { classes } = useStyle()
+  const params = useParams()
+  const { currentProduct, relatedProducts } = useLoaderData()
+  const {
+    name,
+    code,
+    size,
+    surface,
+    type,
+    similarProducts,
+    productImages,
+    category,
+  } = currentProduct
+
   const otherProducts = similarProducts.map((similarProduct, index) => {
     const { code, imgUrl } = similarProduct
 
     return <Slide key={index} imgUrl={imgUrl} code={code} />
   })
 
+  const specificationsData = [
+    { title: 'Category', value: _.startCase(category.name) },
+    { title: 'Surface', value: _.startCase(surface) },
+    { title: 'Type', value: _.startCase(type) },
+    { title: 'Size', value: formatSize(size) },
+  ]
+  const specifications = specificationsData.map((item) => (
+    <List.Item key={item.title}>
+      <Text c="dark.4">
+        <Text span fw={600} mr={8}>
+          {item.title}:
+        </Text>
+        {item.value}
+      </Text>
+    </List.Item>
+  ))
+
   return (
     <Box mt={40}>
-      <Grid>
-        <Grid.Col span={6}>
-          <Container>
-            <ProductImageCarousel productImages={productImages} />
-          </Container>
+      <MediaQuery largerThan="xs" styles={{ display: 'none' }}>
+        <AcfirstBreadcrumb category={category} />
+      </MediaQuery>
+      <Grid gutter="xl">
+        <Grid.Col xs={6}>
+          <ProductImageCarousel productImages={productImages} />
         </Grid.Col>
 
-        <Grid.Col span={6}>
-          <Breadcrumbs
-            separator={<IconChevronRight size="1.5rem" stroke={2} />}
-            mb="sm"
-          >
-            {breadcrumbs}
-          </Breadcrumbs>
+        <Grid.Col xs={6}>
+          <MediaQuery smallerThan="xs" styles={{ display: 'none' }}>
+            <AcfirstBreadcrumb category={category} />
+          </MediaQuery>
           <Title order={1}>{name}</Title>
-          <AddToCartBtn productId={params.productId} />
 
+          <Text mt="sm" className={classes.accordionTitle}>
+            Specifications
+          </Text>
+          <List mt="xs" mb="md" withPadding>
+            {specifications}
+          </List>
+
+          <AddToCartBtn productId={params.productId} />
+          <Divider my="md" />
           {otherProducts.length ? (
             <>
               <Text className={classes.accordionTitle}>
@@ -232,54 +270,16 @@ export default function ProductRoute() {
                 classNames={{
                   viewport: classes.carouselViewport,
                 }}
+                breakpoints={[
+                  { maxWidth: 'sm', slideSize: '33.333333%' },
+                  { maxWidth: 'xs', slideSize: '25%' },
+                ]}
               >
                 {otherProducts}
               </AcfirstCarousel>
-              <Divider my="md" />
             </>
           ) : null}
 
-          <Text mb="xs" className={classes.accordionTitle}>
-            Specifications
-          </Text>
-          <List withPadding>
-            <List.Item>
-              <Text c="dark.4">
-                <Text span fw={600}>
-                  Category:
-                </Text>{' '}
-                {category.name}
-              </Text>
-            </List.Item>
-            <List.Item>
-              <Text c="dark.4">
-                <Text span fw={600}>
-                  Surface:
-                </Text>{' '}
-                <Text span transform="capitalize">
-                  {surface}
-                </Text>
-              </Text>
-            </List.Item>
-            <List.Item>
-              <Text c="dark.4">
-                <Text span fw={600}>
-                  Type:
-                </Text>{' '}
-                <Text span transform="capitalize">
-                  {type}
-                </Text>
-              </Text>
-            </List.Item>
-            <List.Item>
-              <Text c="dark.4">
-                <Text span fw={600}>
-                  Size:
-                </Text>{' '}
-                {formatSize(size)}
-              </Text>
-            </List.Item>
-          </List>
           <Accordion variant="separated" mt="md">
             <Accordion.Item value="additional info">
               <Accordion.Control>
