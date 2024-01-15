@@ -99,11 +99,11 @@ export async function incrementProductViewCount(productId, viewCount) {
     method: 'PUT',
     body: JSON.stringify({
       data: {
-        viewCount: viewCount + 1,
+        viewCount: (viewCount || 0) + 1,
       },
     }),
   }
-
+  console.log('DEBUG options:', options)
   try {
     return await fetchApi(path, {}, options)
   } catch {

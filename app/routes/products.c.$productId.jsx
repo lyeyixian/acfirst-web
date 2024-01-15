@@ -103,7 +103,7 @@ export async function loader({ params }) {
     return {
       name,
       code,
-      category: category.data.attributes.name,
+      category: category.data?.attributes.name || '',
       viewCount,
       imgUrl: getStrapiMedia(coverImg.data),
     }

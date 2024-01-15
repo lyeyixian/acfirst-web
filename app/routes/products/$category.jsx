@@ -65,8 +65,8 @@ export async function loader({ request, params }) {
       id: product.id,
       name,
       code,
-      viewCount,
-      category: category.data.attributes.name,
+      viewCount: viewCount || 0,
+      category: category.data?.attributes.name || '',
       imageUrl: getStrapiMedia(coverImg.data),
     }
   })

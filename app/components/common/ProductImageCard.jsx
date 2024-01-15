@@ -89,7 +89,7 @@ export default function ProductImageCard({ product, height }) {
                   color={theme.colors.dark[0]}
                 />
                 <Text size="sm" ml={7} color="dark.0">
-                  {viewCount}
+                  {viewCount || 0}
                 </Text>
               </Center>
             </Group>
