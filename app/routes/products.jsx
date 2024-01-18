@@ -1,4 +1,14 @@
-import { Divider, Grid, NavLink, ThemeIcon } from '@mantine/core'
+import {
+  Button,
+  Divider,
+  Drawer,
+  Grid,
+  Group,
+  NavLink,
+  Text,
+  ThemeIcon,
+  createStyles,
+} from '@mantine/core'
 import {
   Outlet,
   useParams,
@@ -13,6 +23,22 @@ import { renderCategoryIcon, renderFilterIcon } from '../utils/renderer'
 import { getProductSchema } from '../models/contentType.server'
 import { formatSize } from '../utils/formatter'
 import { _ } from 'lodash'
+import { useDisclosure } from '@mantine/hooks'
+import { IconPlus } from '@tabler/icons-react'
+
+const useStyles = createStyles((theme) => ({
+  sidebar: {
+    [theme.fn.smallerThan('sm')]: {
+      display: 'none',
+    },
+  },
+
+  filterBurger: {
+    [theme.fn.largerThan('sm')]: {
+      display: 'none',
+    },
+  },
+}))
 
 // TODO: dont make the loader run when search params changed
 export async function loader() {
@@ -42,6 +68,9 @@ export async function loader() {
 }
 
 export default function ProductsRoute() {
+  const { classes } = useStyles()
+  const [opened, { toggle, close }] = useDisclosure(false)
+
   const { category } = useParams()
   const [active, setActive] = useState(category)
   useEffect(() => {
@@ -55,6 +84,7 @@ export default function ProductsRoute() {
       {...item}
       icon={renderFilterIcon(item.slug)}
       key={item.label}
+      onClick={close}
     />
   ))
 
@@ -87,6 +117,7 @@ export default function ProductsRoute() {
               ? '/products/all'
               : `/products/${category.slug}`
           )}
+          onClick={close}
         />
       </div>
     )
@@ -95,8 +126,19 @@ export default function ProductsRoute() {
   return (
     <div>
       <h1>Products</h1>
+      <Button
+        className={classes.filterBurger}
+        variant="subtle"
+        onClick={toggle}
+        color="gray"
+      >
+        <Group align="center" spacing="0.5rem">
+          <Text fw={500}>Filters</Text>
+          <IconPlus size="1.2rem" />
+        </Group>
+      </Button>
       <Grid>
-        <Grid.Col span={3}>
+        <Grid.Col className={classes.sidebar} span={3}>
           {categoryFilters}
           <Divider my="md" />
           {specificationFilters}
@@ -105,6 +147,11 @@ export default function ProductsRoute() {
           <Outlet />
         </Grid.Col>
       </Grid>
+      <Drawer opened={opened} onClose={toggle} title="Filters">
+        {categoryFilters}
+        <Divider my="md" />
+        {specificationFilters}
+      </Drawer>
     </div>
   )
 }

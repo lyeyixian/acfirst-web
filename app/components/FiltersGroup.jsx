@@ -71,6 +71,7 @@ export default function FiltersGroup({
   slug,
   initiallyOpened,
   filters,
+  onClick,
 }) {
   const { classes, theme } = useStyles()
   const hasFilters = Array.isArray(filters)
@@ -91,7 +92,7 @@ export default function FiltersGroup({
         active={active === filter.slug}
         className={classes.link}
         label={filter.label}
-        onClick={() =>
+        onClick={(e) => {
           setSearchParams((params) => {
             if (active === filter.slug) {
               params.delete(slug)
@@ -103,7 +104,8 @@ export default function FiltersGroup({
 
             return params
           })
-        }
+          onClick(e)
+        }}
       />
     </div>
   ))

@@ -26,7 +26,7 @@ import { IconEye, IconFileX } from '@tabler/icons-react'
 import AcfirstSkeleton from '../../components/common/AcfirstSkeleton'
 
 // TODO: responsive
-const useStyle = createStyles((theme) => ({
+const useStyles = createStyles((theme) => ({
   card: {
     transition: 'transform 150ms ease, box-shadow 150ms ease',
 
@@ -78,7 +78,7 @@ export async function loader({ request, params }) {
 }
 
 function ProductCard({ product }) {
-  const { classes, theme } = useStyle()
+  const { classes, theme } = useStyles()
 
   return (
     <Card
@@ -126,7 +126,15 @@ function ProductsGrid({ products }) {
   ))
 
   return cards.length ? (
-    <SimpleGrid cols={3}>{cards}</SimpleGrid>
+    <SimpleGrid
+      cols={3}
+      breakpoints={[
+        { maxWidth: 'xs', cols: 1 },
+        { maxWidth: 'sm', cols: 2 },
+      ]}
+    >
+      {cards}
+    </SimpleGrid>
   ) : (
     <Stack justify="center" align="center" mih={600} spacing="xs">
       <IconFileX size="2rem" />
@@ -171,7 +179,6 @@ export default function ProductsIndexRoute() {
             total={pageCount}
             position="center"
             mt="lg"
-            withEdges
           />
         ) : null}
       </Stack>
