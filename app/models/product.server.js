@@ -103,7 +103,7 @@ export async function incrementProductViewCount(productId, viewCount) {
       },
     }),
   }
-  console.log('DEBUG options:', options)
+
   try {
     return await fetchApi(path, {}, options)
   } catch {

@@ -78,6 +78,8 @@ export async function loader({ params }) {
     coverImg,
     similarProducts,
   } = product.attributes
+  const categoryName = category.data?.attributes.name || ''
+  const categorySlug = category.data?.attributes.slug || ''
   const prunedSimilarProducts = similarProducts.data.map((similarProduct) => {
     const { code, coverImg } = similarProduct.attributes
 
@@ -91,7 +93,7 @@ export async function loader({ params }) {
 
   const relatedProducts = await getRelatedProducts(
     code,
-    category.data.attributes.slug,
+    categorySlug,
     type,
     surface,
     size
@@ -120,8 +122,8 @@ export async function loader({ params }) {
       similarProducts: prunedSimilarProducts,
       productImages: getStrapiMedias(productImg.data),
       category: {
-        name: category.data.attributes.name,
-        slug: category.data.attributes.slug,
+        name: categoryName,
+        slug: categorySlug,
       },
       coverImg: getStrapiMedia(coverImg.data),
     },
