@@ -91,6 +91,8 @@ export function ErrorBoundary() {
   const error = useRouteError()
   let errorUI = null
 
+  console.error('Error Boundary Hit:', error)
+
   if (isRouteErrorResponse(error)) {
     errorUI = <GracefulError status={error.status} statusText={error.data} />
   } else if (error instanceof Error) {
