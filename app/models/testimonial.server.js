@@ -71,6 +71,6 @@ const reviews = [
   },
 ]
 
-export async function getReviews() {
+export function getReviews() {
   return { type: 'testimonials', reviews }
 }
