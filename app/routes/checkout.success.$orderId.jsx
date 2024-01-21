@@ -5,7 +5,12 @@ import { Button, Stack, Text, Title } from '@mantine/core'
 import { useEffect } from 'react'
 
 export async function loader({ params }) {
-  const order = await getOrder(params.orderId) // TODO: handle cant get order error
+  const order = await getOrder(params.orderId)
+
+  if (!order) {
+    throw new Response('Order not found', { status: 404 })
+  }
+
   const { phone, name, enquiry, orderId, products } = order.attributes
   const productCodes = products.data.map((product) => product.attributes.code)
   const text = `Name: ${name}

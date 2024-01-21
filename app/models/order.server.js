@@ -35,14 +35,14 @@ export async function getOrder(orderId) {
         $eq: orderId,
       },
     },
-    populate: 'deep',
+    populate: 'products',
   }
 
-  try {
-    const { data } = await fetchApi(path, urlParamsObj)
+  const res = await fetchApi(path, urlParamsObj)
 
-    return data[0]
-  } catch {
-    return { error: 'Unable to retrieve order!' }
+  if (!res.data) {
+    return null
   }
+
+  return res.data[0]
 }
