@@ -43,7 +43,7 @@ const useStyles = createStyles((theme) => ({
 // TODO: dont make the loader run when search params changed
 export async function loader() {
   const categories = await getCategories()
-  const prunedCategories = categories.data.map((category) => {
+  const prunedCategories = categories.map((category) => {
     const { name, slug } = category.attributes
     return {
       name,

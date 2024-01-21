@@ -6,8 +6,9 @@ import { getStrapiMedia } from '../../utils/api/helper'
 
 export async function loader() {
   const categories = await getCategories()
-  const prunedCategories = categories.data.map((category) => {
+  const prunedCategories = categories.map((category) => {
     const { name, slug, description, coverImg } = category.attributes
+
     return {
       name,
       slug,
