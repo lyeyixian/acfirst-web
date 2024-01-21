@@ -31,7 +31,7 @@ export async function addCart() {
   const res = await fetchApi(path, {}, options)
 
   if (!res?.data) {
-    return null
+    throw new Error('Unable to create cart!')
   }
 
   return res.data

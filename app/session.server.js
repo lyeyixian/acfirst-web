@@ -32,10 +32,6 @@ export async function createCartSession(request) {
   const session = await getSession(request)
   const cart = await addCart()
 
-  if (!cart) {
-    throw new Error('Unable to create cart!')
-  }
-
   session.set('cartId', cart.attributes.cartId)
   return json(
     { cart: cart },
