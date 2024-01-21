@@ -17,11 +17,14 @@ export async function createOrder(data) {
       },
     }),
   }
-  try {
-    return await fetchApi(path, {}, options)
-  } catch {
-    return { error: 'Unable to create order!' }
+
+  const res = await fetchApi(path, {}, options)
+
+  if (!res.data) {
+    return null
   }
+
+  return res.data
 }
 
 export async function getOrder(orderId) {

@@ -15,8 +15,14 @@ import {
   createStyles,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { redirect } from '@remix-run/node'
-import { Link, useFetcher, useNavigation, useSubmit } from '@remix-run/react'
+import { json, redirect } from '@remix-run/node'
+import {
+  Link,
+  useActionData,
+  useFetcher,
+  useNavigation,
+  useSubmit,
+} from '@remix-run/react'
 import { createOrder } from '../models/order.server'
 import { clearCart } from '../models/cart.server'
 import AcfirstSkeleton from '../components/common/AcfirstSkeleton'
@@ -49,13 +55,16 @@ export async function action({ request }) {
 
   const res = await createOrder(data)
 
-  const cartRes = await clearCart(cartId)
+  if (!res) {
+    return json({ error: "Can't submit enquiry" })
+  }
 
+  const cartRes = await clearCart(cartId)
   if (!cartRes) {
     console.log('Something went wrong when clearing cart')
   }
 
-  return redirect(`/checkout/success/${res.data.attributes.orderId}`)
+  return redirect(`/checkout/success/${res.attributes.orderId}`)
 }
 
 function ProductSummary({ product }) {
@@ -164,6 +173,14 @@ export default function CheckoutRoute() {
   }
   const navigation = useNavigation()
   const isSubmitting = navigation.state === 'submitting'
+
+  const actionData = useActionData()
+
+  useNotification(
+    { state: navigation.state, data: actionData },
+    'Your form has been submitted successfully. We will contact you in 3 business days.',
+    'There is something wrong when submitting your enquiry. Please try again.'
+  )
 
   return (
     <div>
