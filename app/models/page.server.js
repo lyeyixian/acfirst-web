@@ -10,7 +10,11 @@ export async function getPage(slug) {
     },
     populate: 'deep',
   }
-  const { data } = await fetchApi(path, urlParamsObj)
+  const res = await fetchApi(path, urlParamsObj)
 
-  return data[0]
+  if (!res?.data) {
+    throw new Error('Data missing from response')
+  }
+
+  return res.data[0]
 }

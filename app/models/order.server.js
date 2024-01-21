@@ -20,7 +20,7 @@ export async function createOrder(data) {
 
   const res = await fetchApi(path, {}, options)
 
-  if (!res.data) {
+  if (!res?.data) {
     return null
   }
 
@@ -40,7 +40,7 @@ export async function getOrder(orderId) {
 
   const res = await fetchApi(path, urlParamsObj)
 
-  if (!res.data) {
+  if (!res?.data) {
     return null
   }
 
