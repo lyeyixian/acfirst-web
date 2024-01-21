@@ -6,9 +6,12 @@ export async function addContactFormSubmission(data) {
     method: 'POST',
     body: JSON.stringify({ data }),
   }
-  try {
-    return await fetchApi(path, {}, options)
-  } catch {
+
+  const res = await fetchApi(path, {}, options)
+
+  if (!res?.data) {
     return { error: 'Unable to submit form!' }
   }
+
+  return res.data
 }

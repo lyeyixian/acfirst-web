@@ -15,6 +15,7 @@ import {
 import { addContactFormSubmission } from '../models/contactFormSubmission.server'
 import { getPage } from '../models/page.server'
 import GetInTouch from '../components/contact/GetInTouch'
+import { useNotification } from '../components/hooks/notification'
 
 export async function action({ request }) {
   const formData = await request.formData()
@@ -42,25 +43,14 @@ export default function ContactRoute() {
   const actionData = useActionData()
   const navigation = useNavigation()
 
-  if (navigation.state === 'idle' && actionData) {
-    if (actionData.error) {
-      notifications.show({
-        title: 'Error',
-        message:
-          'There is something wrong when submitting your form. Please try again.',
-        color: 'red',
-        icon: <IconX size="1.2rem" />,
-      })
-    } else {
-      notifications.show({
-        title: 'Success',
-        message:
-          'Your form has been submitted successfully. We will contact you in 3 business days.',
-        color: 'teal',
-        icon: <IconCheck size="1.2rem" />,
-      })
-    }
-  }
+  useNotification(
+    {
+      state: navigation.state,
+      data: actionData,
+    },
+    'Your form has been submitted successfully. We will contact you in 3 business days.',
+    'There is something wrong when submitting your form. Please try again.'
+  )
 
   const { contactInfoData, submitButtonData } = useLoaderData()
   const { title, email, phone, address, workingHours } = contactInfoData
