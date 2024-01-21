@@ -108,7 +108,13 @@ export async function getRelatedProducts(code, category, type, surface, size) {
     sort: 'viewCount:desc',
   }
 
-  return await fetchApi(path, urlParamsObj)
+  const res = await fetchApi(path, urlParamsObj)
+
+  if (!res?.data) {
+    return []
+  }
+
+  return res.data
 }
 
 export async function incrementProductViewCount(productId, viewCount) {

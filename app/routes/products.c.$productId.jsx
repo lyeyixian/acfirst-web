@@ -103,7 +103,7 @@ export async function loader({ params }) {
     surface,
     size
   )
-  const prunedRelatedProducts = relatedProducts.data.map((relatedProduct) => {
+  const prunedRelatedProducts = relatedProducts.map((relatedProduct) => {
     const { name, code, category, viewCount, coverImg } =
       relatedProduct.attributes
 
