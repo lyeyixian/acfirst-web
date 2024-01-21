@@ -19,5 +19,18 @@ export async function getProjects(page = 1, category) {
     }
   }
 
-  return await fetchApi(path, urlParamsObj)
+  const res = await fetchApi(path, urlParamsObj)
+
+  if (!res?.data) {
+    return {
+      data: [],
+      meta: {
+        pagination: {
+          pageCount: 0,
+        },
+      },
+    }
+  }
+
+  return res
 }
