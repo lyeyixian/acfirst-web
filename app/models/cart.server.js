@@ -63,7 +63,7 @@ export async function clearCart(cartId) {
 export async function addToCart(code, quantity, cartId) {
   const cart = await getCart(cartId)
   if (!cart) {
-    throw new Response('Cart not found', { status: 404 })
+    return { error: 'Cart not found' }
   }
 
   const cartItems = cart.attributes.cartItems
@@ -75,7 +75,7 @@ export async function addToCart(code, quantity, cartId) {
     const product = await getProduct(code)
 
     if (!product) {
-      throw new Response('Product not found', { status: 404 })
+      return { error: 'Product not found' }
     }
 
     const prunedProduct = {
@@ -101,11 +101,13 @@ export async function addToCart(code, quantity, cartId) {
     }),
   }
 
-  try {
-    return await fetchApi(path, {}, options)
-  } catch {
+  const res = await fetchApi(path, {}, options)
+
+  if (!res?.data) {
     return { error: 'Unable to update cart!' }
   }
+
+  return res.data
 }
 
 export async function updateCart(code, quantity, cartId) {
