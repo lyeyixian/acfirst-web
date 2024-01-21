@@ -47,7 +47,20 @@ export async function getProducts(page = 1, category, filters = {}) {
     }
   }
 
-  return await fetchApi(path, urlParamsObj)
+  const res = await fetchApi(path, urlParamsObj)
+
+  if (!res?.data) {
+    return {
+      data: [],
+      meta: {
+        pagination: {
+          pageCount: 0,
+        },
+      },
+    }
+  }
+
+  return res
 }
 
 export async function getRelatedProducts(code, category, type, surface, size) {
