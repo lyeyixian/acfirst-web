@@ -128,9 +128,11 @@ export async function incrementProductViewCount(productId, viewCount) {
     }),
   }
 
-  try {
-    return await fetchApi(path, {}, options)
-  } catch {
-    return { error: 'Unable to increment product view count!' }
+  const res = await fetchApi(path, {}, options)
+
+  if (!res?.data) {
+    return null
   }
+
+  return res.data
 }

@@ -94,7 +94,11 @@ export async function loader({ params }) {
     }
   })
 
-  await incrementProductViewCount(product.id, viewCount)
+  const viewCountRes = await incrementProductViewCount(product.id, viewCount)
+
+  if (!viewCountRes) {
+    console.log('Failed to increment product view count')
+  }
 
   const relatedProducts = await getRelatedProducts(
     code,
