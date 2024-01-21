@@ -52,10 +52,12 @@ export async function loader() {
   })
   const productSchema = await getProductSchema()
   const filterData = ['type', 'surface', 'size'].map((key) => {
+    const filterEnum = productSchema?.[key]?.enum || []
+
     return {
       label: _.startCase(key),
       slug: key,
-      filters: productSchema.data.schema.attributes[key].enum.map((item) => {
+      filters: filterEnum.map((item) => {
         return {
           label: key == 'size' ? formatSize(item) : _.startCase(item),
           slug: item,
