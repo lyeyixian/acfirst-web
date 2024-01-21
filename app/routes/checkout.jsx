@@ -49,7 +49,11 @@ export async function action({ request }) {
 
   const res = await createOrder(data)
 
-  await clearCart(cartId)
+  const cartRes = await clearCart(cartId)
+
+  if (!cartRes) {
+    console.log('Something went wrong when clearing cart')
+  }
 
   return redirect(`/checkout/success/${res.data.attributes.orderId}`)
 }

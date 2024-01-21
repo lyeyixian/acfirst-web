@@ -51,11 +51,13 @@ export async function clearCart(cartId) {
     }),
   }
 
-  try {
-    return await fetchApi(path, {}, options)
-  } catch {
-    return { error: 'Unable to clear cart!' }
+  const res = await fetchApi(path, {}, options)
+
+  if (!res?.data) {
+    return null
   }
+
+  return res.data
 }
 
 export async function addToCart(code, quantity, cartId) {
