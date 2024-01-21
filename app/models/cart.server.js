@@ -104,7 +104,7 @@ export async function addToCart(code, quantity, cartId) {
   const res = await fetchApi(path, {}, options)
 
   if (!res?.data) {
-    return { error: 'Unable to update cart!' }
+    return { error: 'Unable to add to cart!' }
   }
 
   return res.data
