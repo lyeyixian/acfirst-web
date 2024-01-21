@@ -143,7 +143,7 @@ export async function updateCart(code, quantity, cartId) {
 export async function removeFromCart(code, cartId) {
   let cart = await getCart(cartId)
   if (!cart) {
-    throw new Response('Cart not found', { status: 404 })
+    return { error: 'Cart not found' }
   }
 
   const cartItems = cart.attributes.cartItems.filter(
@@ -157,9 +157,11 @@ export async function removeFromCart(code, cartId) {
     }),
   }
 
-  try {
-    return await fetchApi(path, {}, options)
-  } catch {
-    return { error: 'Unable to delete product from cart!' }
+  const res = await fetchApi(path, {}, options)
+
+  if (!res?.data) {
+    return { error: 'Unable to remove product from cart!' }
   }
+
+  return res.data
 }
