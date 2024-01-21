@@ -20,11 +20,17 @@ export async function fetchApi(path, urlParamsObj = {}, options = {}) {
 
     // Trigger API call
     const response = await fetch(requestUrl, mergedOptions)
+
+    if (!response.ok) {
+      throw new Error(`Fetch response not ok: ${response.statusText}`)
+    }
+
     const data = await response.json()
 
     return data
   } catch (err) {
-    console.error(err)
-    throw new Error('Failed to fetch API')
+    console.log(err)
+
+    return null
   }
 }
