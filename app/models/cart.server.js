@@ -21,18 +21,20 @@ export async function getCart(cartId) {
   return res.data[0]
 }
 
-// TODO: when deploy, dont know why a lot of carts will be created
 export async function addCart() {
   const path = '/carts'
   const options = {
     method: 'POST',
     body: JSON.stringify({ data: { cartItems: [] } }),
   }
-  try {
-    return await fetchApi(path, {}, options)
-  } catch {
-    return { error: 'Unable to create cart!' }
+
+  const res = await fetchApi(path, {}, options)
+
+  if (!res?.data) {
+    return null
   }
+
+  return res.data
 }
 
 export async function clearCart(cartId) {

@@ -8,9 +8,13 @@ export async function action({ request }) {
 
   if (!cartId) {
     const session = await getSession(request)
-    const res = await addCart()
+    const cart = await addCart()
 
-    cartId = res.data.attributes.cartId
+    if (!cart) {
+      throw new Error('Unable to create cart!')
+    }
+
+    cartId = cart.attributes.cartId
     session.set('cartId', cartId)
     options = { headers: { 'Set-Cookie': await commitSession(session) } }
   }
