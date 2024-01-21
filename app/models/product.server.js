@@ -10,8 +10,13 @@ export async function getProduct(code) {
     },
     populate: 'deep',
   }
-  const { data } = await fetchApi(path, urlParamsObj)
-  return data[0]
+  const res = await fetchApi(path, urlParamsObj)
+
+  if (!res?.data) {
+    return null
+  }
+
+  return res.data[0]
 }
 
 export async function getProducts(page = 1, category, filters = {}) {

@@ -66,6 +66,11 @@ export async function loader({ params }) {
   const { productId } = params
 
   const product = await getProduct(productId)
+
+  if (!product) {
+    throw new Response('Product not found', { status: 404 })
+  }
+
   const {
     name,
     code,
