@@ -10,10 +10,15 @@ export async function getCart(cartId) {
         $eq: cartId,
       },
     },
-    populate: 'deep',
   }
-  const { data } = await fetchApi(path, urlParamsObj)
-  return data[0]
+
+  const res = await fetchApi(path, urlParamsObj)
+
+  if (!res?.data) {
+    return null
+  }
+
+  return res.data[0]
 }
 
 // TODO: when deploy, dont know why a lot of carts will be created
