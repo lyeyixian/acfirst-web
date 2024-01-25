@@ -22,14 +22,16 @@ export async function fetchApi(path, urlParamsObj = {}, options = {}) {
     const response = await fetch(requestUrl, mergedOptions)
 
     if (!response.ok) {
-      throw new Error(`Fetch response not ok: ${response.statusText}`)
+      throw new Error(
+        `Fetch response not ok: ${response.status} ${response.statusText}`
+      )
     }
 
     const data = await response.json()
 
     return data
   } catch (err) {
-    console.log(err)
+    console.log('fetchApi error:', err)
 
     return null
   }
