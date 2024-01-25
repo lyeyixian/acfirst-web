@@ -18,7 +18,6 @@ export default function RelatedProducts({ products }) {
       {relatedProductsCarousel.length ? (
         <AcfirstCarousel
           mt="md"
-          loop
           slideSize="25%"
           slidesToScroll="auto"
           slideGap="md"
@@ -27,6 +26,14 @@ export default function RelatedProducts({ products }) {
             { maxWidth: 'sm', slideSize: '33.333333%' },
             { maxWidth: 'xs', slideSize: '50%' },
           ]}
+          styles={{
+            control: {
+              '&[data-inactive]': {
+                opacity: 0,
+                cursor: 'default',
+              },
+            },
+          }}
         >
           {relatedProductsCarousel}
         </AcfirstCarousel>
