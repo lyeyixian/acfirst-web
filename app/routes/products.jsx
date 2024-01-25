@@ -24,7 +24,7 @@ import { getProductSchema } from '../models/contentType.server'
 import { formatSize } from '../utils/formatter'
 import { _ } from 'lodash'
 import { useDisclosure } from '@mantine/hooks'
-import { IconPlus } from '@tabler/icons-react'
+import { IconPlus, IconX } from '@tabler/icons-react'
 
 const useStyles = createStyles((theme) => ({
   sidebar: {
@@ -70,7 +70,7 @@ export async function loader() {
 }
 
 export default function ProductsRoute() {
-  const { classes } = useStyles()
+  const { classes, theme } = useStyles()
   const [opened, { toggle, close }] = useDisclosure(false)
 
   const { category } = useParams()
@@ -113,6 +113,11 @@ export default function ProductsRoute() {
             </ThemeIcon>
           }
           active={active === category.slug}
+          rightSection={
+            active === category.slug && (
+              <IconX size="1.2rem" color={theme.colors.red[5]} />
+            )
+          }
           component={Link}
           to={preserveSearchParams(
             active === category.slug
