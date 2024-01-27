@@ -10,10 +10,12 @@ export async function createOrder(data) {
         name,
         phone,
         enquiry,
-        products: {
-          connect: [...cartItems.map((item) => item.id)],
-        },
-        // quantities: cartItems.map((item) => item.quantity)
+        productDetails: [
+          ...cartItems.map((item) => ({
+            code: item.code,
+            quantity: item.quantity,
+          })),
+        ],
       },
     }),
   }
@@ -35,7 +37,7 @@ export async function getOrder(orderId) {
         $eq: orderId,
       },
     },
-    populate: 'products',
+    populate: 'productDetails',
   }
 
   const res = await fetchApi(path, urlParamsObj)

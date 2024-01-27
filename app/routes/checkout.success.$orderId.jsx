@@ -11,11 +11,15 @@ export async function loader({ params }) {
     throw new Response('Order not found', { status: 404 })
   }
 
-  const { phone, name, enquiry, orderId, products } = order.attributes
-  const productCodes = products.data.map((product) => product.attributes.code)
+  const { phone, name, enquiry, orderId, productDetails } = order.attributes
   const text = `Name: ${name}
 Phone: ${phone}
-Interested Products: ${productCodes.join(', ')}
+Interested Products: 
+    - ${productDetails
+      .map(
+        (productDetail) => `${productDetail.code} x ${productDetail.quantity}`
+      )
+      .join('\n    - ')}
 Order ID: ${orderId}
 
 ${enquiry}`
