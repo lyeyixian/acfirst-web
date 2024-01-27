@@ -162,7 +162,7 @@ export default function ProductsIndexRoute() {
   return (
     <div>
       <Title order={2} ta="center" mb="md" transform="capitalize">
-        {category === 'all' ? 'All products' : category}
+        {category === 'all' ? 'All Products' : category.split('-').join(' ')}
       </Title>
       <Stack justify="space-between" mih={650}>
         <ProductsGrid products={products} />
