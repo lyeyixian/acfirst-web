@@ -37,7 +37,6 @@ export default function () {
     window.open(whatsappUrl, '_blank')
   }, [])
 
-  // TODO: figure out how to let user choose to use whatsapp or not in a delegant way
   return (
     <Stack align="flex-start" justify="center" h={400} spacing={0}>
       <Title
