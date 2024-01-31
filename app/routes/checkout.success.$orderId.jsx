@@ -33,9 +33,9 @@ export default function () {
   const { whatsappUrl } = useLoaderData()
   const { orderId } = useParams()
 
-  // useEffect(() => {
-  //   window.open(whatsappUrl, '_blank')
-  // }, [])
+  useEffect(() => {
+    window.open(whatsappUrl, '_blank')
+  }, [])
 
   // TODO: figure out how to let user choose to use whatsapp or not in a delegant way
   return (
