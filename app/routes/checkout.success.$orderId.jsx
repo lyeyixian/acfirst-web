@@ -1,7 +1,7 @@
 import { json } from '@remix-run/node'
 import { getOrder } from '../models/order.server'
 import { Link, useLoaderData, useParams } from '@remix-run/react'
-import { Button, Stack, Text, Title } from '@mantine/core'
+import { Anchor, Button, Stack, Text, Title } from '@mantine/core'
 import { useEffect } from 'react'
 
 export async function loader({ params }) {
@@ -33,9 +33,9 @@ export default function () {
   const { whatsappUrl } = useLoaderData()
   const { orderId } = useParams()
 
-  useEffect(() => {
-    window.open(whatsappUrl, '_blank')
-  }, [])
+  // useEffect(() => {
+  //   window.open(whatsappUrl, '_blank')
+  // }, [])
 
   // TODO: figure out how to let user choose to use whatsapp or not in a delegant way
   return (
@@ -47,14 +47,25 @@ export default function () {
       >
         Thank You!
       </Title>
-      <Text color="dimmed">
-        Your order is received and we will be in touch with you in 3 business
-        days
-      </Text>
       <Title order={5} mt="md">
-        Order ID:
+        Order ID (for reference):
       </Title>
-      <Text color="dimmed">{orderId}</Text>
+      <Text color="dimmed" mb="md">
+        {orderId}
+      </Text>
+      <Text color="dimmed">
+        If the WhatsApp popup didn't appear, please{' '}
+        <Anchor href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+          click here
+        </Anchor>
+      </Text>
+      <Text color="dimmed" mt="md">
+        <Text weight={600} span>
+          Note:
+        </Text>{' '}
+        You need to send the message through WhatsApp for us to process your
+        order
+      </Text>
       <Button component={Link} to="/products" my="md">
         Back to Products
       </Button>
