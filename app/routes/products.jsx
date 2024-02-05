@@ -25,6 +25,7 @@ import { formatSize } from '../utils/formatter'
 import { _ } from 'lodash'
 import { useDisclosure } from '@mantine/hooks'
 import { IconPlus, IconX } from '@tabler/icons-react'
+import { useDebounceSearchParams } from '../components/hooks/helper'
 
 const useStyles = createStyles((theme) => ({
   sidebar: {
@@ -81,12 +82,15 @@ export default function ProductsRoute() {
 
   const { categories, filterData } = useLoaderData()
 
+  const [search, setSearch] = useDebounceSearchParams(500)
   const specificationFilters = filterData.map((item) => (
     <FiltersGroup
       {...item}
       icon={renderFilterIcon(item.slug)}
       key={item.label}
       onClick={close}
+      search={search}
+      setSearch={setSearch}
     />
   ))
 

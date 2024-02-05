@@ -25,7 +25,6 @@ import {
 import { IconEye, IconFileX } from '@tabler/icons-react'
 import AcfirstSkeleton from '../../components/common/AcfirstSkeleton'
 
-// TODO: responsive
 const useStyles = createStyles((theme) => ({
   card: {
     transition: 'transform 150ms ease, box-shadow 150ms ease',

@@ -11,7 +11,6 @@ import {
   NavLink,
 } from '@mantine/core'
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react'
-import { useSearchParams } from '@remix-run/react'
 
 const useStyles = createStyles((theme) => ({
   control: {
@@ -72,38 +71,31 @@ export default function FiltersGroup({
   initiallyOpened,
   filters,
   onClick,
+  search,
+  setSearch,
 }) {
   const { classes, theme } = useStyles()
   const hasFilters = Array.isArray(filters)
   const [opened, setOpened] = useState(initiallyOpened || true)
   const ChevronIcon = theme.dir === 'ltr' ? IconChevronRight : IconChevronLeft
 
-  const [searchParams, setSearchParams] = useSearchParams()
-  const filterValue = searchParams.get(slug)
-  const [active, setActive] = useState(filterValue)
-  useEffect(() => {
-    setActive(filterValue)
-  }, [filterValue])
+  const filterValue = search[slug] || ''
 
   const items = (hasFilters ? filters : []).map((filter, index) => (
     <div key={index}>
       {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
       <NavLink
-        active={active === filter.slug}
+        active={filterValue === filter.slug}
         className={classes.link}
         label={filter.label}
         onClick={(e) => {
-          setSearchParams((params) => {
-            if (active === filter.slug) {
-              params.delete(slug)
-            } else {
-              params.set(slug, filter.slug)
-            }
+          if (filterValue === filter.slug) {
+            delete search[slug]
+            setSearch({ ...search })
+          } else {
+            setSearch({ ...search, [slug]: filter.slug })
+          }
 
-            params.set('p', 1)
-
-            return params
-          })
           onClick(e)
         }}
       />
@@ -125,7 +117,9 @@ export default function FiltersGroup({
             )}
             <Text ml="sm" lineClamp={1}>
               {`${label}${
-                active ? `: ${formatSlugToLabel(active, filters)}` : ''
+                filterValue
+                  ? `: ${formatSlugToLabel(filterValue, filters)}`
+                  : ''
               }`}
             </Text>{' '}
           </Box>
