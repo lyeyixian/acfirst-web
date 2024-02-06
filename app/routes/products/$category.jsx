@@ -1,6 +1,6 @@
 import {
-  Anchor,
   AspectRatio,
+  Button,
   Card,
   Center,
   Group,
@@ -22,8 +22,9 @@ import {
   useParams,
   useSearchParams,
 } from '@remix-run/react'
-import { IconEye, IconFileX } from '@tabler/icons-react'
+import { IconEye } from '@tabler/icons-react'
 import AcfirstSkeleton from '../../components/common/AcfirstSkeleton'
+import EmptyState from '../../components/common/EmptyState'
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -135,15 +136,11 @@ function ProductsGrid({ products }) {
       {cards}
     </SimpleGrid>
   ) : (
-    <Stack justify="center" align="center" mih={600} spacing="xs">
-      <IconFileX size="2rem" />
-      <Text size="lg" weight={500}>
-        No products found
-      </Text>
-      <Anchor component={Link} to="/products">
+    <EmptyState title="No products found" mih={600}>
+      <Button variant="subtle" component={Link} to="/products">
         Browse other products
-      </Anchor>
-    </Stack>
+      </Button>
+    </EmptyState>
   )
 }
 

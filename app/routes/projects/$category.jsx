@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node'
 import { useLoaderData, useSearchParams, Link } from '@remix-run/react'
-import { Anchor, Pagination, Stack, Text } from '@mantine/core'
+import { Button, Pagination, Stack } from '@mantine/core'
 import { useEffect, useState } from 'react'
 import { getProjects } from '../../models/project.server'
 import {
@@ -9,7 +9,7 @@ import {
   getStrapiMedias,
 } from '../../utils/api/helper'
 import ProjectsGrid from '../../components/projects/ProjectsGrid'
-import { IconFileX } from '@tabler/icons-react'
+import EmptyState from '../../components/common/EmptyState'
 
 export async function loader({ request, params }) {
   const url = new URL(request.url)
@@ -67,15 +67,11 @@ export default function ProjectsIndexRoute() {
           />
         </Stack>
       ) : (
-        <Stack justify="center" align="center" mih={730} spacing="xs">
-          <IconFileX size="2rem" />
-          <Text size="lg" weight={500}>
-            No projects found
-          </Text>
-          <Anchor component={Link} to="/projects">
+        <EmptyState title="No projects found" mih={730}>
+          <Button variant="subtle" component={Link} to="/products">
             Browse other categories
-          </Anchor>
-        </Stack>
+          </Button>
+        </EmptyState>
       )}
     </div>
   )

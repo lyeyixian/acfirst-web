@@ -1,8 +1,8 @@
-import { Stack, Text, Title } from '@mantine/core'
+import { Title } from '@mantine/core'
 import AcfirstCarousel from '../common/AcfirstCarousel'
 import { Carousel } from '@mantine/carousel'
 import ProductImageCard from '../common/ProductImageCard'
-import { IconFileX } from '@tabler/icons-react'
+import EmptyState from '../common/EmptyState'
 
 export default function RelatedProducts({ products }) {
   const relatedProductsCarousel = products.map((relatedProduct, index) => (
@@ -38,12 +38,7 @@ export default function RelatedProducts({ products }) {
           {relatedProductsCarousel}
         </AcfirstCarousel>
       ) : (
-        <Stack mt="xl" justify="center" align="center" spacing="xs">
-          <IconFileX size="2rem" />
-          <Text size="lg" weight={500}>
-            No related products found
-          </Text>
-        </Stack>
+        <EmptyState title="No related products found" mt="xl" />
       )}
     </>
   )

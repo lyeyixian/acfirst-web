@@ -1,6 +1,6 @@
 import { Button, Group } from '@mantine/core'
 import { useFetcher } from '@remix-run/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import AcfirstNumberInput from './common/AcfirstNumberInput'
 import { useNotification } from './hooks/notification'
 
@@ -23,10 +23,6 @@ export default function AddToCartBtn({ productId, ...props }) {
     'There is something wrong when adding to cart. Please try again.',
     () => setQuantity(1)
   )
-
-  useEffect(() => {
-    console.log('DEBUG add to cart state:', addToCartFetcher.state)
-  }, [addToCartFetcher.state])
 
   return (
     <addToCartFetcher.Form method="post" action="/api/cart">

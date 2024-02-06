@@ -2,8 +2,7 @@ import { Carousel } from '@mantine/carousel'
 import SectionContainer from './SectionContainer'
 import ProductImageCard from '../common/ProductImageCard'
 import AcfirstCarousel from '../common/AcfirstCarousel'
-import { Stack, Text } from '@mantine/core'
-import { IconFileX } from '@tabler/icons-react'
+import EmptyState from '../common/EmptyState'
 
 function CardsCarousel({ products }) {
   const slides = products.map((product, index) => (
@@ -27,12 +26,7 @@ function CardsCarousel({ products }) {
       {slides}
     </AcfirstCarousel>
   ) : (
-    <Stack mt="xl" justify="center" align="center" spacing="xs">
-      <IconFileX size="2rem" />
-      <Text size="lg" weight={500}>
-        No products found
-      </Text>
-    </Stack>
+    <EmptyState title="No products found" mt="xl" />
   )
 }
 
