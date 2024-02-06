@@ -34,6 +34,7 @@ import { useEffectAfterMount } from '../components/hooks/helper'
 import { formatSize } from '../utils/formatter'
 import { _ } from 'lodash'
 import DeleteCartItemBtn from '../components/common/DeleteCartItemBtn'
+import EmptyState from '../components/common/EmptyState'
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -244,7 +245,15 @@ export default function CheckoutRoute() {
         <Grid.Col order={1} sm={7} orderSm={2}>
           <Title order={3}>Order Summary</Title>
           <Card padding="lg" withBorder shadow="sm" radius="md" mt="md">
-            {checkoutProducts}
+            {checkoutProducts.length ? (
+              checkoutProducts
+            ) : (
+              <EmptyState title="No items found in your order" mih={250}>
+                <Button variant="subtle" component={Link} to="/products">
+                  Browse our products
+                </Button>
+              </EmptyState>
+            )}
           </Card>
         </Grid.Col>
       </Grid>
