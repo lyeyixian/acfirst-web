@@ -1,6 +1,6 @@
 import { Button, Group } from '@mantine/core'
 import { useFetcher } from '@remix-run/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import AcfirstNumberInput from './common/AcfirstNumberInput'
 import { useNotification } from './hooks/notification'
 
@@ -24,6 +24,10 @@ export default function AddToCartBtn({ productId, ...props }) {
     () => setQuantity(1)
   )
 
+  useEffect(() => {
+    console.log('DEBUG add to cart state:', addToCartFetcher.state)
+  }, [addToCartFetcher.state])
+
   return (
     <addToCartFetcher.Form method="post" action="/api/cart">
       <input type="hidden" name="productId" value={productId} />
@@ -31,7 +35,7 @@ export default function AddToCartBtn({ productId, ...props }) {
         <AcfirstNumberInput value={quantity} onChange={setQuantity} />
         <Button
           type="submit"
-          loading={addToCartFetcher.state === 'submitting'}
+          loading={['submitting', 'loading'].includes(addToCartFetcher.state)}
           loaderPosition="right"
           {...props}
         >

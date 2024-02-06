@@ -132,12 +132,12 @@ export default function GetInTouch({
     },
   })
 
-  const isSubmitting = navigation.state === 'submitting'
+  const isLoading = ['submitting', 'loading'].includes(navigation.state)
   useEffect(() => {
-    if (!isSubmitting) {
+    if (!isLoading) {
       form.reset()
     }
-  }, [isSubmitting])
+  }, [isLoading])
 
   const handleSubmit = (values, event) => {
     event.preventDefault()
@@ -200,7 +200,7 @@ export default function GetInTouch({
             <Button
               type="submit"
               className={classes.control}
-              loading={isSubmitting}
+              loading={isLoading}
               loaderPosition="right"
             >
               {text}

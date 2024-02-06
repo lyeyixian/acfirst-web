@@ -172,7 +172,7 @@ export default function CheckoutRoute() {
     })
   }
   const navigation = useNavigation()
-  const isSubmitting = navigation.state === 'submitting'
+  const isLoading = ['submitting', 'loading'].includes(navigation.state)
 
   const actionData = useActionData()
 
@@ -232,7 +232,7 @@ export default function CheckoutRoute() {
               <Group position="right" mt="md">
                 <Button
                   type="submit"
-                  loading={isSubmitting}
+                  loading={isLoading}
                   loaderPosition="right"
                 >
                   Send enquiry

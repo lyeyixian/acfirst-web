@@ -11,7 +11,7 @@ export default function DeleteCartItemBtn({ code }) {
       <ActionIcon
         color="red.4"
         type="submit"
-        loading={fetcher.state === 'submitting'}
+        loading={['submitting', 'loading'].includes(fetcher.state)}
       >
         <IconTrash size="1.2rem" />
       </ActionIcon>
