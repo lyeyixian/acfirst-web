@@ -173,7 +173,8 @@ export default function CheckoutRoute() {
     })
   }
   const navigation = useNavigation()
-  const isLoading = ['submitting', 'loading'].includes(navigation.state)
+  const isLoading = navigation.state === 'submitting'
+  const isDisabled = checkoutProducts.length < 1
 
   const actionData = useActionData()
 
@@ -197,6 +198,7 @@ export default function CheckoutRoute() {
                   placeholder="Your name"
                   name="name"
                   withAsterisk
+                  disabled={isDisabled}
                   {...form.getInputProps('name')}
                 />
 
@@ -205,6 +207,7 @@ export default function CheckoutRoute() {
                   placeholder="0123456789"
                   name="phone"
                   withAsterisk
+                  disabled={isDisabled}
                   {...form.getInputProps('phone')}
                 />
               </SimpleGrid>
@@ -215,6 +218,7 @@ export default function CheckoutRoute() {
                 label="Enquiry"
                 placeholder="Your message"
                 minRows={4}
+                disabled={isDisabled}
                 {...form.getInputProps('enquiry')}
               />
 
@@ -235,6 +239,7 @@ export default function CheckoutRoute() {
                   type="submit"
                   loading={isLoading}
                   loaderPosition="right"
+                  disabled={isDisabled}
                 >
                   Send enquiry
                 </Button>
