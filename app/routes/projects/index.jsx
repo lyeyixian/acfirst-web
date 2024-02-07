@@ -20,6 +20,8 @@ export async function loader() {
   return { categories: prunedCategories }
 }
 
+export const shouldRevalidate = () => false
+
 export default function () {
   const loaderData = useLoaderData()
   const { categories } = loaderData

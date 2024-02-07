@@ -77,6 +77,23 @@ export async function loader({ request, params }) {
   })
 }
 
+export function shouldRevalidate({
+  currentUrl,
+  nextUrl,
+  currentParams,
+  nextParams,
+  defaultShouldRevalidate,
+}) {
+  if (
+    currentParams.category === nextParams.category &&
+    currentUrl.search === nextUrl.search
+  ) {
+    return false
+  }
+
+  return defaultShouldRevalidate
+}
+
 function ProductCard({ product }) {
   const { classes, theme } = useStyles()
 

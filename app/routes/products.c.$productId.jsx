@@ -140,6 +140,18 @@ export async function loader({ params }) {
   })
 }
 
+export function shouldRevalidate({
+  currentParams,
+  nextParams,
+  defaultShouldRevalidate,
+}) {
+  if (currentParams.productId === nextParams.productId) {
+    return false
+  }
+
+  return defaultShouldRevalidate
+}
+
 function Slide({ imgUrl, code }) {
   const { classes } = useStyle()
 

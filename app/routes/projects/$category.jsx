@@ -35,6 +35,18 @@ export async function loader({ request, params }) {
   })
 }
 
+export function shouldRevalidate({
+  currentParams,
+  nextParams,
+  defaultShouldRevalidate,
+}) {
+  if (currentParams.category === nextParams.category) {
+    return false
+  }
+
+  return defaultShouldRevalidate
+}
+
 export default function ProjectsIndexRoute() {
   const [searchParams, setSearchParams] = useSearchParams()
   const searchParamsPage = searchParams.get('p') || 1

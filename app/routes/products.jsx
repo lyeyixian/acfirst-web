@@ -41,7 +41,6 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-// TODO: dont make the loader run when search params changed
 export async function loader() {
   const categories = await getCategories()
   const prunedCategories = categories.map((category) => {
@@ -69,6 +68,8 @@ export async function loader() {
 
   return { categories: prunedCategories, filterData }
 }
+
+export const shouldRevalidate = () => false
 
 export default function ProductsRoute() {
   const { classes, theme } = useStyles()
