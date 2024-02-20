@@ -14,12 +14,13 @@ export const useEffectAfterMount = (func, deps) => {
 }
 
 export function useDebounceSearchParams(delay) {
-  const [_, setDebouncedSearchParams] = useSearchParams()
-  const [search, setSearch] = useState({})
+  const [debouncedSearchParams, setDebouncedSearchParams] = useSearchParams()
+  const [search, setSearch] = useState(
+    Object.fromEntries(debouncedSearchParams.entries())
+  )
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      search.p = 1
       setDebouncedSearchParams(search)
     }, delay)
 
