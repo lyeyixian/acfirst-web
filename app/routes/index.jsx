@@ -63,7 +63,7 @@ export async function loader() {
     }
   })
 
-  sections.push(getReviews())
+  sections.push(await getReviews())
 
   return json(sections)
 }

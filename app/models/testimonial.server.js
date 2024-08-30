@@ -1,76 +1,94 @@
-const reviews = [
+const staticReviews = [
   {
-    author_name: 'M.azmir Bakar',
-    author_url:
-      'https://www.google.com/maps/contrib/117051616429797800063/reviews',
-    language: 'en',
-    original_language: 'en',
-    profile_photo_url:
-      'https://lh3.googleusercontent.com/a/ACg8ocJH8168aYUUl0YuZTpBc0mGDmotImiUdyhf3jReFimE=s128-c0x00000000-cc-rp-mo-ba6',
     rating: 5,
-    relative_time_description: '5 months ago',
+    relative_time_description: 'a year ago',
     text: 'Bought ceramic peranakan old style. Rare items hard to get. The owner is friendly. Bought for my melaka house.',
-    time: 1683721487,
-    translated: false,
+    profile_photo_url:
+      'https://lh3.googleusercontent.com/a/ACg8ocJCNkOOCySIJa8dc4l6_nInzk7gEk3JiW9grO-1VgCWW82F8Q=s120-c-rp-mo-ba6-br100',
+    author_name: 'M.azmir Bakar',
   },
   {
-    author_name: 'MOHD YUSAIRI OTHMAN',
-    author_url:
-      'https://www.google.com/maps/contrib/101332127114886547977/reviews',
-    language: 'en',
-    original_language: 'en',
-    profile_photo_url:
-      'https://lh3.googleusercontent.com/a-/ALV-UjX2yVSgy_ovUXbYPJwhViYzodA7qLrcy19B5jqqh9_10a2v=s128-c0x00000000-cc-rp-mo-ba4',
     rating: 5,
-    relative_time_description: '3 years ago',
+    relative_time_description: '4 years ago',
     text: 'A lot of choices for tiles and marble. Affordable price..',
-    time: 1591520678,
-    translated: false,
+    profile_photo_url:
+      'https://lh3.googleusercontent.com/a-/ALV-UjXF49KlcKPSs3Yy0m8Kr5Q-C_nCnfR8MN6I1n00kNhe7MF0QHrKHg=s120-c-rp-mo-ba4-br100',
+    author_name: 'MOHD YUSAIRI OTHMAN',
   },
   {
-    author_name: 'Yuzz Volper',
-    author_url:
-      'https://www.google.com/maps/contrib/113667695590585934364/reviews',
-    language: 'en',
-    original_language: 'en',
-    profile_photo_url:
-      'https://lh3.googleusercontent.com/a-/ALV-UjVk-hZcNl5rouIbeWBem7jP4XRH4dmIVrBx-O9jZQVpzLU=s128-c0x00000000-cc-rp-mo-ba4',
-    rating: 4,
-    relative_time_description: '5 months ago',
-    text: 'Good shop',
-    time: 1684543759,
-    translated: false,
-  },
-  {
-    author_name: 'Hj Zalizan',
-    author_url:
-      'https://www.google.com/maps/contrib/101862515971678032632/reviews',
-    language: 'en',
-    original_language: 'en',
-    profile_photo_url:
-      'https://lh3.googleusercontent.com/a/ACg8ocI18Ahx8eQwdDThKLPYr0FC0RQclrwrsdJ4nMluG86K=s128-c0x00000000-cc-rp-mo-ba5',
     rating: 3,
     relative_time_description: '4 years ago',
     text: 'A Good place to get your Floor Tiles here..... A lot of Selections available & very helpful staff to asist you all the way...',
-    time: 1570591398,
-    translated: false,
+    profile_photo_url:
+      'https://lh3.googleusercontent.com/a/ACg8ocJvQnNQi805jvTQqvAwOoy0wDNva6ZagGFK7q_Knm2gJbHD3Q=s120-c-rp-mo-ba5-br100',
+    author_name: 'Hj Zalizan',
   },
   {
-    author_name: 'Rasilah Ramli',
-    author_url:
-      'https://www.google.com/maps/contrib/116513802225997206772/reviews',
-    language: 'en',
-    original_language: 'en',
+    rating: 4,
+    relative_time_description: '6 years ago',
+    text: 'varieties of ceramic tiles with reasonable price for your budget.',
     profile_photo_url:
-      'https://lh3.googleusercontent.com/a/ACg8ocKwXkwSADQQK0perl3RksJ11NJRL3USw3SKzOzFPmTE=s128-c0x00000000-cc-rp-mo',
+      'https://lh3.googleusercontent.com/a/ACg8ocJPLnORXzd1o_CPw41rhyjjPIT-gRjnzJ7GISK1xy-SGTZqtg=s120-c-rp-mo-ba5-br100',
+    author_name: 'Ahmad Syahir',
+  },
+  {
     rating: 5,
-    relative_time_description: '4 years ago',
+    relative_time_description: '5 years ago',
     text: 'Highly recommended. Thanks to Mr Allen and Mr Beng for the excellent service. Keep it up👍',
-    time: 1551330712,
-    translated: false,
+    profile_photo_url:
+      'https://lh3.googleusercontent.com/a/ACg8ocLv-02SqjQ5J3cNdKovrBSj9M8AbbRG-lmuQT6WOfeDB77yqA=s120-c-rp-mo-br100',
+    author_name: 'Rasilah Ramli',
+  },
+  {
+    rating: 5,
+    relative_time_description: '8 years ago',
+    text: 'Bought all interior home decor needs here. One stop shop.',
+    profile_photo_url:
+      'https://lh3.googleusercontent.com/a-/ALV-UjUXV2RDNizGDqcf8kTrMgFh_5PGLVtSwd8F2ffg00UMVckuV0O-5w=s120-c-rp-mo-br100',
+    author_name: 'Faisal Zulhumadi',
+  },
+  {
+    rating: 5,
+    relative_time_description: '2 years ago',
+    text: 'Good service, reasonable price and awesome showeoom',
+    profile_photo_url:
+      'https://lh3.googleusercontent.com/a-/ALV-UjWxc1zyp3Sj4By6C7MrbG7BPVxFsGnz672sQL1fDGxNBTlgIfXTcg=s120-c-rp-mo-ba2-br100',
+    author_name: 'Lim Chun Woei',
+  },
+  {
+    rating: 5,
+    relative_time_description: '6 years ago',
+    text: 'various choices; good customer relation; price reasonable',
+    profile_photo_url:
+      'https://lh3.googleusercontent.com/a/ACg8ocKwpYAu5GdQONpRsFMsGPW7GithTBY0qH2rEgGhZ8yjV-kVKQ=s120-c-rp-mo-ba4-br100',
+    author_name: 'Norm',
   },
 ]
 
-export function getReviews() {
+export async function getReviews() {
+  const engine = 'google_maps_reviews'
+  const dataId = '0x304b57814b1f25b7%3A0x37d89c1c2cb83e9f'
+  const hl = 'en'
+  const apiKey = process.env.SERP_API_KEY
+
+  if (!apiKey) {
+    console.log('No API key found, using static reviews')
+    return { type: 'testimonials', reviews: staticReviews }
+  }
+
+  const response = await fetch(
+    `https://serpapi.com/search.json?engine=${engine}&data_id=${dataId}&hl=${hl}&api_key=${apiKey}`
+  )
+  const data = await response.json()
+  const reviews = data.reviews.map((review) => {
+    return {
+      rating: review.rating,
+      relative_time_description: review.date,
+      text: review.snippet,
+      profile_photo_url: review.user.thumbnail,
+      author_name: review.user.name,
+    }
+  })
+
   return { type: 'testimonials', reviews }
 }
