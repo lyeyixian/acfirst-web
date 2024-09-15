@@ -142,8 +142,8 @@ const groupsData = [
     links: [
       { label: 'Kitchen', link: '/products/kitchen' },
       { label: 'Bathroom', link: '/products/bathroom' },
-      { label: 'Living Room', link: '/products/living' },
-      { label: 'Car Poch', link: '/products/car' },
+      { label: 'Living Room', link: '/products/living-room' },
+      { label: 'Car Porch', link: '/products/car-porch' },
     ],
   },
   {

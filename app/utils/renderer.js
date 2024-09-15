@@ -84,7 +84,7 @@ export function renderCategoryIcon(category) {
       return IconBath
     case 'living-room':
       return IconSofa
-    case 'car-poch':
+    case 'car-porch':
       return IconCar
     default:
       return null
