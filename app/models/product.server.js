@@ -137,11 +137,20 @@ export async function incrementProductViewCount(productId, viewCount) {
   return res.data
 }
 
-export async function getProductCodes() {
+export async function getProductCodes(category) {
   const path = '/products'
   const urlParamsObj = {
     fields: ['code'],
     sort: 'viewCount:desc',
+    filters: {},
+  }
+
+  if (category && category !== 'all') {
+    urlParamsObj.filters.category = {
+      slug: {
+        $eq: category,
+      },
+    }
   }
 
   const res = await fetchApi(path, urlParamsObj)

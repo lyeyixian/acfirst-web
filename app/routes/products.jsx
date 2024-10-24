@@ -44,7 +44,7 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-export async function loader() {
+export async function loader({ params }) {
   const categories = await getCategories()
   const prunedCategories = categories.map((category) => {
     const { name, slug } = category.attributes
@@ -68,7 +68,8 @@ export async function loader() {
       }),
     }
   })
-  const productCodes = await getProductCodes()
+  const { category } = params
+  const productCodes = await getProductCodes(category)
   const transformedCodes = productCodes.map((productCode) => {
     const { code } = productCode.attributes
     return {
@@ -80,7 +81,13 @@ export async function loader() {
   return { categories: prunedCategories, filterData, codes: transformedCodes }
 }
 
-export const shouldRevalidate = () => false
+export const shouldRevalidate = ({ currentParams, nextParams }) => {
+  if (currentParams.category !== nextParams.category) {
+    return true
+  }
+
+  return false
+}
 
 export default function ProductsRoute() {
   const { classes, theme } = useStyles()
@@ -176,7 +183,6 @@ export default function ProductsRoute() {
       <Grid>
         <Grid.Col className={classes.sidebar} span={3}>
           {categoryFilters}
-          <Divider my="md" />
           <MultiSelect
             searchable
             label="Search for product code"
@@ -185,6 +191,7 @@ export default function ProductsRoute() {
             onChange={handleSelectedCodesChange}
             limit={5}
           />
+          <Divider my="md" />
           {specificationFilters}
         </Grid.Col>
         <Grid.Col span="auto">
