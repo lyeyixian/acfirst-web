@@ -50,14 +50,20 @@ const useStyles = createStyles((theme) => ({
 }))
 
 export async function loader({ request, params }) {
+  const { category } = params
   const url = new URL(request.url)
   const page = url.searchParams.get('p') || 1
   const surface = url.searchParams.get('surface')
   const type = url.searchParams.get('type')
   const size = url.searchParams.get('size')
+  const codes = url.searchParams.getAll('codes')
 
-  const { category } = params
-  const products = await getProducts(page, category, { surface, type, size })
+  const products = await getProducts(page, category, {
+    surface,
+    type,
+    size,
+    code: codes,
+  })
   const prunedProducts = products.data.map((product) => {
     const { name, code, viewCount, category, coverImg } = product.attributes
 

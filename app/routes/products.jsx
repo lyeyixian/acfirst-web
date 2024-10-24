@@ -4,6 +4,7 @@ import {
   Drawer,
   Grid,
   Group,
+  MultiSelect,
   NavLink,
   Text,
   ThemeIcon,
@@ -26,6 +27,8 @@ import { _ } from 'lodash'
 import { useDisclosure } from '@mantine/hooks'
 import { IconPlus, IconX } from '@tabler/icons-react'
 import { useDebounceSearchParams } from '../components/hooks/helper'
+import { getProductCodes } from '../models/product.server'
+import { useProductCodeSearcher } from '../components/hooks/productCodeSearcher'
 
 const useStyles = createStyles((theme) => ({
   sidebar: {
@@ -65,8 +68,16 @@ export async function loader() {
       }),
     }
   })
+  const productCodes = await getProductCodes()
+  const transformedCodes = productCodes.map((productCode) => {
+    const { code } = productCode.attributes
+    return {
+      value: code,
+      label: code,
+    }
+  })
 
-  return { categories: prunedCategories, filterData }
+  return { categories: prunedCategories, filterData, codes: transformedCodes }
 }
 
 export const shouldRevalidate = () => false
@@ -81,7 +92,7 @@ export default function ProductsRoute() {
     setActive(category)
   }, [category])
 
-  const { categories, filterData } = useLoaderData()
+  const { categories, filterData, codes } = useLoaderData()
 
   const [search, setSearch] = useDebounceSearchParams(500)
   const specificationFilters = filterData.map((item) => (
@@ -94,6 +105,12 @@ export default function ProductsRoute() {
       setSearch={setSearch}
     />
   ))
+
+  const { selectedCodes, setSelectedCodes } = useProductCodeSearcher()
+  const handleSelectedCodesChange = (codes) => {
+    setSelectedCodes(codes)
+    setSearch({ codes })
+  }
 
   const [searchParams] = useSearchParams()
   const categoryFilters = categories.map((category, index) => {
@@ -153,6 +170,14 @@ export default function ProductsRoute() {
         <Grid.Col className={classes.sidebar} span={3}>
           {categoryFilters}
           <Divider my="md" />
+          <MultiSelect
+            searchable
+            label="Search for product code"
+            data={codes}
+            value={selectedCodes}
+            onChange={handleSelectedCodesChange}
+            limit={5}
+          />
           {specificationFilters}
         </Grid.Col>
         <Grid.Col span="auto">

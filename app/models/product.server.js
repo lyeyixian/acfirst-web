@@ -32,11 +32,11 @@ export async function getProducts(page = 1, category, filters = {}) {
   }
 
   for (const [key, value] of Object.entries(filters)) {
-    if (value) {
-      urlParamsObj.filters[key] = {
-        $eq: value,
-      }
+    if (!value) {
+      continue
     }
+
+    urlParamsObj.filters[key] = key === 'code' ? { $in: value } : { $eq: value }
   }
 
   if (category && category !== 'all') {
@@ -132,6 +132,22 @@ export async function incrementProductViewCount(productId, viewCount) {
 
   if (!res?.data) {
     return null
+  }
+
+  return res.data
+}
+
+export async function getProductCodes() {
+  const path = '/products'
+  const urlParamsObj = {
+    fields: ['code'],
+    sort: 'viewCount:desc',
+  }
+
+  const res = await fetchApi(path, urlParamsObj)
+
+  if (!res?.data) {
+    return []
   }
 
   return res.data

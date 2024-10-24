@@ -24,6 +24,7 @@ import { json } from '@remix-run/node'
 import { getCart } from './models/cart.server'
 import GracefulError from './components/GracefulError'
 import { useCacheFix } from './utils/fixes'
+import { ProductCodeProvider } from './components/hooks/productCodeSearcher'
 
 export const meta = () => ({
   charset: 'utf-8',
@@ -71,9 +72,11 @@ export default function App() {
           </head>
           <body>
             <Notifications limit={5} position="bottom-center" />
-            <AppContainer>
-              <Outlet />
-            </AppContainer>
+            <ProductCodeProvider>
+              <AppContainer>
+                <Outlet />
+              </AppContainer>
+            </ProductCodeProvider>
             <ScrollRestoration />
             <Scripts />
             <LiveReload />

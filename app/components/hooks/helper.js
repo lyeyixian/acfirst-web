@@ -21,7 +21,22 @@ export function useDebounceSearchParams(delay) {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedSearchParams(search)
+      setDebouncedSearchParams((params) => {
+        // reset the search params everytime there is a change, to overwrite everything
+        params = new URLSearchParams()
+        Object.entries(search).forEach(([key, value]) => {
+          if (key === 'codes') {
+            // if key is codes, the value will be a list
+            value.forEach((code) => {
+              params.append(key, code)
+            })
+          } else {
+            params.set(key, value)
+          }
+        })
+
+        return params
+      })
     }, delay)
 
     return () => {
