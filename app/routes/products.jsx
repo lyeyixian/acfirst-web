@@ -95,6 +95,11 @@ export default function ProductsRoute() {
   const { categories, filterData, codes } = useLoaderData()
 
   const [search, setSearch] = useDebounceSearchParams(500)
+  const handleFiltersChange = (obj) => {
+    delete obj['codes']
+    setSelectedCodes([])
+    setSearch(obj)
+  }
   const specificationFilters = filterData.map((item) => (
     <FiltersGroup
       {...item}
@@ -102,7 +107,7 @@ export default function ProductsRoute() {
       key={item.label}
       onClick={close}
       search={search}
-      setSearch={setSearch}
+      setSearch={handleFiltersChange}
     />
   ))
 
@@ -118,8 +123,12 @@ export default function ProductsRoute() {
     const preserveSearchParams = (str) => {
       const searchParamsEntries = [...searchParams.entries()]
       const newSearchParams = new URLSearchParams(
-        Object.fromEntries(searchParamsEntries.filter(([key]) => key !== 'p'))
+        Object.fromEntries(
+          searchParamsEntries.filter(([key]) => key !== 'p' && key !== 'codes')
+        )
       )
+
+      // setSelectedCodes([])
 
       return str + `?${newSearchParams.toString()}`
     }
