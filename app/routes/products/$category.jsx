@@ -25,6 +25,7 @@ import {
 import { IconEye } from '@tabler/icons-react'
 import AcfirstSkeleton from '../../components/common/AcfirstSkeleton'
 import EmptyState from '../../components/common/EmptyState'
+import { useProductCodeSearcher } from '../../components/hooks/productCodeSearcher'
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -177,6 +178,11 @@ export default function ProductsIndexRoute() {
   useEffect(() => {
     setPage(parseInt(searchParamsPage))
   }, [searchParamsPage])
+
+  const { setSelectedCodes } = useProductCodeSearcher()
+  useEffect(() => {
+    setSelectedCodes([])
+  }, [category])
 
   return (
     <div>

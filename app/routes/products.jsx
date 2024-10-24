@@ -128,8 +128,6 @@ export default function ProductsRoute() {
         )
       )
 
-      // setSelectedCodes([])
-
       return str + `?${newSearchParams.toString()}`
     }
     return (
