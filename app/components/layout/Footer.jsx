@@ -7,6 +7,7 @@ import {
   rem,
   Stack,
   ThemeIcon,
+  Image,
 } from '@mantine/core'
 import {
   IconBrandFacebook,
@@ -201,7 +202,13 @@ export default function Footer() {
     <footer className={classes.footer}>
       <Container className={classes.inner}>
         <div className={classes.logo}>
-          <MantineLogo size={30} />
+          {/* <MantineLogo size={30} /> */}
+          <Group align="center" mb="xs">
+            <Image width={70} src="/title-logo.svg" />
+            <Text fw={800} size="xl">
+              Acfirst Ceramics
+            </Text>
+          </Group>
           <Stack spacing={4}>{infos}</Stack>
         </div>
         <div className={classes.groups}>{groups}</div>
