@@ -18,7 +18,6 @@ import {
   IconMap,
   IconPhone,
 } from '@tabler/icons-react'
-import { MantineLogo } from '@mantine/ds'
 import { Link } from '@remix-run/react'
 
 const useStyles = createStyles((theme) => ({
@@ -202,7 +201,6 @@ export default function Footer() {
     <footer className={classes.footer}>
       <Container className={classes.inner}>
         <div className={classes.logo}>
-          {/* <MantineLogo size={30} /> */}
           <Group align="center" mb="xs">
             <Image width={70} src="/title-logo.svg" />
             <Text fw={800} size="xl">
