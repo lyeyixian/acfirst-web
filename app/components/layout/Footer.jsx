@@ -215,7 +215,7 @@ export default function Footer() {
       </Container>
       <Container className={classes.afterFooter}>
         <Text className={classes.copyright} color="dimmed" size="sm">
-          © 2023 Acfirst Ceramics Sdn. Bhd. All rights reserved.
+          © 2024 Acfirst Ceramics Sdn. Bhd. All rights reserved.
         </Text>
 
         <Group spacing={0} className={classes.social} position="right" noWrap>
