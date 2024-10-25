@@ -76,7 +76,7 @@ export default function FiltersGroup({
 }) {
   const { classes, theme } = useStyles()
   const hasFilters = Array.isArray(filters)
-  const [opened, setOpened] = useState(initiallyOpened || true)
+  const [opened, setOpened] = useState(initiallyOpened || false)
   const ChevronIcon = theme.dir === 'ltr' ? IconChevronRight : IconChevronLeft
 
   const filterValue = search[slug] || ''
