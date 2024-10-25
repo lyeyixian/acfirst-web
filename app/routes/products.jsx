@@ -25,7 +25,7 @@ import { getProductSchema } from '../models/contentType.server'
 import { formatSize } from '../utils/formatter'
 import { _ } from 'lodash'
 import { useDisclosure } from '@mantine/hooks'
-import { IconPlus, IconX } from '@tabler/icons-react'
+import { IconPlus } from '@tabler/icons-react'
 import { useDebounceSearchParams } from '../components/hooks/helper'
 import { getProductCodes } from '../models/product.server'
 import { useProductCodeSearcher } from '../components/hooks/productCodeSearcher'
@@ -40,6 +40,22 @@ const useStyles = createStyles((theme) => ({
   filterBurger: {
     [theme.fn.largerThan('sm')]: {
       display: 'none',
+    },
+  },
+
+  link: {
+    fontWeight: 500,
+    color:
+      theme.colorScheme === 'dark'
+        ? theme.colors.dark[0]
+        : theme.colors.gray[7],
+
+    '&:hover': {
+      backgroundColor:
+        theme.colorScheme === 'dark'
+          ? theme.colors.dark[7]
+          : theme.colors.gray[0],
+      color: theme.colorScheme === 'dark' ? theme.white : theme.black,
     },
   },
 }))
@@ -90,7 +106,7 @@ export const shouldRevalidate = ({ currentParams, nextParams }) => {
 }
 
 export default function ProductsRoute() {
-  const { classes, theme } = useStyles()
+  const { classes } = useStyles()
   const [opened, { toggle, close }] = useDisclosure(false)
 
   const { category } = useParams()
@@ -141,6 +157,7 @@ export default function ProductsRoute() {
       <div key={index}>
         {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
         <NavLink
+          className={classes.link}
           fw={500}
           label={category.name}
           icon={
@@ -149,11 +166,6 @@ export default function ProductsRoute() {
             </ThemeIcon>
           }
           active={active === category.slug}
-          rightSection={
-            active === category.slug && (
-              <IconX size="1.2rem" color={theme.colors.red[5]} />
-            )
-          }
           component={Link}
           to={preserveSearchParams(
             active === category.slug
