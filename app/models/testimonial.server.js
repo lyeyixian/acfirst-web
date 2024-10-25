@@ -1,3 +1,5 @@
+import { reviewCache } from './utils/cache.server'
+
 const staticReviews = [
   {
     rating: 5,
@@ -64,18 +66,31 @@ const staticReviews = [
     author_name: 'Norm',
   },
 ]
+const ONE_DAY = 1000 * 60 * 60 * 24
 
 export async function getReviews() {
+  const cachedReviews = reviewCache.get('reviews')
+  const now = Date.now()
+  if (cachedReviews && now - cachedReviews.timestamp < ONE_DAY) {
+    // Return cached reviews if within one day
+    console.log('Returning cached reviews')
+    return cachedReviews.data
+  }
+
+  const dto = {
+    type: 'testimonials',
+    reviews: staticReviews,
+  }
+
+  const apiKey = process.env.SERP_API_KEY
+  if (!apiKey) {
+    console.log('No API key found, using static reviews')
+    return dto
+  }
+
   const engine = 'google_maps_reviews'
   const dataId = '0x304b57814b1f25b7%3A0x37d89c1c2cb83e9f'
   const hl = 'en'
-  const apiKey = process.env.SERP_API_KEY
-
-  if (!apiKey) {
-    console.log('No API key found, using static reviews')
-    return { type: 'testimonials', reviews: staticReviews }
-  }
-
   const response = await fetch(
     `https://serpapi.com/search.json?engine=${engine}&data_id=${dataId}&hl=${hl}&api_key=${apiKey}`
   )
@@ -90,5 +105,13 @@ export async function getReviews() {
     }
   })
 
-  return { type: 'testimonials', reviews }
+  dto.reviews = reviews
+
+  // Cache the reviews along with the current timestamp
+  reviewCache.set('reviews', {
+    timestamp: now,
+    data: dto,
+  })
+
+  return dto
 }
