@@ -6,6 +6,10 @@
 app = "acfirst-web"
 primary_region = "sin"
 
+[mounts]
+  destination = "/data"
+  source = "local_disk"
+
 [build]
 
 [http_service]
