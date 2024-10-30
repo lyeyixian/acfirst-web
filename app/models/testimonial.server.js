@@ -1,4 +1,9 @@
-import { reviewCache } from './utils/cache.server'
+import {
+  readJsonFromFile,
+  reviewCache,
+  writeJsonToFile,
+} from './utils/cache.server'
+import path from 'path'
 
 const staticReviews = [
   {
@@ -66,17 +71,33 @@ const staticReviews = [
     author_name: 'Norm',
   },
 ]
-const ONE_DAY = 1000 * 60 * 60 * 24
+const CACHE_FILE_PATH = path.resolve(
+  process.env.NODE_ENV === 'production' ? '/data' : 'data',
+  'reviewsCache.json'
+)
+const CACHE_EXPIRATION = 1000 * 60 * 60 * 24 // 1 day
 
 export async function getReviews() {
+  // 1. check if reviews are cached in memory
   const cachedReviews = reviewCache.get('reviews')
   const now = Date.now()
-  if (cachedReviews && now - cachedReviews.timestamp < ONE_DAY) {
-    // Return cached reviews if within one day
-    console.log('Returning cached reviews')
+  if (cachedReviews && now - cachedReviews.timestamp < CACHE_EXPIRATION) {
+    console.log('Returning cached reviews in memory')
     return cachedReviews.data
   }
 
+  // 2. check if reviews are cached in file
+  const fileCachedReviews = await readJsonFromFile(CACHE_FILE_PATH)
+  if (
+    fileCachedReviews &&
+    now - fileCachedReviews.timestamp < CACHE_EXPIRATION
+  ) {
+    console.log('Returning cached reviews from file')
+    reviewCache.set('reviews', fileCachedReviews)
+    return fileCachedReviews.data
+  }
+
+  // 3. fetch reviews from API, if can't get from either cache
   const dto = {
     type: 'testimonials',
     reviews: staticReviews,
@@ -107,11 +128,16 @@ export async function getReviews() {
 
   dto.reviews = reviews
 
-  // Cache the reviews along with the current timestamp
-  reviewCache.set('reviews', {
+  // 4. save reviews to file
+  const cacheEntry = {
     timestamp: now,
     data: dto,
-  })
+  }
+
+  await writeJsonToFile(CACHE_FILE_PATH, cacheEntry)
+
+  // 5. update in memory cache
+  reviewCache.set('reviews', cacheEntry)
 
   return dto
 }
