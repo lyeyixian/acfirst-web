@@ -210,11 +210,19 @@ export default function ProductsRoute() {
           <Outlet />
         </Grid.Col>
       </Grid>
-      <Drawer opened={opened} onClose={toggle} title="Filters">
-        {categoryFilters}
-        <Divider my="md" />
-        {specificationFilters}
-      </Drawer>
+       <Drawer opened={opened} onClose={toggle} title="Filters">
+         {categoryFilters}
+         <MultiSelect
+           searchable
+           label="Search for product code"
+           data={codes}
+           value={selectedCodes}
+           onChange={handleSelectedCodesChange}
+           limit={5}
+         />
+         <Divider my="md" />
+         {specificationFilters}
+       </Drawer>
     </div>
   )
 }
