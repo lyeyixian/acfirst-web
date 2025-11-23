@@ -4,7 +4,6 @@ import {
   Drawer,
   Grid,
   Group,
-  MultiSelect,
   NavLink,
   Text,
   ThemeIcon,
@@ -28,7 +27,7 @@ import { useDisclosure } from '@mantine/hooks'
 import { IconPlus } from '@tabler/icons-react'
 import { useDebounceSearchParams } from '../components/hooks/helper'
 import { getProductCodes } from '../models/product.server'
-import { useProductCodeSearcher } from '../components/hooks/productCodeSearcher'
+import ProductCodeSearch from '../components/ProductCodeSearch'
 
 const useStyles = createStyles((theme) => ({
   sidebar: {
@@ -120,7 +119,6 @@ export default function ProductsRoute() {
   const [search, setSearch] = useDebounceSearchParams(500)
   const handleFiltersChange = (obj) => {
     delete obj['codes']
-    setSelectedCodes([])
     setSearch(obj)
   }
   const specificationFilters = filterData.map((item) => (
@@ -133,12 +131,6 @@ export default function ProductsRoute() {
       setSearch={handleFiltersChange}
     />
   ))
-
-  const { selectedCodes, setSelectedCodes } = useProductCodeSearcher()
-  const handleSelectedCodesChange = (codes) => {
-    setSelectedCodes(codes)
-    setSearch({ codes })
-  }
 
   const [searchParams] = useSearchParams()
   const categoryFilters = categories.map((category, index) => {
@@ -195,14 +187,7 @@ export default function ProductsRoute() {
       <Grid>
         <Grid.Col className={classes.sidebar} span={3}>
           {categoryFilters}
-          <MultiSelect
-            searchable
-            label="Search for product code"
-            data={codes}
-            value={selectedCodes}
-            onChange={handleSelectedCodesChange}
-            limit={5}
-          />
+          <ProductCodeSearch codes={codes} />
           <Divider my="md" />
           {specificationFilters}
         </Grid.Col>
@@ -212,14 +197,7 @@ export default function ProductsRoute() {
       </Grid>
        <Drawer opened={opened} onClose={toggle} title="Filters">
          {categoryFilters}
-         <MultiSelect
-           searchable
-           label="Search for product code"
-           data={codes}
-           value={selectedCodes}
-           onChange={handleSelectedCodesChange}
-           limit={5}
-         />
+         <ProductCodeSearch codes={codes} />
          <Divider my="md" />
          {specificationFilters}
        </Drawer>
