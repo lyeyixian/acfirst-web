@@ -4,6 +4,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev",
+    "lint": "eslint .",
     "start": "remix-serve build",
     "typecheck": "tsc"
   },

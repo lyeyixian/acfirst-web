@@ -5,7 +5,7 @@
 - **Dev server**: `npm run dev` (Remix dev)
 - **Start production**: `npm run start` (Remix serve)
 - **Type check**: `npm run typecheck` (TypeScript)
-- **Lint**: `npx eslint` (ESLint with Remix config)
+- **Lint**: `npm run lint` (ESLint with Remix config)
 
 ## Code Style
 - **Framework**: Remix with React 18, TypeScript strict mode
