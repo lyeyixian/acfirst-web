@@ -1,7 +1,10 @@
-name: Deploy to Fly.io
+name: CI/CD Pipeline
 
 on:
   push:
+    branches:
+      - main
+  pull_request:
     branches:
       - main
 
@@ -21,6 +24,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Run tests
+        run: npm test
+
       - name: Type check
         run: npm run typecheck
 
@@ -31,6 +37,7 @@ jobs:
         run: npm run build
 
       - name: Deploy to Fly.io
+        if: github.event_name == 'push'
         uses: superfly/flyctl-actions@1.4
         with:
           args: deploy
