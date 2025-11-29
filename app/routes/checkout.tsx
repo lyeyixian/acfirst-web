@@ -32,7 +32,7 @@ import { useState } from 'react'
 import { useNotification } from '../components/hooks/notification'
 import { useEffectAfterMount } from '../components/hooks/helper'
 import { formatSize } from '../utils/formatter'
-import { _ } from 'lodash'
+import * as _ from 'lodash'
 import DeleteCartItemBtn from '../components/common/DeleteCartItemBtn'
 import EmptyState from '../components/common/EmptyState'
 

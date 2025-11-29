@@ -16,7 +16,7 @@ import {
 } from '@mantine/core'
 import { Link, useLoaderData, useParams } from '@remix-run/react'
 import { json } from '@remix-run/node'
-import { _ } from 'lodash'
+import * as _ from 'lodash'
 import {
   getProduct,
   getRelatedProducts,
@@ -222,7 +222,6 @@ export default function ProductRoute() {
   const { currentProduct, relatedProducts } = useLoaderData()
   const {
     name,
-    code,
     size,
     surface,
     type,

@@ -1,5 +1,12 @@
 import { Carousel } from '@mantine/carousel'
 import { createStyles, getStylesRef, rem } from '@mantine/core'
+import { ReactNode } from 'react'
+
+interface AcfirstCarouselProps {
+  children: ReactNode
+  classNames?: Record<string, string>
+  [key: string]: any
+}
 
 const useStyles = createStyles((theme) => ({
   carousel: {
@@ -27,7 +34,7 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-export default function AcfirstCarousel({ children, classNames, ...props }) {
+export default function AcfirstCarousel({ children, classNames, ...props }: AcfirstCarouselProps) {
   const { classes } = useStyles()
 
   return (

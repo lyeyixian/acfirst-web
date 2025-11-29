@@ -1,10 +1,14 @@
 import qs from 'qs'
 import { getStrapiURL } from './helper'
 
-export async function fetchApi(path, urlParamsObj = {}, options = {}) {
+export async function fetchApi(
+  path: string,
+  urlParamsObj: Record<string, any> = {},
+  options: RequestInit = {}
+): Promise<any> {
   try {
     // Merge default and user options
-    const mergedOptions = {
+    const mergedOptions: RequestInit = {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,

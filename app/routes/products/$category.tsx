@@ -182,7 +182,7 @@ export default function ProductsIndexRoute() {
   const { setSelectedCodes } = useProductCodeSearcher()
   useEffect(() => {
     setSelectedCodes([])
-  }, [category])
+  }, [category, setSelectedCodes])
 
   return (
     <div>

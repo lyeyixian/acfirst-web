@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export const useSkeletonLoading = (ref) => {
+export const useSkeletonLoading = (ref: React.RefObject<any>) => {
   const [loading, setLoading] = useState(true)
   const handler = () => {
     setLoading(false)
@@ -10,7 +10,7 @@ export const useSkeletonLoading = (ref) => {
     if (ref.current?.complete) {
       handler()
     }
-  }, [ref.current?.complete])
+  }, [ref])
 
   return { loading, handleOnLoad: handler }
 }

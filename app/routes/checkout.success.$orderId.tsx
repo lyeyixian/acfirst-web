@@ -35,7 +35,7 @@ export default function () {
 
   useEffect(() => {
     window.open(whatsappUrl, '_blank')
-  }, [])
+  }, [whatsappUrl])
 
   return (
     <Stack align="flex-start" justify="center" h={400} spacing={0}>

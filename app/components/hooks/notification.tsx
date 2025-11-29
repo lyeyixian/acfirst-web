@@ -2,7 +2,12 @@ import { notifications } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons-react'
 import { useEffect } from 'react'
 
-export const useNotification = (fetcher, successMsg, errorMsg, func) => {
+export const useNotification = (
+  fetcher: { state: string; data: any },
+  successMsg: string,
+  errorMsg: string,
+  func?: () => void
+) => {
   useEffect(() => {
     if (fetcher.state === 'idle' && fetcher.data) {
       if (fetcher.data.error) {
@@ -22,7 +27,6 @@ export const useNotification = (fetcher, successMsg, errorMsg, func) => {
           message: successMsg,
           color: 'teal',
           icon: <IconCheck size="1.2rem" />,
-          background: 'red',
           withBorder: true,
           styles: (theme) => ({
             root: { backgroundColor: theme.colors.gray[0] },
@@ -36,5 +40,5 @@ export const useNotification = (fetcher, successMsg, errorMsg, func) => {
         func()
       }
     }
-  }, [fetcher.state])
+  }, [fetcher, errorMsg, successMsg, func])
 }

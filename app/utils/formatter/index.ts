@@ -1,4 +1,4 @@
-export function formatSize(size) {
+export function formatSize(size: string): string {
   const [units, widthHeightStr] = size.split('-')
   const [width, height] = widthHeightStr.split('x')
 

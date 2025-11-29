@@ -1,15 +1,11 @@
 import { useActionData, useLoaderData, useNavigation } from '@remix-run/react'
 import { json } from '@remix-run/node'
 
-import { notifications } from '@mantine/notifications'
-
 import {
   IconAt,
-  IconCheck,
   IconMapPin,
   IconPhone,
   IconSun,
-  IconX,
 } from '@tabler/icons-react'
 
 import { addContactFormSubmission } from '../models/contactFormSubmission.server'

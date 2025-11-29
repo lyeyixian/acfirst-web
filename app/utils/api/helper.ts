@@ -1,8 +1,8 @@
-export function getStrapiURL(path = '') {
+export function getStrapiURL(path = ''): string {
   return `${process.env.STRAPI_URL_BASE || 'http://127.0.0.1:1337'}${path}`
 }
 
-export function getStrapiMedia(img) {
+export function getStrapiMedia(img: any): string | null {
   const url = img.attributes.url
 
   if (url == null) {
@@ -18,13 +18,13 @@ export function getStrapiMedia(img) {
   return `${getStrapiURL()}${url}`
 }
 
-export function getStrapiMedias(imgs) {
+export function getStrapiMedias(imgs: any[]): (string | null)[] {
   return imgs.map((img) => getStrapiMedia(img))
 }
 
-export function formatDate(dateString) {
+export function formatDate(dateString: string): string {
   const date = new Date(dateString)
-  const options = { year: 'numeric', month: 'long', day: 'numeric' }
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' }
 
   return date.toLocaleDateString('en-US', options)
 }

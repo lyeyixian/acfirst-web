@@ -1,7 +1,7 @@
 import { useSearchParams } from '@remix-run/react'
 import { useEffect, useRef, useState } from 'react'
 
-export const useEffectAfterMount = (func, deps) => {
+export const useEffectAfterMount = (func: () => void, deps: any[] = []) => {
   const didMount = useRef(false)
 
   useEffect(() => {
@@ -10,12 +10,13 @@ export const useEffectAfterMount = (func, deps) => {
     } else {
       didMount.current = true
     }
-  }, deps)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [func, ...deps])
 }
 
-export function useDebounceSearchParams(delay) {
+export function useDebounceSearchParams(delay: number) {
   const [debouncedSearchParams, setDebouncedSearchParams] = useSearchParams()
-  const [search, setSearch] = useState(
+  const [search, setSearch] = useState<Record<string, any>>(
     Object.fromEntries(debouncedSearchParams.entries())
   )
 
@@ -27,11 +28,11 @@ export function useDebounceSearchParams(delay) {
         Object.entries(search).forEach(([key, value]) => {
           if (key === 'codes') {
             // if key is codes, the value will be a list
-            value.forEach((code) => {
+            ;(value as string[]).forEach((code) => {
               params.append(key, code)
             })
           } else {
-            params.set(key, value)
+            params.set(key, value as string)
           }
         })
 
@@ -42,7 +43,7 @@ export function useDebounceSearchParams(delay) {
     return () => {
       clearTimeout(handler)
     }
-  }, [search, delay])
+  }, [search, delay, setDebouncedSearchParams])
 
-  return [search, setSearch]
+  return [search, setSearch] as const
 }
