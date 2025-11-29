@@ -24,11 +24,10 @@ const useStyles = createStyles((theme) => {
         theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
       borderRadius: theme.radius.lg,
       padding: rem(4),
-      border: `${rem(1)} solid ${
-        theme.colorScheme === 'dark'
-          ? theme.colors.dark[8]
-          : theme.colors.gray[2]
-      }`,
+      border: `${rem(1)} solid ${theme.colorScheme === 'dark'
+        ? theme.colors.dark[8]
+        : theme.colors.gray[2]
+        }`,
 
       [BREAKPOINT]: {
         flexDirection: 'column',
@@ -78,9 +77,8 @@ const useStyles = createStyles((theme) => {
       boxSizing: 'border-box',
       position: 'relative',
       borderRadius: theme.radius.lg,
-      backgroundImage: `linear-gradient(135deg, ${
-        theme.colors[theme.primaryColor][5]
-      } 0%, ${theme.colors[theme.primaryColor][7]} 100%)`,
+      backgroundImage: `linear-gradient(135deg, ${theme.colors[theme.primaryColor][5]
+        } 0%, ${theme.colors[theme.primaryColor][7]} 100%)`,
       border: `${rem(1)} solid transparent`,
       padding: theme.spacing.xl,
       flex: `0 0 ${rem(280)}`,
