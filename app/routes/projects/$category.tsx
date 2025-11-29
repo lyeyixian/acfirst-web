@@ -13,10 +13,11 @@ import EmptyState from '../../components/common/EmptyState'
 
 export async function loader({ request, params }) {
   const url = new URL(request.url)
-  const page = url.searchParams.get('p') || 1
+  const pageParam = url.searchParams.get('p')
+  const page = pageParam ? parseInt(pageParam, 10) : 1
 
   const { category } = params
-  const projects = await getProjects(page, category)
+  const projects = await getProjects({ page, category })
   const prunedProjects = projects.data.map((project) => {
     const { title, date, coverImg, projectImg } = project.attributes
 
@@ -49,13 +50,14 @@ export function shouldRevalidate({
 
 export default function ProjectsIndexRoute() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const searchParamsPage = searchParams.get('p') || 1
+  const pageParam = searchParams.get('p')
+  const searchParamsPage = pageParam ? parseInt(pageParam, 10) : 1
   const [page, setPage] = useState(searchParamsPage)
   const loaderData = useLoaderData()
   const { projects, pageCount } = loaderData
 
   useEffect(() => {
-    setPage(parseInt(searchParamsPage))
+    setPage(searchParamsPage)
   }, [searchParamsPage])
 
   return (
@@ -68,11 +70,11 @@ export default function ProjectsIndexRoute() {
             onChange={(value) => {
               setPage(value)
               setSearchParams((params) => {
-                params.set('p', value)
+                params.set('p', value.toString())
                 return params
               })
             }}
-            total={pageCount}
+            total={Number(pageCount)}
             position="center"
             mt="lg"
             withEdges

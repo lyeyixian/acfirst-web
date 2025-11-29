@@ -7,7 +7,7 @@ export async function getProduct(code) {
       code: {
         $eq: code,
       },
-    },
+    } as Record<string, any>,
     populate: 'deep',
   }
   const res = await fetchApi(path, urlParamsObj)
@@ -19,15 +19,18 @@ export async function getProduct(code) {
   return res.data[0]
 }
 
-export async function getProducts(page = 1, category, filters = {}) {
+export async function getProducts(options: { page?: number; category?: string; filters?: Record<string, any> } = {}) {
+  const page = options.page ?? 1
+  const category = options.category
+  const filters = options.filters ?? {}
   const path = '/products'
   const urlParamsObj = {
     populate: 'deep',
     pagination: {
-      page,
+      page: page,
       pageSize: 6,
     },
-    filters: {},
+    filters: {} as any,
     sort: 'viewCount:desc',
   }
 
@@ -137,12 +140,12 @@ export async function incrementProductViewCount(productId, viewCount) {
   return res.data
 }
 
-export async function getProductCodes(category) {
+export async function getProductCodes(category?: string) {
   const path = '/products'
   const urlParamsObj = {
     fields: ['code'],
     sort: 'viewCount:desc',
-    filters: {},
+    filters: {} as any,
   }
 
   if (category && category !== 'all') {

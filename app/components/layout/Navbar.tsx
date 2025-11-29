@@ -120,7 +120,7 @@ const links = [
 
 export default function Navbar() {
   const { classes, cx } = useStyles()
-  const [opened, { toggle }] = useDisclosure(false)
+  const [opened, { toggle, close }] = useDisclosure(false)
   const items = links.map((link) => {
     return (
       <NavLink
@@ -129,7 +129,7 @@ export default function Navbar() {
         className={({ isActive }) =>
           cx(classes.link, { [classes.linkActive]: isActive })
         }
-        onClick={() => toggle(false)}
+        onClick={close}
       >
         {link.label}
       </NavLink>

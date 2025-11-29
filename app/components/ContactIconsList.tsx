@@ -7,14 +7,15 @@ import {
   Stack,
 } from '@mantine/core'
 import { IconSun, IconPhone, IconMapPin, IconAt } from '@tabler/icons-react'
+import React from 'react'
 
-// type ContactIconVariant = 'white' | 'gradient';
+type ContactIconVariant = 'white' | 'gradient'
 
-// interface ContactIconStyles {
-//   variant: ContactIconVariant;
-// }
+interface ContactIconStyles {
+  variant: ContactIconVariant
+}
 
-const useStyles = createStyles((theme, { variant }) => ({
+const useStyles = createStyles((theme, { variant }: ContactIconStyles) => ({
   wrapper: {
     display: 'flex',
     alignItems: 'center',
@@ -44,12 +45,12 @@ const useStyles = createStyles((theme, { variant }) => ({
   },
 }))
 
-// interface ContactIconProps extends Omit<React.ComponentPropsWithoutRef<'div'>, 'title'> {
-//   icon: React.FC<any>;
-//   title: React.ReactNode;
-//   description: React.ReactNode;
-//   variant?: ContactIconVariant;
-// }
+interface ContactIconProps extends Omit<React.ComponentPropsWithoutRef<'div'>, 'title'> {
+  icon: React.FC<any>
+  title: React.ReactNode
+  description: React.ReactNode
+  variant?: ContactIconVariant
+}
 
 function ContactIcon({
   icon: Icon,
@@ -58,7 +59,7 @@ function ContactIcon({
   variant = 'gradient',
   className,
   ...others
-}) {
+}: ContactIconProps) {
   const { classes, cx } = useStyles({ variant })
   return (
     <div className={cx(classes.wrapper, className)} {...others}>
@@ -82,10 +83,10 @@ function ContactIcon({
   )
 }
 
-// interface ContactIconsListProps {
-//   data?: ContactIconProps[];
-//   variant?: ContactIconVariant;
-// }
+interface ContactIconsListProps {
+  data?: ContactIconProps[]
+  variant?: ContactIconVariant
+}
 
 const MOCKDATA = [
   { title: 'Email', description: 'acfirst55@gmail.com', icon: IconAt },
@@ -103,7 +104,7 @@ const MOCKDATA = [
   },
 ]
 
-export default function ContactIconsList({ data = MOCKDATA, variant }) {
+export default function ContactIconsList({ data = MOCKDATA, variant }: ContactIconsListProps) {
   const items = data.map((item, index) => (
     <ContactIcon key={index} variant={variant} {...item} />
   ))

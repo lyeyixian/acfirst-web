@@ -1,6 +1,7 @@
 import { fetchApi } from '../utils/api/fetchApi'
 
-export async function getProjects(page = 1, category) {
+export async function getProjects(options: { page?: number; category?: string } = {}) {
+  const { page = 1, category } = options
   const path = `/projects`
   const urlParamsObj = {
     populate: 'deep',
@@ -8,7 +9,7 @@ export async function getProjects(page = 1, category) {
       page,
       pageSize: 6,
     },
-    filters: {},
+    filters: {} as any,
   }
 
   if (category) {

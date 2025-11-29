@@ -1,16 +1,16 @@
-import { ActionIcon, Group, NumberInput, rem } from '@mantine/core'
+import { ActionIcon, Group, NumberInput, NumberInputHandlers, rem } from '@mantine/core'
 import { IconMinus, IconPlus } from '@tabler/icons-react'
 import { useRef } from 'react'
 
 export default function AcfirstNumberInput({ ...props }) {
-  const handlers = useRef()
+  const handlers = useRef<NumberInputHandlers | null>(null)
 
   return (
     <Group spacing={5}>
       <ActionIcon
         size={36}
         variant="subtle"
-        onClick={() => handlers.current.decrement()}
+        onClick={() => handlers.current?.decrement()}
       >
         <IconMinus size="1rem" stroke={2} />
       </ActionIcon>
@@ -28,7 +28,7 @@ export default function AcfirstNumberInput({ ...props }) {
       <ActionIcon
         size={36}
         variant="subtle"
-        onClick={() => handlers.current.increment()}
+        onClick={() => handlers.current?.increment()}
       >
         <IconPlus size="1rem" stroke={2} />
       </ActionIcon>

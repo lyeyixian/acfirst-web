@@ -194,15 +194,14 @@ function AcfirstBreadcrumb({ category, ...props }) {
     { title: params.productId, href: '/products/c/' + params.productId },
   ]
   const breadcrumbs = breadcrumbsData.map((item, index) => (
-    <Text
+    <Anchor
       className={classes.breadcrumb}
       weight={600}
       key={index}
-      component={Anchor}
       href={item.href}
     >
       {item.title}
-    </Text>
+    </Anchor>
   ))
 
   return (

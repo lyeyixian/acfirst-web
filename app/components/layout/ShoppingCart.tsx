@@ -90,7 +90,7 @@ export default function ShoppingCart() {
       <Popover.Dropdown p="xl">
         {cartProducts.length ? (
           <>
-            <ScrollArea.Autosize mah={400} offsetScrollbars>
+            <ScrollArea.Autosize mah={400} offsetScrollbars placeholder="">
               {cartProducts}
             </ScrollArea.Autosize>
             <Button

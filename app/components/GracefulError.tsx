@@ -47,6 +47,10 @@ export default function GracefulError({
   status,
   statusText,
   statusDescription,
+}: {
+  status: number
+  statusText: string
+  statusDescription?: string
 }) {
   const { classes } = useStyles()
   const location = useLocation()

@@ -53,18 +53,19 @@ const useStyles = createStyles((theme) => ({
 export async function loader({ request, params }) {
   const { category } = params
   const url = new URL(request.url)
-  const page = url.searchParams.get('p') || 1
+  const pageParam = url.searchParams.get('p')
+  const page = pageParam ? parseInt(pageParam, 10) : 1
   const surface = url.searchParams.get('surface')
   const type = url.searchParams.get('type')
   const size = url.searchParams.get('size')
   const codes = url.searchParams.getAll('codes')
 
-  const products = await getProducts(page, category, {
+  const products = await getProducts({ page, category, filters: {
     surface,
     type,
     size,
     code: codes,
-  })
+  } })
   const prunedProducts = products.data.map((product) => {
     const { name, code, viewCount, category, coverImg } = product.attributes
 
@@ -172,11 +173,12 @@ export default function ProductsIndexRoute() {
   const { category } = useParams()
   const { products, pageCount } = useLoaderData()
   const [searchParams, setSearchParams] = useSearchParams()
-  const searchParamsPage = searchParams.get('p') || 1
+  const pageParam = searchParams.get('p')
+  const searchParamsPage = pageParam ? parseInt(pageParam, 10) : 1
   const [page, setPage] = useState(searchParamsPage)
 
   useEffect(() => {
-    setPage(parseInt(searchParamsPage))
+    setPage(searchParamsPage)
   }, [searchParamsPage])
 
   const { setSelectedCodes } = useProductCodeSearcher()
@@ -197,11 +199,11 @@ export default function ProductsIndexRoute() {
             onChange={(value) => {
               setPage(value)
               setSearchParams((params) => {
-                params.set('p', value)
+                params.set('p', value.toString())
                 return params
               })
             }}
-            total={pageCount}
+            total={Number(pageCount)}
             position="center"
             mt="lg"
           />
