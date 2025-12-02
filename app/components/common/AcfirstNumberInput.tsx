@@ -1,4 +1,5 @@
-import { ActionIcon, Group, NumberInput, NumberInputHandlers, rem } from '@mantine/core'
+import { ActionIcon, Group, NumberInput, rem } from '@mantine/core'
+import type { NumberInputHandlers } from '@mantine/core'
 import { IconMinus, IconPlus } from '@tabler/icons-react'
 import { useRef } from 'react'
 

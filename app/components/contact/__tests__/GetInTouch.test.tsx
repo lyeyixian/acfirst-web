@@ -1,3 +1,7 @@
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import GetInTouch from '../GetInTouch'
+import { vi } from 'vitest'
+
 // Mock Remix hooks
 const mockSubmit = vi.fn()
 const mockNavigation = { state: 'idle' }
@@ -20,9 +24,6 @@ vi.mock('@mantine/form', () => ({
 vi.mock('~/components/ContactIconsList', () => ({
   default: ({ data }) => <div data-testid="contact-icons">{data ? data.length : 0} icons</div>,
 }))
-
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import GetInTouch from '../GetInTouch'
 
 const mockProps = {
   contactInfoTitle: 'Contact Us',

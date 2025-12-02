@@ -81,7 +81,7 @@ export default function HeroBanner({
   imgUrl,
 }) {
   const { classes } = useStyles()
-  const { text, url, type, newTab } = buttonProps
+  const { text, url } = buttonProps
 
   return (
     <Box

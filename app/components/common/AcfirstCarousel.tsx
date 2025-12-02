@@ -1,6 +1,6 @@
 import { Carousel } from '@mantine/carousel'
 import { createStyles, getStylesRef, rem } from '@mantine/core'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 interface AcfirstCarouselProps {
   children: ReactNode
