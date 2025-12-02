@@ -10,7 +10,7 @@ export const useSkeletonLoading = (ref: React.RefObject<any>) => {
     if (ref.current?.complete) {
       handler()
     }
-  }, [ref])
+  }, [ref.current?.complete])
 
   return { loading, handleOnLoad: handler }
 }

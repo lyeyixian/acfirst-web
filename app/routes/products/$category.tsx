@@ -60,12 +60,14 @@ export async function loader({ request, params }) {
   const size = url.searchParams.get('size')
   const codes = url.searchParams.getAll('codes')
 
-  const products = await getProducts({ page, category, filters: {
-    surface,
-    type,
-    size,
-    code: codes,
-  } })
+  const products = await getProducts({
+    page, category, filters: {
+      surface,
+      type,
+      size,
+      code: codes,
+    }
+  })
   const prunedProducts = products.data.map((product) => {
     const { name, code, viewCount, category, coverImg } = product.attributes
 
@@ -184,7 +186,7 @@ export default function ProductsIndexRoute() {
   const { setSelectedCodes } = useProductCodeSearcher()
   useEffect(() => {
     setSelectedCodes([])
-  }, [category, setSelectedCodes])
+  }, [category])
 
   return (
     <div>

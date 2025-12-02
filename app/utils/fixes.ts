@@ -14,8 +14,8 @@ export function useCacheFix() {
     const tags = cache.sheet.tags
     cache.sheet.flush()
     tags.forEach((tag) => {
-      ;(cache.sheet as any)._insertTag(tag)
+      ; (cache.sheet as any)._insertTag(tag)
     })
     clientStyleData?.reset()
-  }, [clientStyleData, mantineCache])
+  }, [])
 }

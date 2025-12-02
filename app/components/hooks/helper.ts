@@ -10,8 +10,7 @@ export const useEffectAfterMount = (func: () => void, deps: any[] = []) => {
     } else {
       didMount.current = true
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [func, ...deps])
+  }, deps)
 }
 
 export function useDebounceSearchParams(delay: number) {
@@ -28,7 +27,7 @@ export function useDebounceSearchParams(delay: number) {
         Object.entries(search).forEach(([key, value]) => {
           if (key === 'codes') {
             // if key is codes, the value will be a list
-            ;(value as string[]).forEach((code) => {
+            ; (value as string[]).forEach((code) => {
               params.append(key, code)
             })
           } else {
@@ -43,7 +42,7 @@ export function useDebounceSearchParams(delay: number) {
     return () => {
       clearTimeout(handler)
     }
-  }, [search, delay, setDebouncedSearchParams])
+  }, [search, delay])
 
   return [search, setSearch] as const
 }

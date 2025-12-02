@@ -40,5 +40,5 @@ export const useNotification = (
         func()
       }
     }
-  }, [fetcher, errorMsg, successMsg, func])
+  }, [fetcher.state])
 }
