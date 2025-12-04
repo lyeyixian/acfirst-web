@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import { vi } from 'vitest'
+import { vi, describe, beforeEach, it, expect } from 'vitest'
 import ShoppingCart from '../ShoppingCart'
 
 const mockUseCart = vi.fn()
@@ -16,7 +16,7 @@ vi.mock('../ShoppingCart', () => ({
         {index !== 0 && <hr />}
         <div>
           <div>
-            <img src={product.imgUrl} />
+            <img src={product.imgUrl} alt="" />
             <div>
               <a href={`/products/c/${product.code}`}>{product.name}</a>
               <span>{product.category}</span>
