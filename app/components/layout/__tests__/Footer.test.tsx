@@ -28,11 +28,11 @@ vi.mock('../Footer', () => ({
       </div>
       <div>
         <div>© 2024 Acfirst Ceramics Sdn. Bhd. All rights reserved.</div>
-        <div>
-          <button href="https://www.facebook.com/acfirstceramics">Facebook</button>
-          <button href="https://instagram.com/acfirst_changlun?igshid=YmMyMTA2M2Y=">Instagram</button>
-          <button href="https://wa.me/60174051255">Whatsapp</button>
-        </div>
+         <div>
+           <a role="button" href="https://www.facebook.com/acfirstceramics">Facebook</a>
+           <a role="button" href="https://instagram.com/acfirst_changlun?igshid=YmMyMTA2M2Y=">Instagram</a>
+           <a role="button" href="https://wa.me/60174051255">Whatsapp</a>
+         </div>
       </div>
     </footer>
   ),
@@ -57,7 +57,7 @@ const mockTheme = {
 }
 
 vi.mock('@mantine/core', async (importOriginal) => {
-  const actual = await importOriginal()
+  const actual = await importOriginal() as any
   return {
     ...actual,
     createStyles: (stylesFn) => () => {
