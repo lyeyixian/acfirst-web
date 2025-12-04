@@ -15,9 +15,18 @@ export const useEffectAfterMount = (func: () => void, deps: any[] = []) => {
 
 export function useDebounceSearchParams(delay: number) {
   const [debouncedSearchParams, setDebouncedSearchParams] = useSearchParams()
-  const [search, setSearch] = useState<Record<string, any>>(
-    Object.fromEntries(debouncedSearchParams.entries())
-  )
+  const [search, setSearch] = useState<Record<string, any>>(() => {
+    const params: Record<string, any> = {}
+    for (const [key, value] of debouncedSearchParams.entries()) {
+      if (key === 'codes') {
+        if (!params[key]) params[key] = []
+        params[key].push(value)
+      } else {
+        params[key] = value
+      }
+    }
+    return params
+  })
 
   useEffect(() => {
     const handler = setTimeout(() => {
