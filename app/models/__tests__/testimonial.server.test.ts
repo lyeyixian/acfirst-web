@@ -1,6 +1,12 @@
 // Mock dependencies before importing the module
 import { vi } from 'vitest'
 
+import { describe, it, expect, beforeEach } from 'vitest'
+import { fetchApi } from '~/utils/api/fetchApi'
+import fs from 'fs/promises'
+import path from 'path'
+import { getReviews } from '../testimonial.server'
+
 vi.mock('~/utils/api/fetchApi')
 vi.mock('fs/promises')
 vi.mock('path')
@@ -8,12 +14,6 @@ vi.mock('path')
 // Mock global fetch
 const mockGlobalFetch = vi.fn()
 vi.stubGlobal('fetch', mockGlobalFetch)
-
-import { describe, it, expect, beforeEach } from 'vitest'
-import { getReviews } from '../testimonial.server'
-import { fetchApi } from '~/utils/api/fetchApi'
-import fs from 'fs/promises'
-import path from 'path'
 
 const mockFetchApi = vi.mocked(fetchApi)
 const mockFs = vi.mocked(fs)

@@ -1,11 +1,10 @@
 // Mock dependencies before importing the module
 import { vi } from 'vitest'
 
-vi.mock('~/utils/api/fetchApi')
-vi.mock('~/utils/api/helper')
-vi.mock('../product.server')
-
 import { describe, it, expect, beforeEach } from 'vitest'
+import { fetchApi } from '~/utils/api/fetchApi'
+import { getStrapiMedia } from '~/utils/api/helper'
+import { getProduct } from '../product.server'
 import {
   getCart,
   addCart,
@@ -14,9 +13,10 @@ import {
   updateCart,
   removeFromCart,
 } from '../cart.server'
-import { fetchApi } from '~/utils/api/fetchApi'
-import { getStrapiMedia } from '~/utils/api/helper'
-import { getProduct } from '../product.server'
+
+vi.mock('~/utils/api/fetchApi')
+vi.mock('~/utils/api/helper')
+vi.mock('../product.server')
 
 // Get references to the mocked functions
 const mockFetchApi = vi.mocked(fetchApi)

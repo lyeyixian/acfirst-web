@@ -1,11 +1,11 @@
 // Mock dependencies before importing the module
 import { vi } from 'vitest'
 
-vi.mock('~/utils/api/fetchApi')
-
 import { describe, it, expect, beforeEach } from 'vitest'
-import { getGlobal } from '../global.server'
 import { fetchApi } from '~/utils/api/fetchApi'
+import { getGlobal } from '../global.server'
+
+vi.mock('~/utils/api/fetchApi')
 
 const mockFetchApi = vi.mocked(fetchApi)
 

@@ -1,11 +1,11 @@
 // Mock dependencies before importing the module
 import { vi } from 'vitest'
 
-vi.mock('fs/promises')
-
 import { describe, it, expect, beforeEach } from 'vitest'
-import { writeJsonToFile, readJsonFromFile, reviewCache } from '../../utils/cache.server'
 import fs from 'fs/promises'
+import { writeJsonToFile, readJsonFromFile, reviewCache } from '../../utils/cache.server'
+
+vi.mock('fs/promises')
 
 const mockFs = vi.mocked(fs)
 
