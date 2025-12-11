@@ -4,15 +4,6 @@ import { useState } from 'react'
 import AcfirstNumberInput from './common/AcfirstNumberInput'
 import { useNotification } from './hooks/notification'
 
-export function isInvalidQuantity(quantity) {
-  return (
-    quantity === '' ||
-    quantity === null ||
-    quantity === undefined ||
-    (quantity <= 0 && /^[0-9]+$/.test(quantity.toString()))
-  )
-}
-
 export default function AddToCartBtn({ productId, ...props }) {
   const addToCartFetcher = useFetcher()
   const [quantity, setQuantity] = useState(1)
