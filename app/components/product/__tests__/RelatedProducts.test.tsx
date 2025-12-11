@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
-import { vi, describe, it, expect } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+import RelatedProducts from '../RelatedProducts'
 
 // Mock dependencies
 vi.mock('@mantine/core', () => ({
@@ -34,7 +35,6 @@ vi.mock('../common/ProductImageCard', () => ({
   default: ({ product }) => `Product: ${product.name}`,
 }))
 
-import RelatedProducts from '../RelatedProducts'
 
 describe('RelatedProducts', () => {
   it('renders empty state when no products', () => {
