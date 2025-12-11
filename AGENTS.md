@@ -6,6 +6,8 @@
 - **Start production**: `npm run start` (Remix serve)
 - **Type check**: `npm run typecheck` (TypeScript)
 - **Lint**: `npm run lint` (ESLint with Remix config)
+- **Test**: `npm test` (Vitest with @testing-library/react)
+- **Test single file**: `npm test -- <path/to/test.tsx>`
 
 ## Code Style
 - **Framework**: Remix with React 18, TypeScript strict mode
@@ -17,6 +19,7 @@
 - **Error Handling**: Null checks, early returns, no try/catch unless necessary
 - **Styling**: Mantine createStyles hook with theme-based responsive design
 - **Server Models**: Async functions with fetchApi utility, Strapi-like API structure
+- **Testing**: Unit tests with Vitest and @testing-library/react, mock hooks and external dependencies
 
 ## File Organization
 - `app/components/`: Reusable UI components
