@@ -60,7 +60,7 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-const formatSlugToLabel = (slug, filters) => {
+export const formatSlugToLabel = (slug, filters) => {
   return filters.find((filter) => filter.slug === slug)?.label
 }
 
