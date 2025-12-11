@@ -3,6 +3,10 @@ export function getStrapiURL(path = ''): string {
 }
 
 export function getStrapiMedia(img: any): string | null {
+  if (!img || !img.attributes) {
+    return null
+  }
+
   const url = img.attributes.url
 
   if (url == null) {
