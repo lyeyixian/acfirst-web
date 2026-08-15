@@ -1,0 +1,22 @@
+{
+  "_sketch": "INCOMPLETE. The home route walks pageData.attributes.contentSection and switches on __component — sections.hero, sections.showcase, sections.product-categories and more. Each branch reaches through nested Strapi `data.attributes` envelopes (product -> category -> coverImg -> media URL). Recording this by hand is the job; it is not one fixture, it is one per page slug, and it goes stale whenever the CMS content model changes. See SKETCH.md.",
+  "data": [
+    {
+      "id": 1,
+      "attributes": {
+        "slug": "home",
+        "title": "Home",
+        "contentSection": [
+          {
+            "__component": "sections.hero",
+            "title": "AC First",
+            "description": "Air-conditioning, done properly.",
+            "button": { "label": "See products", "url": "/products" },
+            "picture": { "data": { "attributes": { "url": "/uploads/hero.jpg" } } }
+          }
+        ]
+      }
+    }
+  ],
+  "meta": { "pagination": { "page": 1, "pageSize": 25, "pageCount": 1, "total": 1 } }
+}

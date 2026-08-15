@@ -1,0 +1,10 @@
+{
+  "parent": null,
+  "max_concurrent_workers": 2,
+  "worker_timeout_minutes": 45,
+  "working_hours": {
+    "timezone": "Asia/Singapore",
+    "start_hour": 9,
+    "end_hour": 23
+  }
+}

@@ -1,0 +1,97 @@
+# SKETCH — written by `border-collie init` (v0.6.0-sketch).
+#
+# Trimmed from border-collie's own .github/workflows/border-collie-worker.yml.
+# Everything load-bearing is unchanged — the run-name the Orchestrator's
+# liveness check parses, the App token, the two wall-clock ceilings. What is
+# different for this repo is at the bottom: the workspace hooks from
+# WORKFLOW.md run here, so the Worker starts in a repo that installs.
+name: Worker
+
+run-name: "border-collie worker #${{ inputs.ticket }} attempt ${{ inputs.attempt }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      ticket:
+        required: true
+        type: string
+      attempt:
+        required: true
+        type: string
+      timeout_minutes:
+        required: false
+        default: "45"
+      job_timeout_minutes:
+        required: false
+        default: "55"
+
+permissions:
+  contents: read
+
+jobs:
+  worker:
+    name: "Worker #${{ inputs.ticket }} attempt ${{ inputs.attempt }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ fromJSON(inputs.job_timeout_minutes) }}
+    steps:
+      - name: Mint a GitHub App installation token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.BORDER_COLLIE_APP_ID }}
+          private-key: ${{ secrets.BORDER_COLLIE_APP_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v7
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+
+      # Node twice, deliberately: 24 to run the border-collie CLI, and this
+      # repo's own 18.20.8 for the work itself. A herded repo does not have to
+      # share the orchestrator's toolchain — v2 open question is whether the
+      # hooks own this, or the workflow does.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Install border-collie
+        run: npm install -g border-collie@0.6.0
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code@latest
+
+      # No `claude plugin install` step: the skills this Worker invokes are in
+      # .claude/skills/ in the checkout above. That is the whole point of the
+      # skills-live-in-the-target-repo decision — one fewer network dependency
+      # between a dispatched Worker and a working session.
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 18.20.8
+          cache: npm
+
+      - name: Prepare workspace (WORKFLOW.md hooks.after_create)
+        run: |
+          npm ci --no-audit --no-fund
+          [ -f .env ] || cp .env.example .env
+          npx playwright install --with-deps chromium
+
+      - name: Run Worker
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          BORDER_COLLIE_RUN_ID: ${{ github.run_id }}
+          TICKET: ${{ inputs.ticket }}
+          ATTEMPT: ${{ inputs.attempt }}
+          TIMEOUT_MINUTES: ${{ inputs.timeout_minutes }}
+        run: |
+          border-collie worker "$TICKET" "$ATTEMPT" \
+            --in-place \
+            --timeout-minutes "$TIMEOUT_MINUTES"
+
+      - name: Upload run log
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: worker-log-ticket-${{ inputs.ticket }}-attempt-${{ inputs.attempt }}-${{ github.run_id }}
+          path: .border-collie/logs/*.jsonl
+          if-no-files-found: warn
