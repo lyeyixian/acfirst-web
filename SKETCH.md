@@ -9,6 +9,15 @@ not a proposal to merge. Nothing here is wired to anything; the version string
 Resolves [border-collie#129](https://github.com/lyeyixian/border-collie/issues/129).
 Map: [border-collie#125](https://github.com/lyeyixian/border-collie/issues/125).
 
+**This branch is the snapshot as built, not as decided.** The open questions
+below were answered on the ticket, and four of them went the other way — read
+[the resolution comment](https://github.com/lyeyixian/border-collie/issues/129#issuecomment-5302638690)
+for what was actually settled. In short: `border-collie.json` is deleted rather
+than written, the skills are the mattpocock defaults vendored via skills.sh
+rather than the three hand-written ones here, `border-collie-gates.yml` should
+not be scaffolded at all, and the file set as a whole is deferred until after
+border-collie's own architecture change.
+
 ## The files
 
 | File | What it is |
